@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,13 +41,13 @@
     <Compile Include="Game.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Table.cs" />
-    <Compile Include="test.cs" />
     <Compile Include="actions\Call.cs" />
     <Compile Include="actions\Check.cs" />
     <Compile Include="actions\Fold.cs" />
     <Compile Include="actions\PlayerAction.cs" />
     <Compile Include="actions\Raise.cs" />
     <Compile Include="RulesEngine.cs" />
+    <Compile Include="Cards.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

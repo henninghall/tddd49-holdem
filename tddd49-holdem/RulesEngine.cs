@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using cs_holdem.actions;
 
-namespace cs_holdem
+namespace tddd49_holdem
 {
     public class RulesEngine
     {
@@ -33,7 +32,7 @@ namespace cs_holdem
         public bool IsCallValid(Player player)
         {
              // not highest bet already
-            if (!_table.GetHighestBetPlayers().Contains(player))
+           if (!_table.GetHighestBetPlayers().Contains(player))
             {
                 // have enough chips
                 if (_table.GetHighestBet() <= (player.CurrentBet + player.ChipsOnHand))

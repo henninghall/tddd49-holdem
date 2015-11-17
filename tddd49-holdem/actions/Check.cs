@@ -1,4 +1,4 @@
-﻿namespace cs_holdem.actions
+﻿namespace tddd49_holdem.actions
 {
     public class Check : PlayerAction
     {

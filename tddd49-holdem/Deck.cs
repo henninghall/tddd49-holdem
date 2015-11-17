@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace cs_holdem
+namespace tddd49_holdem
 {
     public class Deck : Stack<Card>
     {
@@ -43,9 +43,9 @@ namespace cs_holdem
             return deckString;
         }
 
-        public HashSet<Card> Pop(int numberOfCards)
+		public Cards Pop(int numberOfCards)
         {
-            HashSet<Card> cards = new HashSet<Card>();
+			Cards cards = new Cards();
             for (int i = 0; i < numberOfCards; i++)
             {
                 cards.Add(Pop());   

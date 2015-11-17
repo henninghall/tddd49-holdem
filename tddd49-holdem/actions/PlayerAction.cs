@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace cs_holdem.actions
+namespace tddd49_holdem.actions
 {
     public abstract class PlayerAction
     {

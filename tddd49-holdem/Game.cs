@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using cs_holdem.actions;
 
-namespace cs_holdem
+namespace tddd49_holdem
 {
     public class Game
     {
@@ -25,6 +24,6 @@ namespace cs_holdem
 
             // start game at table
             table.StartGame();
-        }
+			}
     }
 }

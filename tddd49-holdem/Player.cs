@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using cs_holdem.actions;
 
 
-namespace cs_holdem
+namespace tddd49_holdem
 {
     public class Player
     {
-        public HashSet<Card> Cards {  get; set; }
+        public Cards Cards {get; set;}
         public Table Table;
         public String Name { private set; get; }
         public int ChipsOnHand {set; get; }
-        public int CurrentBet { private set; get; }
+        public int CurrentBet {set; get; }
     
         public Player(String name)
         {
@@ -39,11 +38,11 @@ namespace cs_holdem
 
         private void Check()
         {
-            if (Table.Rules.IsCheckValid(this))
-            {
-                Table.AfterMove.Enqueue(this);
-                Console.WriteLine(Name + " checks.");
-            }
+			if (Table.Rules.IsCheckValid (this)) {
+				Table.AfterMove.Enqueue (this);
+				Console.WriteLine (Name + " checks.");
+			} 
+			else Console.WriteLine ("Check is not valid");
         }
 
         private void Call()
@@ -54,32 +53,41 @@ namespace cs_holdem
                 Table.AfterMove.Enqueue(this);
                 Console.WriteLine(Name + " calls.");
             }
+			else Console.WriteLine ("Call is not valid");
         }
 
         private void Raise(int bet)
         {
             if (Table.Rules.IsRaiseValid(this))
             {
+				// bet = raise + diff to max bet. 
+				bet += (Table.GetHighestBet() - CurrentBet);
+
                 Bet(bet);
+
                 // force every active player to move again
                 Table.MoveAllAfterMoveToBeforeMove();
               
                 Table.AfterMove.Enqueue(this);
-                Console.WriteLine(Name + " raises.");
+				Console.WriteLine(Name + " raises " + bet + ".");
             }
+			else Console.WriteLine ("Raise is not valid");
         }
 
         public void MakeMove()
         {
-           
-            int input = Console.Read();
-            switch (input)
+			int input = Convert.ToInt32(Console.ReadLine());
+			switch (input)
             {
                 case 0: Fold(); break;
                 case 1: Check(); break;
                 case 2: Call(); break;
                 case 3: Raise(10); break;
+			default:
+				Console.WriteLine ("Invalid input: " + input);
+				break;
             }
+
         }
 
         

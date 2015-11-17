@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace cs_holdem
+namespace tddd49_holdem
 {
     public class Table
     {
@@ -13,7 +13,7 @@ namespace cs_holdem
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; private set; }
-        private List<Card> _cardsOnTable;
+        private Cards _cardsOnTable;
         public int Pot { get; private set; }
         public Deck Deck = new Deck();
         private bool _gameOver = false;
@@ -21,7 +21,7 @@ namespace cs_holdem
 
         public Table()
         {
-            _cardsOnTable = new List<Card>();
+			_cardsOnTable = new Cards();
             Rules = new RulesEngine(this);
             Pot = 0;
         }
@@ -43,13 +43,14 @@ namespace cs_holdem
 
                 // pop the round-specific amount of cards on the table defined by rules.
                 // normal texas hold'em rules gives 0 cards before first round etc. 
-                PutCards(Deck.Pop(cardsToPopCurrentRound));
+				PutCards(Deck.Pop(cardsToPopCurrentRound));
 
                 while (BeforeMove.Count != 0)
                 {
-                    var currentPlayer = BeforeMove.Dequeue();
-
-                    //table.DisplayValidActionsForPlayer(player);
+					PrintTable();
+					var currentPlayer = BeforeMove.Dequeue();
+					Console.WriteLine (currentPlayer.Name + " , please choose action:");
+					DisplayValidActionsForPlayer(currentPlayer);
                     currentPlayer.MakeMove();
 
                     // quit game if only one player left
@@ -59,7 +60,7 @@ namespace cs_holdem
                         break;
                     }
                 }
-                //table.movePlayersBetToPot();
+                MovePlayersBetToPot();
 
                 if (_gameOver) break;
             }
@@ -82,7 +83,16 @@ namespace cs_holdem
                 AttachPlayer(player);
             }
         }
-    
+
+		public void MovePlayersBetToPot(){
+			int collectingChips = 0;
+			foreach (Player player in _allPlayers) {
+				collectingChips += player.CurrentBet;
+				player.CurrentBet = 0;
+			}
+			Pot += collectingChips;
+		}
+			
         public HashSet<Player> GetHighestBetPlayers()
         {
             int currentHighestBet = 0;
@@ -93,6 +103,7 @@ namespace cs_holdem
                 {
                     currentHighestBetPlayers.Clear();
                     currentHighestBetPlayers.Add(player);
+					currentHighestBet = player.CurrentBet;
                 }
                 else if (player.CurrentBet == currentHighestBet)
                 {
@@ -111,10 +122,9 @@ namespace cs_holdem
                 {
                     currentHighestBet = player.CurrentBet;
                 }
-                return currentHighestBet;
             }
-            return 0;
-        }
+			return currentHighestBet;
+		}
 
         public void DisplayValidActionsForPlayer(Player player)
         {
@@ -157,6 +167,29 @@ namespace cs_holdem
             else throw new NotImplementedException("Winner algorithm sholud be implemented here."); 
         }
 
+		public bool isPlayerActive(Player player){
+			if (BeforeMove.Contains (player))
+				return true;
+			else if (AfterMove.Contains (player))
+				return true;
+			else
+				return false;
+		}
+
+		public void PrintTable()
+		{
+			Console.WriteLine();
+			Console.WriteLine ("Table Cards: \t" + _cardsOnTable);
+			Console.WriteLine ("Table Pot: \t" + Pot);
+			Console.WriteLine();
+			Console.WriteLine ("Name \t\t Active \t Cards \t\t CurrentBet");
+
+			foreach (Player player in _allPlayers) {
+				Console.WriteLine(player.Name + "\t " + isPlayerActive(player) + "\t\t " + player.Cards + "\t " + player.CurrentBet);
+			}
+			Console.WriteLine();
+
+		}
 
     }
 }
