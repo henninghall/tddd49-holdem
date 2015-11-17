@@ -1,21 +1,26 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-using System.Runtime.InteropServices;
-
-namespace tddd49_holdem
+namespace cs_holdem
 {
-    public class Deck<Card> : Stack<Card>()
+    public class Deck : Stack<Card>
     {
         public Deck()
         {
-            Push(CreateAllCards()); 
-            PrintDeck();
+            Push(CreateAllCards());
+            Shuffle();
         }
 
-        private List<Card> CreateAllCards()
+        private void Push(List<Card> cardList)
         {
+            foreach (Card card in cardList)
+            {
+                Push(card);
+            }
+        }
+
+      private List<Card> CreateAllCards()
+        {   
             List<Card> allCards = new List<Card>();
             for (byte i = 2; i < 15; i++)
             {
@@ -27,25 +32,45 @@ namespace tddd49_holdem
             return allCards;
         }
 
-        public void PrintDeck()
+        public override string ToString()
         {
             object[] cardsInDeck = ToArray();
+            String deckString = "";
             foreach (var card in cardsInDeck)
             {
-                Console.WriteLine(card);
+                deckString += card + "\n";
             }
+            return deckString;
         }
 
-        public List<Card> Pop(int numberOfCards)
+        public HashSet<Card> Pop(int numberOfCards)
         {
-            List<Card> cards = new List<Card>();
+            HashSet<Card> cards = new HashSet<Card>();
             for (int i = 0; i < numberOfCards; i++)
             {
-                cards.Add((Card) Pop());   
+                cards.Add(Pop());   
             }
             return cards;
         }
 
+        public void Shuffle()
+        {
+            Card[] deck = ToArray();
+            Clear();
+
+            //	Based on Java code from wikipedia:
+            //	http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
+            Random r = new Random();
+            for (int n = deck.Length - 1; n > 0; --n)
+            {
+                int k = r.Next(n + 1);
+                Card temp = deck[n];
+                deck[n] = deck[k];
+                deck[k] = temp;
+            }
+            Push(new List<Card>(deck));
+        }
+
         
     }
-}
+}   

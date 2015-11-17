@@ -1,37 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using cs_holdem.actions;
 
-namespace tddd49_holdem
+namespace cs_holdem
 {
     public class Game
     {
 
         static void Main(string[] args)
-        {   
-           
-            // creating deck
-            Deck deck = new Deck();
-            //deck.shuffle();
+        {
+            // creating table
+            var table = new Table();
 
             // creating players
-            var p1 = new Player(deck.Pop(2));
-            var p2 = new Player(deck.Pop(2));
-            List<Player> players = new List<Player>();
-            players.Add(p1);
-            players.Add(p2);
+            var p1 = new Player("Player 1");
+            var p2 = new Player("Player 2");
+            var p3 = new Player("Player 3");
+           
+            // Attach players to table
+            table.AttachPlayer(p1);
+            table.AttachPlayer(p2);
+            table.AttachPlayer(p3);
 
-            // creating table
-            Table table = new Table(players, deck);
-
-            // game loop
-            while (table.GetNumberOfCardsOnTable() < 5)
-            {
-                foreach (var player in table.GetActivePlayers())
-                {   
-                   // player.ChooseAction();
-
-                }       
-            }
+            // start game at table
+            table.StartGame();
         }
-      }
+    }
 }
