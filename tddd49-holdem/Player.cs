@@ -9,11 +9,11 @@ namespace tddd49_holdem
 {
     public class Player
     {
-        public Cards Cards {get; set;}
+		public Cards Cards;
         public Table Table;
         public String Name { private set; get; }
-        public int ChipsOnHand {set; get; }
-        public int CurrentBet {set; get; }
+		public int ChipsOnHand; 
+		public int CurrentBet;
     
         public Player(String name)
         {
@@ -41,9 +41,8 @@ namespace tddd49_holdem
 			if (Table.Rules.IsCheckValid (this)) {
 				Table.AfterMove.Enqueue (this);
 				Console.WriteLine (Name + " checks.");
-			} 
-			else Console.WriteLine ("Check is not valid");
-        }
+			} else throw new InvalidActionException("Check is not valid");		
+		}
 
         private void Call()
         {
@@ -53,7 +52,7 @@ namespace tddd49_holdem
                 Table.AfterMove.Enqueue(this);
                 Console.WriteLine(Name + " calls.");
             }
-			else Console.WriteLine ("Call is not valid");
+			else throw new InvalidActionException("Call is not valid");	
         }
 
         private void Raise(int bet)
@@ -71,25 +70,27 @@ namespace tddd49_holdem
                 Table.AfterMove.Enqueue(this);
 				Console.WriteLine(Name + " raises " + bet + ".");
             }
-			else Console.WriteLine ("Raise is not valid");
+			else throw new InvalidActionException("Raise is not valid");	
         }
 
         public void MakeMove()
         {
 			int input = Convert.ToInt32(Console.ReadLine());
 			switch (input)
-            {
-                case 0: Fold(); break;
-                case 1: Check(); break;
-                case 2: Call(); break;
-                case 3: Raise(10); break;
-			default:
-				Console.WriteLine ("Invalid input: " + input);
-				break;
-            }
-
+				{
+				case 0: Fold(); break;
+				case 1: Check(); break;
+				case 2: Call(); break;
+				case 3: Raise(100); break;
+				default:
+					Console.WriteLine ("Invalid input, try again: ");
+					break;
+				}
         }
 
-        
+		public Cards getAllCards(){
+			return (Cards) Cards.Concat(Table.CardsOnTable); 
+		}
+			
     }
 }

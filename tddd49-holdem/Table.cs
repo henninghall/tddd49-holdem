@@ -13,7 +13,7 @@ namespace tddd49_holdem
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; private set; }
-        private Cards _cardsOnTable;
+		public Cards CardsOnTable { get; private set; }
         public int Pot { get; private set; }
         public Deck Deck = new Deck();
         private bool _gameOver = false;
@@ -21,7 +21,7 @@ namespace tddd49_holdem
 
         public Table()
         {
-			_cardsOnTable = new Cards();
+			CardsOnTable = new Cards();
             Rules = new RulesEngine(this);
             Pot = 0;
         }
@@ -37,7 +37,6 @@ namespace tddd49_holdem
             // normally 4 rounds 0,3,1,1 cards before each round.
             foreach (var cardsToPopCurrentRound in RulesEngine.CardsBeforeRound)
             {
-
                 // moves all active players to beforeMove
                 MoveAllAfterMoveToBeforeMove();
 
@@ -49,9 +48,10 @@ namespace tddd49_holdem
                 {
 					PrintTable();
 					var currentPlayer = BeforeMove.Dequeue();
-					Console.WriteLine (currentPlayer.Name + " , please choose action:");
+
+					Console.WriteLine (currentPlayer.Name + ", please choose action:");
 					DisplayValidActionsForPlayer(currentPlayer);
-                    currentPlayer.MakeMove();
+					currentPlayer.MakeMove();
 
                     // quit game if only one player left
                     if (AfterMove.Count + BeforeMove.Count == 1)
@@ -60,12 +60,12 @@ namespace tddd49_holdem
                         break;
                     }
                 }
-                MovePlayersBetToPot();
+                MovePlayerBetsToPot();
 
                 if (_gameOver) break;
             }
-            Console.WriteLine("Game ended. The winner is: " + GetWinner().Name);
-        }
+			Console.WriteLine("Game ended. The winner is: " + GetWinners().First().Name);
+            }
 
         public void AttachPlayer(Player player)
         {
@@ -76,7 +76,7 @@ namespace tddd49_holdem
             Console.WriteLine(player.Name + " joined table with cards: " + player.Cards.First() + " and " + player.Cards.Last());
         }
 
-        public void AttachPlayers(List<Player> allPlayers)
+		public void AttachPlayers(IEnumerable<Player> allPlayers)
         {
             foreach (var player in allPlayers)
             {
@@ -84,13 +84,11 @@ namespace tddd49_holdem
             }
         }
 
-		public void MovePlayersBetToPot(){
-			int collectingChips = 0;
+		public void MovePlayerBetsToPot(){
 			foreach (Player player in _allPlayers) {
-				collectingChips += player.CurrentBet;
+				Pot += player.CurrentBet;
 				player.CurrentBet = 0;
 			}
-			Pot += collectingChips;
 		}
 			
         public HashSet<Player> GetHighestBetPlayers()
@@ -134,11 +132,11 @@ namespace tddd49_holdem
             if (Rules.IsRaiseValid(player)) Console.WriteLine("3: Raise");
         }
 
-        public void PutCards(HashSet<Card> cards)
+		public void PutCards(IEnumerable<Card> cards)
         {
             foreach (var card in cards)
             {
-                _cardsOnTable.Add(card);
+                CardsOnTable.Add(card);
                 Console.WriteLine("Put card '" + card + "' on table.");
             }
         }
@@ -156,30 +154,30 @@ namespace tddd49_holdem
             }
         }
 
-        public Player GetWinner()
+		// Winner is often one player but it could also be a tie between several players. 
+        public HashSet<Player> GetWinners()
         {
-            // if all players except one folded
-            if (AfterMove.Count + BeforeMove.Count == 1)
-            {
-                if (AfterMove.Any()) return AfterMove.Dequeue();
-                return BeforeMove.Dequeue();
-            }
-            else throw new NotImplementedException("Winner algorithm sholud be implemented here."); 
+			HashSet<Player> activePlayers = new HashSet<Player>(GetActivePlayers());
+
+			// if all players except one folded
+			if (activePlayers.Count == 1) return activePlayers;
+
+			// else winner(s) is determined due to rules
+			return Rules.GetBestDrawPlayers(activePlayers);
         }
 
+		private List<Player> GetActivePlayers(){
+			return AfterMove.Concat(BeforeMove).ToList();
+		}
+
 		public bool isPlayerActive(Player player){
-			if (BeforeMove.Contains (player))
-				return true;
-			else if (AfterMove.Contains (player))
-				return true;
-			else
-				return false;
+			return GetActivePlayers().Contains(player);
 		}
 
 		public void PrintTable()
 		{
 			Console.WriteLine();
-			Console.WriteLine ("Table Cards: \t" + _cardsOnTable);
+			Console.WriteLine ("Table Cards: \t" + CardsOnTable);
 			Console.WriteLine ("Table Pot: \t" + Pot);
 			Console.WriteLine();
 			Console.WriteLine ("Name \t\t Active \t Cards \t\t CurrentBet");
@@ -188,8 +186,9 @@ namespace tddd49_holdem
 				Console.WriteLine(player.Name + "\t " + isPlayerActive(player) + "\t\t " + player.Cards + "\t " + player.CurrentBet);
 			}
 			Console.WriteLine();
-
 		}
+
+
 
     }
 }
