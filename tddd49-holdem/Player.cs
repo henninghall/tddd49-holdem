@@ -11,11 +11,11 @@ namespace tddd49_holdem
     {
 		public Cards Cards;
         public Table Table;
-        public String Name { private set; get; }
+        public string Name { private set; get; }
 		public int ChipsOnHand; 
 		public int CurrentBet;
     
-        public Player(String name)
+        public Player(string name)
         {
             Name = name;
             Console.WriteLine("Player created: " + name);
@@ -88,7 +88,7 @@ namespace tddd49_holdem
 				}
         }
 
-		public Cards getAllCards(){
+		public Cards GetAllCards(){
 			return (Cards) Cards.Concat(Table.CardsOnTable); 
 		}
 			

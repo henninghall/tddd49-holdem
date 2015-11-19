@@ -9,7 +9,7 @@ namespace tddd49_holdem
 
     public class RulesEngine
     {
-        private Table _table;
+        private readonly Table _table;
 
         public static readonly List<int> CardsBeforeRound = new List<int>{0, 3, 1, 1};
         public const int StartingChips = 1000;
@@ -35,38 +35,26 @@ namespace tddd49_holdem
         public bool IsCallValid(Player player)
         {
              // not valid if player has highest bet already
-           if (!_table.GetHighestBetPlayers().Contains(player))
-            {
-                // must have enough chips
-                if (_table.GetHighestBet() <= (player.CurrentBet + player.ChipsOnHand))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool IsRaiseValid(Player player)
-        {
+            if (_table.GetHighestBetPlayers().Contains(player)) return false;
             // must have enough chips
-            if ((player.CurrentBet + player.ChipsOnHand) > _table.GetHighestBet())
-            {
-                return true;
-            }
-            return false;
+            return _table.GetHighestBet() <= (player.CurrentBet + player.ChipsOnHand);
         }
 
-		public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players){
+        public bool IsRaiseValid(Player player) {
+            // must have enough chips
+            return (player.CurrentBet + player.ChipsOnHand) > _table.GetHighestBet();
+        }
+
+        public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players){
 
 			HashSet<Player> currentBestDrawPlayers = new HashSet<Player>();
 			DrawType currentBestDrawType = DrawType.HighCards;
-			Draw currentDraw;
 
-			// Get best draw types
+		    // Get best draw types
 			foreach (Player player in players) {
-				currentDraw = new Draw (player.getAllCards(), this);
+			    Draw currentDraw = new Draw (player.GetAllCards(), this);
 
-				// if same draw type
+			    // if same draw type
 				if (currentDraw.Type == currentBestDrawType) {
 					currentBestDrawPlayers.Add(player);
 				} 
@@ -77,7 +65,7 @@ namespace tddd49_holdem
 					currentBestDrawType = currentDraw.Type;
 				}
 			}
-			// TODO: Compare draws with same draw type
+		    // TODO: Compare draws with same draw type
 
 			return currentBestDrawPlayers;
 		}
@@ -91,8 +79,8 @@ namespace tddd49_holdem
 			int straightStartsAt;
 
 			foreach (Card card in allCards) {
-				valueCounter[card._value].Add(card);
-				colorCounter[card._color].Add(card);
+				valueCounter[card.Value].Add(card);
+				colorCounter[card.Color].Add(card);
 			}
 
 			GetLongestStraight(valueCounter, out straightLenght, out straightStartsAt);
@@ -106,7 +94,7 @@ namespace tddd49_holdem
 				// Straight Flush
 				if (straightLenght >= 5) {
 					drawtype = DrawType.StraigtFlush;
-					cardsInDraw = valueCounter.getStraight (5, straightStartsAt); 
+					cardsInDraw = valueCounter.GetStraight (5, straightStartsAt); 
 				}
 				// Flush
 				else {
@@ -116,7 +104,7 @@ namespace tddd49_holdem
 
 			// Straight 
 			else if (straightLenght >= 5) {
-				cardsInDraw.AddRange(valueCounter.getStraight (5, straightStartsAt)); 
+				cardsInDraw.AddRange(valueCounter.GetStraight (5, straightStartsAt)); 
 				drawtype = DrawType.Straight;
 			}
 			// FourOfAKind
@@ -168,7 +156,7 @@ namespace tddd49_holdem
 			int currentStraigt = 0;
 			int index = 0;
 			foreach (Cards cards in valueCounter) {
-				if (cards.Count() > 0) {
+				if (cards.Any()) {
 					currentStraigt++;
 					if (currentStraigt > longestStraight) {
 						longestStraight = currentStraigt; 

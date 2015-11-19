@@ -2,21 +2,21 @@
 {
     public class Card
     {
-		public int _color {private set; get;}
-		public int _value {private set; get;}
+		public int Color {get;}
+		public int Value {get;}
     
         public Card(int color, int value)
         {
-            _color = color;
-            _value = value;
+            Color = color;
+            Value = value;
         }
 
         public override string ToString()
         {
-			return  getColorSymbol(_color) + " " + getNumberSymbol(_value);
+			return  GetColorSymbol(Color) + " " + getNumberSymbol(Value);
         }
 
-		private string getColorSymbol(int color){
+		private string GetColorSymbol(int color){
 			switch (color){
 			case 0: return "♠";
 			case 1: return "♥";

@@ -6,27 +6,17 @@ namespace tddd49_holdem
 {
     public class Game
     {
-
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
 			Card c1 = new Card (0, 2);
-			Card c2 = new Card (1, 5);
+			Card c2 = new Card (1, 7);
 			Card c3 = new Card (2, 7);
-			Card c4 = new Card (1, 8);
+			Card c4 = new Card (1, 1);
 			Card c5 = new Card (2, 11);
-			Card c6 = new Card (1, 11);
+			Card c6 = new Card (1, 11);     
 			Card c7 = new Card (1, 14);
 
-			Cards cards = new Cards();
-			cards.Add(c1);
-			cards.Add(c2);
-			cards.Add(c3);
-			cards.Add(c4);
-			cards.Add(c5);
-			cards.Add(c6);
-			cards.Add(c7);
-
-			//Cards subCards = cards.GetSubCards (0, 2);
+            Cards cards = new Cards {c1, c2, c3, c4, c5, c6, c7};
 
 			Draw draw = new Draw (cards,new RulesEngine(new Table()));
 

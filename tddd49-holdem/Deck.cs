@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
 namespace tddd49_holdem
-{
+    {
     public class Deck : Stack<Card>
     {
         public Deck()
@@ -11,7 +12,7 @@ namespace tddd49_holdem
             Shuffle();
         }
 
-        private void Push(List<Card> cardList)
+        private void Push(IEnumerable<Card> cardList)
         {
             foreach (Card card in cardList)
             {
@@ -19,7 +20,7 @@ namespace tddd49_holdem
             }
         }
 
-      private List<Card> CreateAllCards()
+        private IEnumerable<Card> CreateAllCards()
         {   
             List<Card> allCards = new List<Card>();
             for (byte i = 2; i < 15; i++)
@@ -34,18 +35,12 @@ namespace tddd49_holdem
 
         public override string ToString()
         {
-            object[] cardsInDeck = ToArray();
-            String deckString = "";
-            foreach (var card in cardsInDeck)
-            {
-                deckString += card + "\n";
-            }
-            return deckString;
+            return this.ToArray().Aggregate("", (current, card) => current + (card + "\n"));
         }
 
-		public Cards Pop(int numberOfCards)
+	    public Cards Pop(int numberOfCards)
         {
-			Cards cards = new Cards();
+		    Cards cards = new Cards();
             for (int i = 0; i < numberOfCards; i++)
             {
                 cards.Add(Pop());   
@@ -73,4 +68,4 @@ namespace tddd49_holdem
 
         
     }
-}   
+    }   
