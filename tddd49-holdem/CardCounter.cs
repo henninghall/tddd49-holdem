@@ -25,7 +25,7 @@ namespace tddd49_holdem
             }
             return currentMax;
         }
-
+        
         public int HighestMaxIndex()
         {
             int currentMax = 0;

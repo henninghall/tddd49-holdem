@@ -50,7 +50,7 @@ namespace tddd49_holdem
 			HashSet<Player> currentBestDrawPlayers = new HashSet<Player>();
 			DrawType currentBestDrawType = DrawType.HighCards;
 
-		    // Get best draw types
+		    // Get best draw types by comparing all players draws.
 			foreach (Player player in players) {
 			    Draw currentDraw = new Draw (player.GetAllCards(), this);
 
@@ -58,7 +58,7 @@ namespace tddd49_holdem
 				if (currentDraw.Type == currentBestDrawType) {
 					currentBestDrawPlayers.Add(player);
 				} 
-				// if curent draw type is better than so far found
+				// if current draw type is better than so far found
 				else if (currentDraw.Type > currentBestDrawType) {
 					currentBestDrawPlayers.Clear();
 					currentBestDrawPlayers.Add(player);
@@ -99,6 +99,8 @@ namespace tddd49_holdem
 				// Flush
 				else {
 					drawtype = DrawType.Flush;
+                    Console.WriteLine("colorMax: " + colorCounter.Max());
+				    cardsInDraw = colorCounter[colorCounter.HighestMaxIndex()];
 				}
 			}
 
@@ -108,42 +110,43 @@ namespace tddd49_holdem
 				drawtype = DrawType.Straight;
 			}
 			// FourOfAKind
-			else if (valueCounter.Max () == 4) {
-				drawtype = DrawType.FourOfAKind;
-				cardsInDraw.AddRange(valueCounter.GetHighestFourOfAKind());
-				cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (1));
-			}
-			// ThreeOfAKind / Full House
-			else if (valueCounter.Max () == 3) {
-				cardsInDraw.AddRange(valueCounter.GetHighestThreeOfAKind ());
+			else switch (valueCounter.Max ()) {
+			    case 4:
+			        drawtype = DrawType.FourOfAKind;
+			        cardsInDraw.AddRange(valueCounter.GetHighestFourOfAKind());
+			        cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (1));
+			        break;
 
-				if (valueCounter.Contains (2)) {
-					drawtype = DrawType.FullHouse;
-					cardsInDraw.AddRange (valueCounter.GetHighestPair ());
-				} else {
-					drawtype = DrawType.ThreeOfAKind;
-					cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (2));
-				}
-			}
+            // TreeOfAKind / FullHouse 
+			    case 3:
+			        cardsInDraw.AddRange(valueCounter.GetHighestThreeOfAKind ());
 
-			// 2 pair / pair
-			else if (valueCounter.Max () == 2) {
-				cardsInDraw.AddRange(valueCounter.GetHighestPair ());
+			        if (valueCounter.Contains (2)) {
+			            drawtype = DrawType.FullHouse;
+			            cardsInDraw.AddRange (valueCounter.GetHighestPair ());
+			        } else {
+			            drawtype = DrawType.ThreeOfAKind;
+			            cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (2));
+			        }
+			        break;
+            // TwoPair / Pair
+			    case 2:
+			        cardsInDraw.AddRange(valueCounter.GetHighestPair ());
 
-				if (valueCounter.NumberOfCardsOfSize (2) == 2) {
-					drawtype = DrawType.TwoPairs;
-					cardsInDraw.AddRange (valueCounter.GetSecondHighestPair ());
-					cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (1));
-				} else {
-					drawtype = DrawType.OnePair;
-					cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (3));
-				}
-			}
-
-			// High card
-			else {
-				drawtype = DrawType.HighCards;
-				cardsInDraw.AddRange(valueCounter.GetHighestSingelCards(5));
+			        if (valueCounter.NumberOfCardsOfSize (2) == 2) {
+			            drawtype = DrawType.TwoPairs;
+			            cardsInDraw.AddRange (valueCounter.GetSecondHighestPair ());
+			            cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (1));
+			        } else {
+			            drawtype = DrawType.OnePair;
+			            cardsInDraw.AddRange (valueCounter.GetHighestSingelCards (3));
+			        }
+			        break;
+            // HighCards
+			    default:
+			        drawtype = DrawType.HighCards;
+			        cardsInDraw.AddRange(valueCounter.GetHighestSingelCards(5));
+			        break;
 			}
 
 			Console.WriteLine(valueCounter);
