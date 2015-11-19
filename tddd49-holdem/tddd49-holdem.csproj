@@ -38,8 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card.cs" />
+    <Compile Include="counters\ColorCounter.cs" />
+    <Compile Include="counters\ValueCounter.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="TieDrawException.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="actions\Call.cs" />
@@ -51,7 +54,7 @@
     <Compile Include="Cards.cs" />
     <Compile Include="InvalidActionException.cs" />
     <Compile Include="Draw.cs" />
-    <Compile Include="CardCounter.cs" />
+    <Compile Include="counters\CardCounter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -61,9 +64,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="actions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />

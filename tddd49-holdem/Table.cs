@@ -9,7 +9,7 @@ namespace tddd49_holdem
         /* private List<Player> ActivePlayers { get; private set; }
         private List<Player> InactivePlayers { get; private set; }
         */
-        private List<Player> _allPlayers = new List<Player>();
+        private readonly List<Player> _allPlayers = new List<Player>();
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; private set; }
@@ -35,7 +35,7 @@ namespace tddd49_holdem
 
             // game loop
             // normally 4 rounds 0,3,1,1 cards before each round.
-            foreach (var cardsToPopCurrentRound in RulesEngine.CardsBeforeRound)
+            foreach (int cardsToPopCurrentRound in RulesEngine.CardsBeforeRound)
             {
                 // moves all active players to beforeMove
                 MoveAllAfterMoveToBeforeMove();
@@ -47,24 +47,23 @@ namespace tddd49_holdem
                 while (BeforeMove.Count != 0)
                 {
 					PrintTable();
-					var currentPlayer = BeforeMove.Dequeue();
+					Player currentPlayer = BeforeMove.Dequeue();
 
 					Console.WriteLine (currentPlayer.Name + ", please choose action:");
 					DisplayValidActionsForPlayer(currentPlayer);
 					currentPlayer.MakeMove();
 
                     // quit game if only one player left
-                    if (AfterMove.Count + BeforeMove.Count == 1)
-                    {
-                        _gameOver = true;
-                        break;
-                    }
+                    if (AfterMove.Count + BeforeMove.Count != 1) continue;
+                    _gameOver = true;
+                    break;
                 }
                 MovePlayerBetsToPot();
 
                 if (_gameOver) break;
             }
-			Console.WriteLine("Game ended. The winner is: " + GetWinners().First().Name);
+            Player winner = GetWinners().First();
+			Console.WriteLine("Game ended. The winner is: " + winner.Name + " with " + Rules.GetDrawType(winner.GetAllCards()));
             }
 
         public void AttachPlayer(Player player)
@@ -78,7 +77,7 @@ namespace tddd49_holdem
 
 		public void AttachPlayers(IEnumerable<Player> allPlayers)
         {
-            foreach (var player in allPlayers)
+            foreach (Player player in allPlayers)
             {
                 AttachPlayer(player);
             }
@@ -134,7 +133,7 @@ namespace tddd49_holdem
 
 		public void PutCards(IEnumerable<Card> cards)
         {
-            foreach (var card in cards)
+            foreach (Card card in cards)
             {
                 CardsOnTable.Add(card);
                 Console.WriteLine("Put card '" + card + "' on table.");
@@ -170,7 +169,7 @@ namespace tddd49_holdem
 			return AfterMove.Concat(BeforeMove).ToList();
 		}
 
-		public bool isPlayerActive(Player player){
+		public bool IsPlayerActive(Player player){
 			return GetActivePlayers().Contains(player);
 		}
 
@@ -183,12 +182,9 @@ namespace tddd49_holdem
 			Console.WriteLine ("Name \t\t Active \t Cards \t\t CurrentBet");
 
 			foreach (Player player in _allPlayers) {
-				Console.WriteLine(player.Name + "\t " + isPlayerActive(player) + "\t\t " + player.Cards + "\t " + player.CurrentBet);
+				Console.WriteLine(player.Name + "\t " + IsPlayerActive(player) + "\t\t " + player.Cards + "\t " + player.CurrentBet);
 			}
 			Console.WriteLine();
 		}
-
-
-
     }
 }

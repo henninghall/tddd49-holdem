@@ -26,7 +26,7 @@ namespace tddd49_holdem
             ChipsOnHand -= amount;
             CurrentBet += amount;
         }
-
+       
         private void Fold()
         {
             // does not add player to the doneMoveQueue which
@@ -89,7 +89,10 @@ namespace tddd49_holdem
         }
 
 		public Cards GetAllCards(){
-			return (Cards) Cards.Concat(Table.CardsOnTable); 
+            Cards allCards = new Cards();
+            allCards.AddRange(Cards);
+            allCards.AddRange(Table.CardsOnTable);
+			return allCards; 
 		}
 			
     }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-
-namespace tddd49_holdem
+namespace tddd49_holdem.counters
 {
-    public class CardCounter : List<Cards>
+    public abstract class CardCounter : List<Cards>
     {
-        public CardCounter(int size)
-        {
+        protected CardCounter(int size) {
             for (int i = 0; i < size; i++)
             {
                 Add(new Cards());
@@ -86,7 +83,8 @@ namespace tddd49_holdem
             return chosen;
         }
 
-        public Cards GetHighestSingelCards(int amount)
+        // returns highest single cards in decending order 
+        public Cards GetHighestSingleCards(int amount)
         {
             Cards singleCards = new Cards();
             for (int i = 0; i < amount; i++)

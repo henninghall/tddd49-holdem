@@ -1,20 +1,24 @@
 ﻿using System;
+using tddd49_holdem.counters;
 
 namespace tddd49_holdem
 {
 	public class Draw
 	{
 		public Cards Cards { private set; get;}
-		public DrawType Type { private set; get;}
+		public DrawType Type { set; get;}
+	    public ValueCounter ValueCounter;
 
-		public Draw (Cards allCardsAvailable, RulesEngine rules)
+		public Draw ()
 		{
-			Cards cards;
-			DrawType type;
-			rules.GetDraw(allCardsAvailable, out type, out cards);
-			Cards = cards;
-			Type = type;
+			
 		}
+
+	    public Draw(Cards cards, DrawType drawType) {
+	        Cards = cards;
+	        Type = drawType;
+	    }
+        
 	}
 }
 
