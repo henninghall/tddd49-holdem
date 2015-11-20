@@ -14,7 +14,7 @@ namespace tddd49_holdem
         public const int StartingChips = 1000;
         public const int CardsOnHand = 2;
 
-        public bool IsFoldValid(Player player)
+        public bool IsFoldValid(Player player, Table table)
         {
             // fold always ok
             return true;

@@ -38,7 +38,7 @@ namespace tddd49_holdem
 
         private void Check()
         {
-			if (Table.Rules.IsCheckValid (this)) {
+			if (Table.Rules.IsCheckValid(this, Table)) {
 				Table.AfterMove.Enqueue (this);
 				Console.WriteLine (Name + " checks.");
 			} else throw new InvalidActionException("Check is not valid");		
@@ -46,7 +46,7 @@ namespace tddd49_holdem
 
         private void Call()
         {
-            if (Table.Rules.IsCallValid(this))
+            if (Table.Rules.IsCallValid(this, Table))
             {
                 Bet(Table.GetHighestBet() - CurrentBet);
                 Table.AfterMove.Enqueue(this);
@@ -57,7 +57,7 @@ namespace tddd49_holdem
 
         private void Raise(int bet)
         {
-            if (Table.Rules.IsRaiseValid(this))
+            if (Table.Rules.IsRaiseValid(this, Table))
             {
 				// bet = raise + diff to max bet. 
 				bet += (Table.GetHighestBet() - CurrentBet);

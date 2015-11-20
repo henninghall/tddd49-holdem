@@ -125,10 +125,10 @@ namespace tddd49_holdem
 
         public void DisplayValidActionsForPlayer(Player player)
         {
-            if (Rules.IsFoldValid(player)) Console.WriteLine("0: Fold");
-            if (Rules.IsCheckValid(player)) Console.WriteLine("1: Check");
-            if (Rules.IsCallValid(player)) Console.WriteLine("2: Call");
-            if (Rules.IsRaiseValid(player)) Console.WriteLine("3: Raise");
+            if (Rules.IsFoldValid(player, this)) Console.WriteLine("0: Fold");
+            if (Rules.IsCheckValid(player, this)) Console.WriteLine("1: Check");
+            if (Rules.IsCallValid(player, this)) Console.WriteLine("2: Call");
+            if (Rules.IsRaiseValid(player, this)) Console.WriteLine("3: Raise");
         }
 
 		public void PutCards(IEnumerable<Card> cards)
