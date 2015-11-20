@@ -11,7 +11,7 @@ namespace tddd49_holdem
     {
 		public Cards Cards;
         public Table Table;
-        public string Name { private set; get; }
+        public string Name { set; get; }
 		public int ChipsOnHand; 
 		public int CurrentBet;
     

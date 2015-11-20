@@ -8,3 +8,4 @@ Bug: StraightFlush must have same cards in the flush as straight.
 Bug: Straight starting position
 Bug: 2st 3ofAkind doesnt see second 3ofAkind as pair
 Test
+Blinds 
