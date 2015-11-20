@@ -22,7 +22,7 @@ namespace tddd49_holdem
         public Table()
         {
 			CardsOnTable = new Cards();
-            Rules = new RulesEngine(this);
+            Rules = new RulesEngine();
             Pot = 0;
         }
 

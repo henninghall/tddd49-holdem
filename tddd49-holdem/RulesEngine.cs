@@ -10,17 +10,9 @@ namespace tddd49_holdem
 
     public class RulesEngine
     {
-        private readonly Table _table;
-
         public static readonly List<int> CardsBeforeRound = new List<int>{0, 3, 1, 1};
         public const int StartingChips = 1000;
         public const int CardsOnHand = 2;
-
-
-        public RulesEngine(Table table)
-        {
-            _table = table;
-        }
 
         public bool IsFoldValid(Player player)
         {
@@ -28,22 +20,22 @@ namespace tddd49_holdem
             return true;
         }
 
-        public bool IsCheckValid(Player player)
+        public bool IsCheckValid(Player player, Table table)
         {
-            return (_table.GetHighestBetPlayers().Contains(player));
+            return (table.GetHighestBetPlayers().Contains(player));
         }
 
-        public bool IsCallValid(Player player)
+        public bool IsCallValid(Player player, Table table)
         {
              // not valid if player has highest bet already
-            if (_table.GetHighestBetPlayers().Contains(player)) return false;
+            if (table.GetHighestBetPlayers().Contains(player)) return false;
             // must have enough chips
-            return _table.GetHighestBet() <= (player.CurrentBet + player.ChipsOnHand);
+            return table.GetHighestBet() <= (player.CurrentBet + player.ChipsOnHand);
         }
 
-        public bool IsRaiseValid(Player player) {
+        public bool IsRaiseValid(Player player, Table table) {
             // must have enough chips
-            return (player.CurrentBet + player.ChipsOnHand) > _table.GetHighestBet();
+            return (player.CurrentBet + player.ChipsOnHand) > table.GetHighestBet();
         }
 
         public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players){
