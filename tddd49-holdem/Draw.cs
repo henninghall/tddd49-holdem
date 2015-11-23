@@ -1,5 +1,4 @@
-﻿using System;
-using tddd49_holdem.counters;
+﻿using tddd49_holdem.counters;
 
 namespace tddd49_holdem
 {

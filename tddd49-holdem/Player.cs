@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 
 
 namespace tddd49_holdem
 {
     public class Player
     {
-		public Cards Cards;
+		public Cards Cards { set; get; }
         public Table Table;
         public string Name { set; get; }
-		public int ChipsOnHand; 
-		public int CurrentBet;
+		public int ChipsOnHand { set; get; }
+		public int CurrentBet { set; get; }
     
+        public Player() { }
+
         public Player(string name)
         {
             Name = name;

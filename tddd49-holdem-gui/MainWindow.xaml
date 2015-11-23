@@ -5,19 +5,73 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:tddd49_holdem_gui"
         mc:Ignorable="d"
-        Title="TDDD49 Hold'em" Height="470" Width="700">
-    <StackPanel>
+        Title="TDDD49 Hold'em" Height="620"  Width="800">
 
-        <DockPanel >
-            <TextBlock Name="Slot4" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Top" Height="50" Text="{Binding Name}" FontSize="14" Background="Beige"
-                       d:DataContext="{d:DesignData Player}" />
-            <TextBlock Name="Slot2" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Left" Height="50" Text="{Binding Name}" FontSize="14" Background="Beige"
-                       d:DataContext="{d:DesignData Player }" />
-            <TextBlock Name="Slot3" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" Height="50"  Text="{Binding Name}" FontSize="14" Background="Beige" />
-            <TextBlock Name="Slot1" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Bottom" Height="50" Text="{Binding Name}" FontSize="14" Background="Beige" />
-            <Image Source="images/poker-table.png" />
-        </DockPanel>
-        <TextBlock Name="ActionBar" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Bottom" Height="50" Text="{Binding Pot}" FontSize="16" Background="Aquamarine" />
+    <StackPanel>
+        <WrapPanel Name="PlayerPanel1" HorizontalAlignment="Center" >
+            <!-- Player1 -->
+            <StackPanel Height="100" Width="100" Background="Bisque" Name="Slot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}" >
+                <TextBlock Text="{Binding Name}"  FontSize="16" Height="25"/>
+                <TextBlock Text="{Binding ChipsOnHand}" FontSize="16"  Height="25"/>
+                <StackPanel Orientation="Horizontal" Height="50">
+                    <!-- Card1 -->
+                    <StackPanel Width="50">
+                        <TextBlock Text="{Binding Cards.Item.Color}"  FontSize="16" Height="25"/>
+                        <TextBlock Text="{Binding Cards.Item.Value}"  FontSize="16" Height="25"/>
+                    </StackPanel>
+                    <!-- Card2 -->
+                    <StackPanel Width="50">
+                        <TextBlock Text="{Binding Cards.Item.Color}" FontSize="16" Height="25"/>
+                        <TextBlock Text="{Binding Cards.Item.Value}" FontSize="16" Height="25"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </WrapPanel>
+        <StackPanel Orientation="Horizontal" Height="300">
+            <WrapPanel Name="PlayerPanel2" Width="100">
+                <!-- insert players here -->
+            </WrapPanel>
+            <StackPanel Width="600">
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="/images/poker-table.png"/>
+                </StackPanel.Background>
+                <!-- the actual table -->
+            </StackPanel>
+            <WrapPanel Name="PlayerPanel3" Width="100">
+                <!-- insert players here -->
+            </WrapPanel>
+        </StackPanel>
+        <WrapPanel Name="PlayerPanel4" Height="100">
+            <!-- insert players here -->
+        </WrapPanel>
+
+        <!-- Action bar -->
+        <StackPanel Orientation="Horizontal" Height="100" Background="CornflowerBlue">
+            <StackPanel  Width="480">
+                <TextBlock Foreground="Black" FontSize="16" Padding="10">
+                     Waiting for player 1...<LineBreak />
+                     Player 1 rasies.<LineBreak />
+                     Waiting for player 2...
+                </TextBlock>
+            </StackPanel>
+            <WrapPanel VerticalAlignment="Center" Width="300">
+                <Button Name="FoldButton" Width="150" VerticalAlignment="Stretch" FontSize="20">Fold</Button>
+                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20">Check</Button>
+                <Button Name="CallButton" Width="150" VerticalAlignment="Stretch"  FontSize="20">Call</Button>
+                <Button Name="RaiseButton" Width="150" VerticalAlignment="Stretch"   FontSize="20">Raise</Button>
+            </WrapPanel>
+        </StackPanel>
 
     </StackPanel>
+    <!-- <StackPanel>
+        <DockPanel>
+            <TextBlock Name="Slot1" DockPanel.Dock="Top"  Text="{Binding Name}" d:DataContext="{d:DesignData Source=/Samples/PlayerSample.xaml}"  HorizontalAlignment="Center"  Height="50" FontSize="14" Background="Beige" />
+            <TextBlock Name="Slot2" DockPanel.Dock="Right"  Text="{Binding Name}" d:DataContext="{d:DesignData Source=/Samples/PlayerSample.xaml}"  HorizontalAlignment="Center"  Height="50" FontSize="14" Background="Beige" />
+            <TextBlock Name="Slot3" DockPanel.Dock="Bottom"  Text="{Binding Name}" d:DataContext="{d:DesignData Source=/Samples/PlayerSample.xaml}" Height="75" Width="75" FontSize="14" Background="Beige" />
+            <TextBlock Name="Slot4" DockPanel.Dock="Left"  Text="{Binding Name}" d:DataContext="{d:DesignData Source=/Samples/PlayerSample.xaml}"  Height="50" FontSize="14" Background="Beige" />
+            <Image Source="images/poker-table.png" />
+        </DockPanel>
+        <TextBlock Name="ActionBar" DockPanel.Dock="Bottom" Text="{Binding Pot}" d:DataContext="{d:DesignData Source=/Samples/TableSample.xaml}" HorizontalAlignment="Center" VerticalAlignment="Center"  Height="50"  FontSize="16" Background="Aquamarine" />
+        
+    </StackPanel> -->
 </Window>

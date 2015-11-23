@@ -2,9 +2,12 @@
 {
     public class Card
     {
-		public int Color {get;}
-		public int Value {get;}
-    
+		public int Color { get; set; }
+		public int Value {get; set; }
+
+        // Needed for sample data in gui    
+        public Card() { }
+
         public Card(int color, int value)
         {
             Color = color;

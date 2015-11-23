@@ -13,8 +13,8 @@ namespace tddd49_holdem
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; private set; }
-		public Cards CardsOnTable { get; private set; }
-        public int Pot { get; private set; }
+		public Cards CardsOnTable { get; set;}
+        public int Pot { get; set; }
         public Deck Deck = new Deck();
         private bool _gameOver = false;
         

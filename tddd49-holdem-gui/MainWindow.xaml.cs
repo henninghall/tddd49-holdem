@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using tddd49_holdem;
-using Table = System.Windows.Documents.Table;
 
 namespace tddd49_holdem_gui
 {
@@ -37,7 +24,7 @@ namespace tddd49_holdem_gui
 
             this.DataContext = table;
             Slot1.DataContext = p1;
-            Slot2.DataContext = p2;
+            //Slot2.DataContext = p2;
 
             p1.Name = "New p1 name";
             p2.Name = "New p2 name";
