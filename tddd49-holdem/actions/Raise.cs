@@ -9,7 +9,7 @@
         public override bool IsValid()
         {
             // have enough chips
-            if ((_player.CurrentBet + _player.ChipsOnHand) > _table.GetHighestBet())
+            if ((Player.CurrentBet + Player.ChipsOnHand) > Table.GetHighestBet())
             {
                 return true;
             }

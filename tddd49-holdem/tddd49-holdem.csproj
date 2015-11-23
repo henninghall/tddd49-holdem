@@ -44,8 +44,9 @@
     <Compile Include="counters\ColorCounter.cs" />
     <Compile Include="counters\ValueCounter.cs" />
     <Compile Include="Deck.cs" />
+    <Compile Include="Exceptions\InvalidSuitException.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="TieDrawException.cs" />
+    <Compile Include="Exceptions\TieDrawException.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="actions\Call.cs" />
@@ -55,7 +56,7 @@
     <Compile Include="actions\Raise.cs" />
     <Compile Include="RulesEngine.cs" />
     <Compile Include="Cards.cs" />
-    <Compile Include="InvalidActionException.cs" />
+    <Compile Include="Exceptions\InvalidActionException.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="counters\CardCounter.cs" />
   </ItemGroup>

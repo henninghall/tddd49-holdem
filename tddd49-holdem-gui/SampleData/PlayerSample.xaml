@@ -4,7 +4,7 @@
     CurrentBet="10"
     ChipsOnHand="2000" >
     <m:Player.Cards>
-        <m:Card Color="3" Value="12"/>
-        <m:Card Color="1" Value="4"/>
+        <m:Card SuitSymbol="♠" ValueSymbol="D" Color="Black"/>
+        <m:Card SuitSymbol="♥" ValueSymbol="4" Color="Red"/>
     </m:Player.Cards>
 </m:Player>

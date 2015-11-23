@@ -6,7 +6,7 @@
 
         public override bool IsValid()
         {
-            return(_table.GetHighestBetPlayers().Contains(_player));
+            return(Table.GetHighestBetPlayers().Contains(Player));
         }
 
         public override void Execute()

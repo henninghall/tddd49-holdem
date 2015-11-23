@@ -30,13 +30,6 @@ namespace tddd49_holdem_gui
             p2.Name = "New p2 name";
         }
 
-        private void PnlMainGrid_OnMouseDown(object sender, MouseButtonEventArgs e) {
-            MessageBox.Show("You clicked me at down " + e.GetPosition(this).ToString());
-        }
-
-        private void pnlMainGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at up " + e.GetPosition(this).ToString());
-        }
+    
     }
 }

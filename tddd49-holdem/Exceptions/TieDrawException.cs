@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace tddd49_holdem
+namespace tddd49_holdem.Exceptions
 {
 	public class TieDrawException: Exception
 	{

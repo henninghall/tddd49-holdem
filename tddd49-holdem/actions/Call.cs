@@ -9,10 +9,10 @@
         public override bool IsValid()
         {
             // not highest bet already
-            if (!_table.GetHighestBetPlayers().Contains(_player))
+            if (!Table.GetHighestBetPlayers().Contains(Player))
             {
                 // have enough chips
-                if (_table.GetHighestBet() <= (_player.CurrentBet + _player.ChipsOnHand))
+                if (Table.GetHighestBet() <= (Player.CurrentBet + Player.ChipsOnHand))
                 {
                     return true;
                 }

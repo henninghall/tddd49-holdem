@@ -5,7 +5,7 @@
         public ColorCounter(Cards cards) : base(4) {
             foreach (Card card in cards)
             {
-                this[card.Color].Add(card);
+                this[card.Suit].Add(card);
             }
 
         }

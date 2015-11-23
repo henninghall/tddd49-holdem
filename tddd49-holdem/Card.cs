@@ -1,35 +1,48 @@
-﻿namespace tddd49_holdem
+﻿using System;
+using tddd49_holdem.Exceptions;
+
+namespace tddd49_holdem
 {
+    //public enum CardColor { Black, Red }
+
     public class Card
     {
-		public int Color { get; set; }
+		public int Suit { get; set; }
 		public int Value {get; set; }
+        public string SuitSymbol { get; set; }
+        public string ValueSymbol { get; set; }
+        public string Color { get; set; }
 
+    
         // Needed for sample data in gui    
         public Card() { }
 
-        public Card(int color, int value)
+        public Card(int suit, int value)
         {
-            Color = color;
+            Suit = suit;
             Value = value;
+            SuitSymbol = GetSuitSymbol(suit);
+            ValueSymbol = GetNumberSymbol(value);
+            Color = GetColor(suit);
         }
+
 
         public override string ToString()
         {
-			return  GetColorSymbol(Color) + " " + getNumberSymbol(Value);
+			return  GetSuitSymbol(Suit) + " " + GetNumberSymbol(Value);
         }
 
-		private string GetColorSymbol(int color){
-			switch (color){
+		private string GetSuitSymbol(int suit){
+			switch (suit){
 			case 0: return "♠";
 			case 1: return "♥";
 			case 2: return "♦";
 			case 3: return "♣";
 			}
-			return null;
-		}
+            throw new InvalidSuitException();
+        }
 
-		private string getNumberSymbol(int number){
+        private string GetNumberSymbol(int number){
 			switch (number){
 			case 11: return "Kn";
 			case 12: return "D";
@@ -39,5 +52,16 @@
 			return number.ToString();
 		}
 
+        private string GetColor(int suit) {
+            switch (suit)
+            {
+                case 0: return "Black";
+                case 1: return "Red"; 
+                case 2: return "Red";
+                case 3: return "Black";
+            }
+            throw new InvalidSuitException();
+        }
+        
     }
 }
