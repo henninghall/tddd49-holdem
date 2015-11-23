@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:tddd49_holdem_gui"
         mc:Ignorable="d"
-        Title="TDDD49 Hold'em" Height="650"  Width="850">
+        Title="TDDD49 Hold'em" Height="675"  Width="900">
     <StackPanel>
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>
-        <WrapPanel HorizontalAlignment="Center" Margin="10">
+        <WrapPanel HorizontalAlignment="Center">
             <!-- Player 1 -->
             <local:PlayerPanel x:Name="PlayerSlot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
         <StackPanel Orientation="Horizontal" Height="300" HorizontalAlignment="Center">
-            <WrapPanel Width="100" VerticalAlignment="Center">
+            <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 2 -->
                 <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
@@ -25,12 +25,13 @@
                 </StackPanel.Background>
                 <!-- the actual table -->
             </StackPanel>
-            <WrapPanel Width="100" VerticalAlignment="Center">
+            <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 3 -->
                 <local:PlayerPanel x:Name="PlayerSlot3" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot5" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
         </StackPanel>
-        <WrapPanel Width="100">
+        <WrapPanel HorizontalAlignment="Center">
             <!-- Player 4 -->
             <local:PlayerPanel x:Name="PlayerSlot4" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
@@ -52,4 +53,6 @@
             </WrapPanel>
         </StackPanel>
     </StackPanel>
+
+
 </Window>

@@ -1,4 +1,6 @@
-﻿namespace tddd49_holdem_gui
+﻿using System.Windows;
+
+namespace tddd49_holdem_gui
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
@@ -9,5 +11,6 @@
         {
             InitializeComponent();
         }
+        
     }
 }

@@ -1,12 +1,14 @@
 ﻿<UserControl Name="PlayerPanelControl"
-            x:Class="tddd49_holdem_gui.PlayerPanel" 
+             x:Class="tddd49_holdem_gui.PlayerPanel" 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}" >
+             d:DesignHeight="300" d:DesignWidth="300" Margin="10"
+             d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}" 
+             >
+
     <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" >
         <StackPanel Height="100" Width="100" Background="GhostWhite" Name="Slot1" >
             <TextBlock Text="{Binding Name}"  HorizontalAlignment="Center" FontSize="16"/>

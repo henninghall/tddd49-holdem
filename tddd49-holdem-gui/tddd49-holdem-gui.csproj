@@ -73,9 +73,9 @@
     <DesignData Include="SampleData\PlayerSample.xaml">
       <SubType>Designer</SubType>
     </DesignData>
-    <Page Include="SampleData\TableSample.xaml">
+    <DesignData Include="SampleData\TableSample.xaml">
       <SubType>Designer</SubType>
-    </Page>
+    </DesignData>
     <Page Include="PlayerPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

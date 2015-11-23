@@ -15,19 +15,19 @@ namespace tddd49_holdem_gui
         public MainWindow()
         {
             InitializeComponent();
-            Player p1 = new Player("Player 1");
-            Player p2 = new Player("Player 2");
+             
+            Player p1 = new Player("Barbastark");
+            Player p2 = new Player("Barbafin");
            
-            tddd49_holdem.Table table = new tddd49_holdem.Table();
+            Table table = new Table();
             table.AttachPlayer(p1);
             table.AttachPlayer(p2);
 
-            this.DataContext = table;
-            PlayerPanel1.DataContext = p1;
-            PlayerPanel2.DataContext = p2;
+            PlayerSlot1.DataContext = p1;
+            PlayerSlot2.DataContext = p2;
+            
 
-            p1.Name = "New p1 name";
-            p2.Name = "New p2 name";
+           // table.StartGame();
         }
 
     
