@@ -23,8 +23,8 @@ namespace tddd49_holdem_gui
             table.AttachPlayer(p2);
 
             this.DataContext = table;
-            Slot1.DataContext = p1;
-            //Slot2.DataContext = p2;
+            PlayerPanel1.DataContext = p1;
+            PlayerPanel2.DataContext = p2;
 
             p1.Name = "New p1 name";
             p2.Name = "New p2 name";
