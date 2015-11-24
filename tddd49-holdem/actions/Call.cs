@@ -1,28 +1,23 @@
-﻿namespace tddd49_holdem.actions
+﻿using System;
+
+namespace tddd49_holdem.actions
 {
     public class Call : PlayerAction
     {
-        public Call(Table table, Player player) : base(table, player)
-        {
-        }
+        public Call(Player player) : base(player) { }
 
         public override bool IsValid()
         {
-            // not highest bet already
-            if (!Table.GetHighestBetPlayers().Contains(Player))
-            {
-                // have enough chips
-                if (Table.GetHighestBet() <= (Player.CurrentBet + Player.ChipsOnHand))
-                {
-                    return true;
-                }
-            }
-            return false;
+            // not valid if player has highest bet already
+            if (Player.Table.GetHighestBetPlayers().Contains(Player)) return false;
+            // must have enough chips
+            return Player.Table.GetHighestBet() <= (Player.CurrentBet + Player.ChipsOnHand);
         }
 
         public override void Execute()
         {
-           // _player.Bet(_table.GetHighestBet() - _player.CurrentBet);
+            Player.Bet(Player.Table.GetHighestBet() - Player.CurrentBet);
+            Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
         }
     }
 }

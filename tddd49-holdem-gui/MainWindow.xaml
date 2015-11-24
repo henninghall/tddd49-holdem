@@ -43,9 +43,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ListBox>
-                
-                
-                
+
                 <!-- the actual table -->
             </StackPanel>
             <WrapPanel Width="130" VerticalAlignment="Center">
@@ -61,16 +59,20 @@
 
         <!-- Action bar -->
         <StackPanel Orientation="Horizontal" Height="100" Background="WhiteSmoke" x:Name="ActionPanel">
-            <StackPanel  Width="480">
-                <TextBlock Foreground="Black" FontSize="16" Padding="10">
-                     Waiting for player 1...<LineBreak />
-                     Player 1 rasies.<LineBreak />
-                     Waiting for player 2...
-                </TextBlock>
+            <StackPanel  Width="480" d:DataContext="{d:DesignData Source=/SampleData/LogBoxSample.xaml}" >
+
+                <ListBox x:Name="LogBox" ItemsSource="{Binding TextRows}" Height="100">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Text}" FontSize="15" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
             </StackPanel>
             <WrapPanel VerticalAlignment="Center" Width="300">
                 <Button Name="FoldButton" Width="150" VerticalAlignment="Stretch" FontSize="20" Click="FoldButton_Click" Tag="{Binding ActivePlayer}">Fold</Button>
-                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CheckButton_Click" Tag="{Binding}">Check</Button>
+                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CheckButton_Click" Tag="{Binding ActivePlayer}">Check</Button>
                 <Button Name="CallButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CallButton_Click" Tag="{Binding ActivePlayer}">Call</Button>
                 <Button Name="RaiseButton" Width="150" VerticalAlignment="Stretch"   FontSize="20" Click="RaiseButton_Click" Tag="{Binding ActivePlayer}">Raise</Button>
             </WrapPanel>

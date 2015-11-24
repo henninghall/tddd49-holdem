@@ -48,7 +48,7 @@ namespace tddd49_holdem
             table.AttachPlayer(p3);
 
             // start game at table
-            table.StartConsoleGame();
+            //table.StartGuiGame();
                        
         }
 

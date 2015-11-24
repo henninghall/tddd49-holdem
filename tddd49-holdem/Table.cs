@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace tddd49_holdem
 {
-    public class Table
+    public class Table : Data
     {
         /* private List<Player> ActivePlayers { get; private set; }
         private List<Player> InactivePlayers { get; private set; }
@@ -18,7 +18,12 @@ namespace tddd49_holdem
         public Deck Deck = new Deck();
         private bool _gameOver = false;
         private readonly Queue<int> _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
-        public Player ActivePlayer { get; private set; }
+        private Player _activePlayer;
+        public Player ActivePlayer
+        {
+            get { return _activePlayer; }
+            set { SetField(ref _activePlayer, value, "ActivePlayer"); }
+        }
 
         public Cards CardsOnTable { get; set; }
 
@@ -27,48 +32,6 @@ namespace tddd49_holdem
             CardsOnTable = new Cards();
             Rules = new RulesEngine();
             Pot = 0;
-        }
-      
-        public void StartConsoleGame()
-        {
-            Console.WriteLine("Game started.");
-
-            // make all players active before each game
-            MakeAllPlayersActive();
-
-            // game loop
-            // normally 4 rounds 0,3,1,1 cards before each round.
-            foreach (int cardsToPopCurrentRound in RulesEngine.CardsBeforeRound)
-            {
-                // moves all active players to beforeMove
-                MoveAllAfterMoveToBeforeMove();
-
-                // pop the round-specific amount of cards on the table defined by rules.
-                // normal texas hold'em rules gives 0 cards before first round etc. 
-                PutCards(Deck.Pop(cardsToPopCurrentRound));
-
-                while (BeforeMove.Count != 0)
-                {
-                    PrintTable();
-                    Player currentPlayer = BeforeMove.Dequeue();
-
-                    Console.WriteLine(currentPlayer.Name + ", please choose action:");
-                    DisplayValidActionsForPlayer(currentPlayer);
-                    currentPlayer.MakeConsoleMove();
-
-
-
-                    // quit game if only one player left
-                    if (AfterMove.Count + BeforeMove.Count != 1) continue;
-                    _gameOver = true;
-                    break;
-                }
-                MovePlayerBetsToPot();
-
-                if (_gameOver) break;
-            }
-            Player winner = GetWinners().First();
-            Console.WriteLine("Game ended. The winner is: " + winner.Name + " with " + Rules.GetDrawType(winner.GetAllCards()));
         }
 
         public void StartGuiGame()
@@ -136,6 +99,7 @@ namespace tddd49_holdem
             return currentHighestBet;
         }
 
+        /*
         public void DisplayValidActionsForPlayer(Player player)
         {
             if (Rules.IsFoldValid(player, this)) Console.WriteLine("0: Fold");
@@ -143,7 +107,7 @@ namespace tddd49_holdem
             if (Rules.IsCallValid(player, this)) Console.WriteLine("2: Call");
             if (Rules.IsRaiseValid(player, this)) Console.WriteLine("3: Raise");
         }
-
+        */
         public void PutCards(IEnumerable<Card> cards)
         {
             foreach (Card card in cards)

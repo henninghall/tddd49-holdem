@@ -2,25 +2,26 @@
 {
     public class Raise : PlayerAction
     {
-        public Raise(Table table, Player player) : base(table, player)
-        {
-        }
+        public Raise(Player player) : base(player){ }
 
         public override bool IsValid()
         {
-            // have enough chips
-            if ((Player.CurrentBet + Player.ChipsOnHand) > Table.GetHighestBet())
-            {
-                return true;
-            }
-
-            return false;
+            // must have enough chips
+            return (Player.CurrentBet + Player.ChipsOnHand) > Player.Table.GetHighestBet();
         }
 
         // TODO: Remove fixed bet.
-        public override void Execute()
-        {
-           // _player.Bet(10);
+        public override void Execute() {
+            int bet = 10;
+            // bet = raise + diff to max bet. 
+            bet += (Player.Table.GetHighestBet() - Player.CurrentBet);
+
+            Player.Bet(bet);
+
+            // force every active player to move again...
+            Player.Table.MoveAllAfterMoveToBeforeMove();
+            // ... except player who made the bet
+            Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Fold : PlayerAction
     {
-        public Fold(Table table, Player player) : base(table, player){}
+        public Fold(Player player) : base(player){}
 
         public override bool IsValid()
         {
@@ -12,7 +12,7 @@
 
         public override void Execute()
         {
-            Player.Fold();
+            Player.Table.BeforeMove.Dequeue();
         }
     }
 }

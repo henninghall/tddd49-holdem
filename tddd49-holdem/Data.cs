@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace tddd49_holdem
 {
+    // From: http://stackoverflow.com/questions/1315621/implementing-inotifypropertychanged-does-a-better-way-exist
     public class Data : INotifyPropertyChanged
     {
         // boiler-plate

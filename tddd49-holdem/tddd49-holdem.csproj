@@ -49,6 +49,7 @@
     <Compile Include="Exceptions\InvalidSuitException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Exceptions\TieDrawException.cs" />
+    <Compile Include="LogBox.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="actions\Call.cs" />

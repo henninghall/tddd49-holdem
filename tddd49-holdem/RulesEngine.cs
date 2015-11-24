@@ -13,6 +13,7 @@ namespace tddd49_holdem
         public const int StartingChips = 1000;
         public const int CardsOnHand = 2;
 
+        /* 
         public bool IsFoldValid(Player player, Table table)
         {
             // fold always ok
@@ -36,6 +37,7 @@ namespace tddd49_holdem
             // must have enough chips
             return (player.CurrentBet + player.ChipsOnHand) > table.GetHighestBet();
         }
+        */
 
         public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players){
 

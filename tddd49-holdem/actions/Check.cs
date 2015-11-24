@@ -2,15 +2,16 @@
 {
     public class Check : PlayerAction
     {
-        public Check(Table table, Player player) : base(table, player){}
+        public Check(Player player) : base(player) { }
 
         public override bool IsValid()
         {
-            return(Table.GetHighestBetPlayers().Contains(Player));
+            return (Player.Table.GetHighestBetPlayers().Contains(Player));
         }
 
-        public override void Execute() {
-            Player.Check();
+        public override void Execute()
+        {
+            Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
         }
     }
 }
