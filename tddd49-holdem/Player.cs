@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Linq;
+using tddd49_holdem.actions;
 
 
 namespace tddd49_holdem
 {
-    public class Player
+    public class Player : Data
     {
 		public Cards Cards { set; get; }
         public Table Table;
-        public string Name { set; get; }
-		public int ChipsOnHand { set; get; }
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { SetField(ref _name, value, "Name"); }
+        }
+        public int ChipsOnHand { set; get; }
 		public int CurrentBet { set; get; }
     
         public Player() { }
@@ -24,8 +31,8 @@ namespace tddd49_holdem
             ChipsOnHand -= amount;
             CurrentBet += amount;
         }
-       
-        private void Fold()
+
+        public void Fold()
         {
             // does not add player to the doneMoveQueue which
             // makes the player inactive this round
@@ -34,26 +41,26 @@ namespace tddd49_holdem
             Console.WriteLine(Name + " folds.");
         }
 
-        private void Check()
+        public void Check()
         {
 			if (Table.Rules.IsCheckValid(this, Table)) {
-				Table.AfterMove.Enqueue (this);
+                Table.AfterMove.Enqueue(Table.BeforeMove.Dequeue());
 				Console.WriteLine (Name + " checks.");
 			} else throw new InvalidActionException("Check is not valid");		
 		}
 
-        private void Call()
+        public void Call()
         {
             if (Table.Rules.IsCallValid(this, Table))
             {
                 Bet(Table.GetHighestBet() - CurrentBet);
-                Table.AfterMove.Enqueue(this);
+                Table.AfterMove.Enqueue(Table.BeforeMove.Dequeue());
                 Console.WriteLine(Name + " calls.");
             }
 			else throw new InvalidActionException("Call is not valid");	
         }
 
-        private void Raise(int bet)
+        public void Raise(int bet)
         {
             if (Table.Rules.IsRaiseValid(this, Table))
             {
@@ -64,17 +71,18 @@ namespace tddd49_holdem
 
                 // force every active player to move again
                 Table.MoveAllAfterMoveToBeforeMove();
-              
-                Table.AfterMove.Enqueue(this);
-				Console.WriteLine(Name + " raises " + bet + ".");
+                Table.AfterMove.Enqueue(Table.BeforeMove.Dequeue());
+
+                Console.WriteLine(Name + " raises " + bet + ".");
             }
 			else throw new InvalidActionException("Raise is not valid");	
         }
 
-        public void MakeMove()
+        public void MakeConsoleMove()
         {
-			int input = Convert.ToInt32(Console.ReadLine());
-			switch (input)
+            int input = Convert.ToInt32(Console.ReadLine());
+
+            switch (input)
 				{
 				case 0: Fold(); break;
 				case 1: Check(); break;
@@ -86,12 +94,31 @@ namespace tddd49_holdem
 				}
         }
 
+        public void MakeMove(PlayerAction action) {
+            if (!action.IsValid()) throw new InvalidActionException();
+            action.Execute();
+            if (Table.GetNumberOfActivePlayers() == 1) Table.EndGame();
+            if (Table.BeforeMove.Count == 0) {
+                Table.MovePlayerBetsToPot();
+                if (!Table.HasNextCard()) Table.EndGame();
+                else {
+                    Table.NextCard();
+                    Table.MoveAllAfterMoveToBeforeMove();
+                }
+            }
+            Table.NextPlayer();
+        }
+
 		public Cards GetAllCards(){
             Cards allCards = new Cards();
             allCards.AddRange(Cards);
             allCards.AddRange(Table.CardsOnTable);
 			return allCards; 
 		}
-			
+
+		
     }
+
+
+
 }

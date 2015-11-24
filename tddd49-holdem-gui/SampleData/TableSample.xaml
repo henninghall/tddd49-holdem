@@ -2,11 +2,11 @@
     xmlns:m="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
     Pot="4520" >
     <m:Table.CardsOnTable>
-        <m:Card Suit="0" Value="11"/>
-        <m:Card Suit="1" Value="4"/>
-        <m:Card Suit="1" Value="14"/>
-        <m:Card Suit="2" Value="7"/>
-        <m:Card Suit="3" Value="7"/>
+        <m:Card SuitSymbol="♠" ValueSymbol="D" Color="Black"/>
+        <m:Card SuitSymbol="♥" ValueSymbol="7" Color="Red"/>
+        <m:Card SuitSymbol="♥" ValueSymbol="Kn" Color="Red"/>
+        <m:Card SuitSymbol="♠" ValueSymbol="5" Color="Black"/>
+        <m:Card SuitSymbol="♥" ValueSymbol="7" Color="Red"/>
     </m:Table.CardsOnTable>
 </m:Table>
     

@@ -9,9 +9,8 @@
             return(Table.GetHighestBetPlayers().Contains(Player));
         }
 
-        public override void Execute()
-        {
-           // a check does nothing
+        public override void Execute() {
+            Player.Check();
         }
     }
 }

@@ -40,9 +40,11 @@
     <None Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="counters\ColorCounter.cs" />
     <Compile Include="counters\ValueCounter.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Exceptions\InvalidSuitException.cs" />
     <Compile Include="Game.cs" />

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:tddd49_holdem_gui"
+        xmlns:tddd49Holdem="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
         mc:Ignorable="d"
-        Title="TDDD49 Hold'em" Height="675"  Width="900">
+        Title="TDDD49 Hold'em" Height="675"  Width="900"
+        x:Name="Window">
     <StackPanel>
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
@@ -19,10 +21,31 @@
                 <!-- Player 2 -->
                 <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
-            <StackPanel Width="600">
+            <StackPanel Width="600" d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
                 <StackPanel.Background>
                     <ImageBrush ImageSource="/images/poker-table.png"/>
                 </StackPanel.Background>
+
+                <ListBox ItemsSource="{Binding CardsOnTable}" Background="Transparent" Margin="120" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Background="GhostWhite" Margin="1">
+                                <StackPanel Width="42">
+                                    <TextBlock Text="{Binding SuitSymbol}" FontSize="19"  HorizontalAlignment="Center" Foreground="{Binding Color}" />
+                                    <TextBlock Text="{Binding ValueSymbol}" FontSize="19"  HorizontalAlignment="Center" Foreground="{Binding Color}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ListBox>
+                
+                
+                
                 <!-- the actual table -->
             </StackPanel>
             <WrapPanel Width="130" VerticalAlignment="Center">
@@ -37,7 +60,7 @@
         </WrapPanel>
 
         <!-- Action bar -->
-        <StackPanel Orientation="Horizontal" Height="100" Background="WhiteSmoke">
+        <StackPanel Orientation="Horizontal" Height="100" Background="WhiteSmoke" x:Name="ActionPanel">
             <StackPanel  Width="480">
                 <TextBlock Foreground="Black" FontSize="16" Padding="10">
                      Waiting for player 1...<LineBreak />
@@ -46,10 +69,10 @@
                 </TextBlock>
             </StackPanel>
             <WrapPanel VerticalAlignment="Center" Width="300">
-                <Button Name="FoldButton" Width="150" VerticalAlignment="Stretch" FontSize="20">Fold</Button>
-                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20">Check</Button>
-                <Button Name="CallButton" Width="150" VerticalAlignment="Stretch"  FontSize="20">Call</Button>
-                <Button Name="RaiseButton" Width="150" VerticalAlignment="Stretch"   FontSize="20">Raise</Button>
+                <Button Name="FoldButton" Width="150" VerticalAlignment="Stretch" FontSize="20" Click="FoldButton_Click" Tag="{Binding ActivePlayer}">Fold</Button>
+                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CheckButton_Click" Tag="{Binding}">Check</Button>
+                <Button Name="CallButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CallButton_Click" Tag="{Binding ActivePlayer}">Call</Button>
+                <Button Name="RaiseButton" Width="150" VerticalAlignment="Stretch"   FontSize="20" Click="RaiseButton_Click" Tag="{Binding ActivePlayer}">Raise</Button>
             </WrapPanel>
         </StackPanel>
     </StackPanel>
