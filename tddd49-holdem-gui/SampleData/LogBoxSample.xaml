@@ -1,6 +1,6 @@
 ﻿<m:LogBox
     xmlns:m="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
-    xmlns:system="clr-namespace:System;assembly=mscorlib">
+>
     <m:LogBox.TextRows>
         <m:Row Text="Line 1"/>
         <m:Row Text="Line 2"/>

@@ -58,6 +58,7 @@
     <Compile Include="PlayerPanel.xaml.cs">
       <DependentUpon>PlayerPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IsActivePlayerConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

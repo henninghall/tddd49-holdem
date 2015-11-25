@@ -4,15 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:tddd49_holdem_gui"
-        xmlns:tddd49Holdem="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
         mc:Ignorable="d"
-        Title="TDDD49 Hold'em" Height="675"  Width="900"
+        Title="TDDD49 Hold'em" Height="700"  Width="900"
         x:Name="Window">
     <StackPanel>
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>
-        <WrapPanel HorizontalAlignment="Center">
+        <WrapPanel x:Name="PlayerPanel1" HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 1 -->
             <local:PlayerPanel x:Name="PlayerSlot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
@@ -25,8 +24,7 @@
                 <StackPanel.Background>
                     <ImageBrush ImageSource="/images/poker-table.png"/>
                 </StackPanel.Background>
-
-                <ListBox ItemsSource="{Binding CardsOnTable}" Background="Transparent" Margin="120" >
+                <ListBox ItemsSource="{Binding CardsOnTable}" Background="Transparent" BorderBrush="Transparent" Width="260" Margin="90">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Background="GhostWhite" Margin="1">
@@ -39,7 +37,7 @@
                     </ListBox.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
+                            <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ListBox>
@@ -52,16 +50,15 @@
                 <local:PlayerPanel x:Name="PlayerSlot5" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
         </StackPanel>
-        <WrapPanel HorizontalAlignment="Center">
+        <WrapPanel HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 4 -->
-            <local:PlayerPanel x:Name="PlayerSlot4" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
 
         <!-- Action bar -->
-        <StackPanel Orientation="Horizontal" Height="100" Background="WhiteSmoke" x:Name="ActionPanel">
+        <StackPanel Orientation="Horizontal" Height="100" Background="WhiteSmoke" x:Name="ActionPanel" >
             <StackPanel  Width="480" d:DataContext="{d:DesignData Source=/SampleData/LogBoxSample.xaml}" >
 
-                <ListBox x:Name="LogBox" ItemsSource="{Binding TextRows}" Height="100">
+                <ListBox x:Name="LogBoxControl" ItemsSource="{Binding TextRows}" Height="100">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Text}" FontSize="15" />
@@ -78,6 +75,4 @@
             </WrapPanel>
         </StackPanel>
     </StackPanel>
-
-
 </Window>

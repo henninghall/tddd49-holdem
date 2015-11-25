@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using tddd49_holdem;
 using tddd49_holdem.actions;
 
@@ -11,7 +10,6 @@ namespace tddd49_holdem_gui
     /// </summary>
     public partial class MainWindow
     {
-        public LogBox logBox;
 
         /// <summary>
         /// Interaction logic for MainWindow.xaml
@@ -20,7 +18,7 @@ namespace tddd49_holdem_gui
         {
             InitializeComponent();
 
-            Player p1 = new Player("Barbastark");
+            Player p1 = new Player("Bamse");
             Player p2 = new Player("Skalman");
             PlayerSlot1.DataContext = p1;
             PlayerSlot2.DataContext = p2;
@@ -28,40 +26,39 @@ namespace tddd49_holdem_gui
             Table table = new Table();
             table.AttachPlayer(p1);
             table.AttachPlayer(p2);
+
             Window.DataContext = table;
-
-            logBox = new LogBox();
-            LogBox.DataContext = logBox;
-
+            LogBoxControl.DataContext = table.LogBox;
+            
             table.StartGuiGame();
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
-            activePlayer.MakeMove(new Fold(activePlayer));
-            logBox.Log(activePlayer.Name + " folded!");
+            activePlayer.Table.MakeMove(new Fold(activePlayer));
+            activePlayer.Table.LogBox.Log(activePlayer.Name + " folded!");
         }
 
         private void CheckButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
-            activePlayer.MakeMove(new Check(activePlayer));
-            logBox.Log(activePlayer.Name + " checked!");
+            activePlayer.Table.MakeMove(new Check(activePlayer));
+            activePlayer.Table.LogBox.Log(activePlayer.Name + " checked!");
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
-            activePlayer.MakeMove(new Call(activePlayer));
-            logBox.Log(activePlayer.Name + " called!");
+            activePlayer.Table.MakeMove(new Call(activePlayer));
+            activePlayer.Table.LogBox.Log(activePlayer.Name + " called!");
         }
 
         private void RaiseButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
-            activePlayer.MakeMove(new Raise(activePlayer));
-            logBox.Log(activePlayer.Name + " raised!");
+            activePlayer.Table.MakeMove(new Raise(activePlayer));
+            activePlayer.Table.LogBox.Log(activePlayer.Name + " raised!");
         }
     }
 }

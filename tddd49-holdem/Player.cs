@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Linq;
-using tddd49_holdem.actions;
-
 
 namespace tddd49_holdem
 {
     public class Player : Data
     {
         public Cards Cards { set; get; }
-        public Table Table;
-        private int _chipsOnHand;
 
+        public Table Table;
+        public Table get_Table()
+        {
+            return Table;
+        }
+        public void set_Table(Table t) {
+            SetField(ref Table, t, "Table");
+        }
+
+        private int _chipsOnHand;
         public int ChipsOnHand
         {
             get { return _chipsOnHand; }
@@ -28,7 +33,6 @@ namespace tddd49_holdem
             get { return _name; }
             set { SetField(ref _name, value, "Name"); }
         }
-        
 
         public Player() { }
 
@@ -44,24 +48,6 @@ namespace tddd49_holdem
             CurrentBet += amount;
         }
 
-        public void MakeMove(PlayerAction action)
-        {
-            if (!action.IsValid()) throw new InvalidActionException();
-            action.Execute();
-            if (Table.GetNumberOfActivePlayers() == 1) Table.EndGame();
-            if (Table.BeforeMove.Count == 0)
-            {
-                Table.MovePlayerBetsToPot();
-                if (!Table.HasNextCard()) Table.EndGame();
-                else
-                {
-                    Table.NextCard();
-                    Table.MoveAllAfterMoveToBeforeMove();
-                }
-            }
-            Table.NextPlayer();
-        }
-
         public Cards GetAllCards()
         {
             Cards allCards = new Cards();
@@ -69,7 +55,6 @@ namespace tddd49_holdem
             allCards.AddRange(Table.CardsOnTable);
             return allCards;
         }
-
 
     }
 

@@ -8,5 +8,8 @@
         <m:Card SuitSymbol="♠" ValueSymbol="5" Color="Black"/>
         <m:Card SuitSymbol="♥" ValueSymbol="7" Color="Red"/>
     </m:Table.CardsOnTable>
+    <m:Table.ActivePlayer>
+        <m:Player Name="PlayerName"/>
+    </m:Table.ActivePlayer>
 </m:Table>
     
