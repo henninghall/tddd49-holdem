@@ -9,9 +9,6 @@
              Margin="10"
              d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml} " 
              >
-    <UserControl.Resources>
-        <local:IsActivePlayerConverter x:Key="Converter" />
-    </UserControl.Resources>
     <!-- Hides the Control if no player attached to it-->
     <UserControl.Style>
         <Style TargetType="UserControl">
@@ -27,12 +24,12 @@
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
-                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="BorderThickness" Value="5" />
                 <Setter Property="CornerRadius" Value="6" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=Active}" Value="True" >
 
-                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="BorderBrush" Value="DodgerBlue" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

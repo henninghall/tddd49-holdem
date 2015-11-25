@@ -16,14 +16,37 @@ namespace tddd49_holdem
         public Deck Deck = new Deck();
         private readonly Queue<int> _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
         public LogBox LogBox { get; set; }
+        public Cards CardsOnTable { get; set; }
+
+        private bool _canCheck;
+        public bool CanCheck
+        {
+            get { return _canCheck; }
+            set { SetField(ref _canCheck, value, "CanCheck"); }
+        }
+        private bool _canFold;
+        public bool CanFold
+        {
+            get { return _canFold; }
+            set { SetField(ref _canFold, value, "CanFold"); }
+        }
+        private bool _canCall;
+        public bool CanCall {
+            get { return _canCall; }
+            set { SetField(ref _canCall, value, "CanCall"); }
+        }
+        private bool _canRaise;
+        public bool CanRaise
+        {
+            get { return _canRaise; }
+            set { SetField(ref _canRaise, value, "CanRaise"); }
+        }
         private Player _activePlayer;
         public Player ActivePlayer
         {
             get { return _activePlayer; }
             set { SetField(ref _activePlayer, value, "ActivePlayer"); }
         }
-
-        public Cards CardsOnTable { get; set; }
 
         public Table()
         {
@@ -54,7 +77,7 @@ namespace tddd49_holdem
                     MoveAllAfterMoveToBeforeMove();
                 }
             }
-            if(HasNextPlayer()) NextPlayer();
+            if(HasNextPlayer()) { NextPlayer();}
         }
 
         public void AttachPlayer(Player player) {
@@ -193,6 +216,17 @@ namespace tddd49_holdem
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
             ActivePlayer.Active = true;
+            UpdatePossibleActions();
+        }
+
+        /// <summary>
+        /// Needed for the data bindings
+        /// </summary>
+        private void UpdatePossibleActions() {
+            CanFold = new Fold(ActivePlayer).IsValid();
+            CanCheck = new Check(ActivePlayer).IsValid();
+            CanCall = new Call(ActivePlayer).IsValid();
+            CanRaise = new Raise(ActivePlayer).IsValid();
         }
 
         public bool HasNextPlayer()

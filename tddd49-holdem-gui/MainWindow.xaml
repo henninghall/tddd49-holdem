@@ -7,20 +7,21 @@
         mc:Ignorable="d"
         Title="TDDD49 Hold'em" Height="700"  Width="900"
         x:Name="Window">
-    <StackPanel>
+    <StackPanel  d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>
         <WrapPanel x:Name="PlayerPanel1" HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 1 -->
             <local:PlayerPanel x:Name="PlayerSlot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
         <StackPanel Orientation="Horizontal" Height="300" HorizontalAlignment="Center">
             <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 2 -->
-                <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot6" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
-            <StackPanel Width="600" d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
+            <StackPanel Width="600">
                 <StackPanel.Background>
                     <ImageBrush ImageSource="/images/poker-table.png"/>
                 </StackPanel.Background>
@@ -47,11 +48,12 @@
             <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 3 -->
                 <local:PlayerPanel x:Name="PlayerSlot3" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
-                <local:PlayerPanel x:Name="PlayerSlot5" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
         </StackPanel>
         <WrapPanel HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 4 -->
+            <local:PlayerPanel x:Name="PlayerSlot5" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot4" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
 
         <!-- Action bar -->
@@ -67,12 +69,20 @@
                 </ListBox>
 
             </StackPanel>
-            <WrapPanel VerticalAlignment="Center" Width="300">
-                <Button Name="FoldButton" Width="150" VerticalAlignment="Stretch" FontSize="20" Click="FoldButton_Click" Tag="{Binding ActivePlayer}">Fold</Button>
-                <Button Name="CheckButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CheckButton_Click" Tag="{Binding ActivePlayer}">Check</Button>
-                <Button Name="CallButton" Width="150" VerticalAlignment="Stretch"  FontSize="20" Click="CallButton_Click" Tag="{Binding ActivePlayer}">Call</Button>
-                <Button Name="RaiseButton" Width="150" VerticalAlignment="Stretch"   FontSize="20" Click="RaiseButton_Click" Tag="{Binding ActivePlayer}">Raise</Button>
-            </WrapPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="43" />
+                    <RowDefinition Height="43" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="202" />
+                    <ColumnDefinition Width="202" />
+                </Grid.ColumnDefinitions>
+            <Button Name="FoldButton"  FontSize="20" Click="FoldButton_Click" IsEnabled ="{Binding CanFold}" Tag="{Binding ActivePlayer}">Fold</Button>
+                <Button Grid.Row="0" Grid.Column="1" Name="CheckButton"   FontSize="20" Click="CheckButton_Click" IsEnabled ="{Binding CanCheck}" Tag="{Binding ActivePlayer}">Check</Button>
+                <Button Grid.Row="1" Grid.Column="0" Name="CallButton"   FontSize="20" Click="CallButton_Click" IsEnabled ="{Binding CanCall}" Tag="{Binding ActivePlayer}">Call</Button>
+                <Button Grid.Row="1" Grid.Column="1" Name="RaiseButton"   FontSize="20" Click="RaiseButton_Click" IsEnabled ="{Binding CanRaise}" Tag="{Binding ActivePlayer}">Raise</Button>
+            </Grid>
         </StackPanel>
     </StackPanel>
 </Window>
