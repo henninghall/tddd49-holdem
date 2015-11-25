@@ -30,7 +30,7 @@
                 <Setter Property="BorderThickness" Value="2" />
                 <Setter Property="CornerRadius" Value="6" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=. , Converter={StaticResource Converter}}" Value="True" >
+                    <DataTrigger Binding="{Binding Path=Active}" Value="True" >
 
                         <Setter Property="BorderBrush" Value="Red" />
                     </DataTrigger>

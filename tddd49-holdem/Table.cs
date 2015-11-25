@@ -189,10 +189,12 @@ namespace tddd49_holdem
             return _numberOfCardsToPutOnTable.Any();
         }
 
-        public void NextPlayer()
-        {
+        public void NextPlayer() {
+            if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
+            ActivePlayer.Active = true;
         }
+
         public bool HasNextPlayer()
         {
             return BeforeMove.Any();

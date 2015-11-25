@@ -21,6 +21,20 @@ namespace tddd49_holdem
             get { return _chipsOnHand; }
             set { SetField(ref _chipsOnHand, value, "ChipsOnHand"); }
         }
+
+       /// <summary>
+       /// The active field is needed for the gui active player detection.
+       /// The table also keeps tracks of the active player in a variable. 
+       /// Probably possibly to solve by using Multibinding and/or Converters
+       /// in the PlayerPanel or MainWindow.
+       /// </summary>
+        private bool _active;
+        public bool Active
+        {
+            get { return _active; }
+            set { SetField(ref _active, value, "Active"); }
+        }
+
         private int _currentBet;
         public int CurrentBet
         {
