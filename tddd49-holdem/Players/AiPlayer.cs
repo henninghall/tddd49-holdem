@@ -58,7 +58,7 @@ namespace tddd49_holdem.Players
                 else Fold.Execute();
             }
             
-            throw new InvalidActionException("AI-Player couldn't find any action to excecute.");
+            else throw new InvalidActionException("AI-Player couldn't find any action to excecute.");
         }
 
 
