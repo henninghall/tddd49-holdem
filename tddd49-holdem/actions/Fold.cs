@@ -13,6 +13,7 @@
         public override void Execute()
         {
             Player.Table.BeforeMove.Dequeue();
+            Player.Cards.Clear();    
         }
     }
 }

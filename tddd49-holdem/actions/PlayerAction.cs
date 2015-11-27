@@ -1,11 +1,8 @@
-﻿
-using System;
-
-namespace tddd49_holdem.actions
+﻿namespace tddd49_holdem.actions
 {
     public abstract class PlayerAction
     {
-        protected Player Player; 
+        protected Player Player;
 
         protected PlayerAction(Player player)
         {
@@ -14,7 +11,6 @@ namespace tddd49_holdem.actions
 
         public abstract bool IsValid();
         public abstract void Execute();
-
 
     }
 }

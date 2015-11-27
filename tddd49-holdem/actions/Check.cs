@@ -1,4 +1,7 @@
-﻿namespace tddd49_holdem.actions
+﻿using System;
+using System.Windows.Input;
+
+namespace tddd49_holdem.actions
 {
     public class Check : PlayerAction
     {

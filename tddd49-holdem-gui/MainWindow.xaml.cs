@@ -20,7 +20,7 @@ namespace tddd49_holdem_gui
 
             Player p1 = new Player("Bamse");
             Player p2 = new Player("Skalman");
-            Player p3 = new Player("Skuttis");
+            Player p3 = new Player("Lille Skutt");
             PlayerSlot1.DataContext = p1;
             PlayerSlot2.DataContext = p2;
             PlayerSlot3.DataContext = p3;

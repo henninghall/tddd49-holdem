@@ -84,6 +84,9 @@
     <DesignData Include="SampleData\LogBoxSample.xaml">
       <SubType>Designer</SubType>
     </DesignData>
+    <Page Include="SampleData\PlayerNoCardsSample.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -14,7 +14,7 @@
         <WrapPanel x:Name="PlayerPanel1" HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 1 -->
             <local:PlayerPanel x:Name="PlayerSlot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
-            <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerNoCardsSample.xaml}"/>
         </WrapPanel>
         <StackPanel Orientation="Horizontal" Height="300" HorizontalAlignment="Center">
             <WrapPanel Width="130" VerticalAlignment="Center">

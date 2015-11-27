@@ -31,7 +31,8 @@ namespace tddd49_holdem
             set { SetField(ref _canFold, value, "CanFold"); }
         }
         private bool _canCall;
-        public bool CanCall {
+        public bool CanCall
+        {
             get { return _canCall; }
             set { SetField(ref _canCall, value, "CanCall"); }
         }
@@ -77,10 +78,11 @@ namespace tddd49_holdem
                     MoveAllAfterMoveToBeforeMove();
                 }
             }
-            if(HasNextPlayer()) { NextPlayer();}
+            if (HasNextPlayer()) { NextPlayer(); }
         }
 
-        public void AttachPlayer(Player player) {
+        public void AttachPlayer(Player player)
+        {
             player.Table = this;
             player.ChipsOnHand = RulesEngine.StartingChips;
             player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
@@ -187,16 +189,21 @@ namespace tddd49_holdem
             return GetActivePlayers().Contains(player);
         }
 
-        public void EndGame() {
+        public void EndGame()
+        {
             HashSet<Player> winners = GetWinners();
-            if (winners.Count == 1) {
+            if (winners.Count == 1)
+            {
                 Player winner = winners.First();
-                LogBox.Log("Game over! The winner is " + winner.Name + " with " +
-                           Rules.GetDrawType(winner.GetAllCards()));
+                string logMessage = "Game over! The winner is " + winner.Name;
+                if (GetNumberOfActivePlayers() > 1) logMessage += " with " + Rules.GetDrawType(winner.GetAllCards());
+                LogBox.Log(logMessage);
             }
-            else {
+            else
+            {
                 LogBox.Log("Game over! There was a Tie between: ");
-                foreach (Player winner in winners) {
+                foreach (Player winner in winners)
+                {
                     LogBox.Log(winner.Name);
                 }
             }
@@ -212,7 +219,8 @@ namespace tddd49_holdem
             return _numberOfCardsToPutOnTable.Any();
         }
 
-        public void NextPlayer() {
+        public void NextPlayer()
+        {
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
             ActivePlayer.Active = true;
@@ -222,7 +230,8 @@ namespace tddd49_holdem
         /// <summary>
         /// Needed for the data bindings
         /// </summary>
-        private void UpdatePossibleActions() {
+        private void UpdatePossibleActions()
+        {
             CanFold = new Fold(ActivePlayer).IsValid();
             CanCheck = new Check(ActivePlayer).IsValid();
             CanCall = new Call(ActivePlayer).IsValid();
