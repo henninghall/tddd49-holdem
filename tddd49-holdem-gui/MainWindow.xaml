@@ -21,11 +21,13 @@
                 <!-- Player 2 -->
                 <local:PlayerPanel x:Name="PlayerSlot6" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
+            <!-- the actual table -->
             <StackPanel Width="600">
                 <StackPanel.Background>
                     <ImageBrush ImageSource="/images/poker-table.png"/>
                 </StackPanel.Background>
-                <ListBox ItemsSource="{Binding CardsOnTable}" Background="Transparent" BorderBrush="Transparent" Width="260" Margin="90">
+               <!-- Cards on table -->
+                <ListBox ItemsSource="{Binding CardsOnTable}" Background="Transparent" BorderBrush="Transparent" Width="260" Margin="0,80,0,0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Background="GhostWhite" Margin="1">
@@ -42,8 +44,20 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ListBox>
-
-                <!-- the actual table -->
+                <!-- Pot -->
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Pot}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <Image Source="/Images/pot.png" Height="62"  HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" Margin="3,0,0,0"><Run Text="$"/><Run Text="{Binding Pot}"/></TextBlock>
+                </StackPanel>
             </StackPanel>
             <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 3 -->
@@ -78,7 +92,7 @@
                     <ColumnDefinition Width="202" />
                     <ColumnDefinition Width="202" />
                 </Grid.ColumnDefinitions>
-            <Button Name="FoldButton"  FontSize="20" Click="FoldButton_Click" IsEnabled ="{Binding CanFold}" Tag="{Binding ActivePlayer}">Fold</Button>
+                <Button Name="FoldButton"  FontSize="20" Click="FoldButton_Click" IsEnabled ="{Binding CanFold}" Tag="{Binding ActivePlayer}">Fold</Button>
                 <Button Grid.Row="0" Grid.Column="1" Name="CheckButton"   FontSize="20" Click="CheckButton_Click" IsEnabled ="{Binding CanCheck}" Tag="{Binding ActivePlayer}">Check</Button>
                 <Button Grid.Row="1" Grid.Column="0" Name="CallButton"   FontSize="20" Click="CallButton_Click" IsEnabled ="{Binding CanCall}" Tag="{Binding ActivePlayer}">Call</Button>
                 <Button Grid.Row="1" Grid.Column="1" Name="RaiseButton"   FontSize="20" Click="RaiseButton_Click" IsEnabled ="{Binding CanRaise}" Tag="{Binding ActivePlayer}">Raise</Button>

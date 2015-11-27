@@ -33,7 +33,7 @@ namespace tddd49_holdem_gui
             Window.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
             
-            table.StartGuiGame();
+            table.StartRound();
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)

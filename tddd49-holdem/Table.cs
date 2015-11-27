@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using tddd49_holdem.actions;
 
 namespace tddd49_holdem
@@ -12,11 +10,17 @@ namespace tddd49_holdem
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; }
-        public int Pot { get; set; }
-        public Deck Deck = new Deck();
-        private readonly Queue<int> _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
+        public Deck Deck;
+        private Queue<int> _numberOfCardsToPutOnTable;
         public LogBox LogBox { get; set; }
         public Cards CardsOnTable { get; set; }
+
+        private int _pot;
+        public int Pot
+        {
+            get { return _pot; }
+            set { SetField(ref _pot, value, "Pot"); }
+        }
 
         private bool _canCheck;
         public bool CanCheck
@@ -57,35 +61,46 @@ namespace tddd49_holdem
             Pot = 0;
         }
 
-        public void StartGuiGame()
+        public void StartRound()
         {
+            MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
+            CardsOnTable.Clear();
+            Deck = new Deck();
+            HandOutCards();
+            ResetCardQueue();
             NextPlayer();
+            LogBox.Log("Round started!");
         }
 
         public void MakeMove(PlayerAction action)
         {
             if (!action.IsValid()) throw new InvalidActionException();
             action.Execute();
-            if (GetNumberOfActivePlayers() == 1) EndGame();
+            if (GetNumberOfActivePlayers() == 1) EndRound();
             if (BeforeMove.Count == 0)
             {
                 MovePlayerBetsToPot();
-                if (!HasNextCard()) EndGame();
+                if (!HasNextCard()) EndRound();
                 else
                 {
                     NextCard();
                     MoveAllAfterMoveToBeforeMove();
-                }
+                }   
             }
             if (HasNextPlayer()) { NextPlayer(); }
+        }
+
+        private void HandOutCards() {
+            foreach (Player player in _allPlayers) {
+                player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
+            }
         }
 
         public void AttachPlayer(Player player)
         {
             player.Table = this;
             player.ChipsOnHand = RulesEngine.StartingChips;
-            player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
             _allPlayers.Add(player);
             LogBox.Log(player.Name + " joined the table.");
         }
@@ -189,7 +204,7 @@ namespace tddd49_holdem
             return GetActivePlayers().Contains(player);
         }
 
-        public void EndGame()
+        public void EndRound()
         {
             HashSet<Player> winners = GetWinners();
             if (winners.Count == 1)
@@ -202,10 +217,17 @@ namespace tddd49_holdem
             else
             {
                 LogBox.Log("Game over! There was a Tie between: ");
-                foreach (Player winner in winners)
-                {
-                    LogBox.Log(winner.Name);
-                }
+                foreach (Player winner in winners) LogBox.Log(winner.Name);
+            }
+            GivePotToPlayers(winners);
+            StartRound();
+        }
+
+        private void GivePotToPlayers(HashSet<Player> winners) {
+            foreach (Player winner in winners) {
+                int winSum = Pot/winners.Count;
+                winner.ChipsOnHand += winSum;
+                Pot -= winSum;
             }
         }
 
@@ -217,6 +239,10 @@ namespace tddd49_holdem
         public bool HasNextCard()
         {
             return _numberOfCardsToPutOnTable.Any();
+        }
+
+        private void ResetCardQueue() {
+            _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
         }
 
         public void NextPlayer()

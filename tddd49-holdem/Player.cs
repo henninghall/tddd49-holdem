@@ -4,7 +4,12 @@ namespace tddd49_holdem
 {
     public class Player : Data
     {
-        public Cards Cards { set; get; }
+        private Cards _cards;
+        public Cards Cards
+        {
+            get { return _cards; }
+            set { SetField(ref _cards, value, "Cards"); }
+        }
 
         public Table Table;
         public Table get_Table()

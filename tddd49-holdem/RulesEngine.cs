@@ -9,8 +9,8 @@ namespace tddd49_holdem
 
     public class RulesEngine
     {
-        public static Queue<int> CardsBeforeRound = new Queue<int>(new[] { 3, 1, 1 });
-        public const int StartingChips = 1000;
+        public static List<int> CardsBeforeRound = new List<int>(new[] { 3, 1, 1 });
+        public const int StartingChips = 100;
         public const int CardsOnHand = 2;
         
         public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players)
