@@ -83,9 +83,12 @@ namespace tddd49_holdem.counters
             return chosen;
         }
 
-        // returns highest single cards in decending order 
+        //// returns highest single cards in decending order 
+        ///  returns the specifyed amount as maximum or as many as possible
         public Cards GetHighestSingleCards(int amount)
         {
+            int numberOfSingles = NumberOfCardsOfSize(1);
+            if (numberOfSingles < amount) amount = numberOfSingles;
             Cards singleCards = new Cards();
             for (int i = 0; i < amount; i++)
             {
@@ -102,6 +105,11 @@ namespace tddd49_holdem.counters
         public Cards GetSecondHighestPair()
         {
             return GetNthAmountOfCards(2, 2);
+        }
+
+        public Cards GetThirdHighestPair()
+        {
+            return GetNthAmountOfCards(3, 2);
         }
 
         public Cards GetHighestThreeOfAKind()

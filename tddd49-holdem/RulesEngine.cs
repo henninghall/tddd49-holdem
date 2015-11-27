@@ -63,8 +63,8 @@ namespace tddd49_holdem
             return GetDraw(allCards).Type;
         }
 
-        public Draw GetDraw(Cards allCards)
-        {
+        public Draw GetDraw(Cards allCards) {
+            int numberOfCards = allCards.Count;
             ValueCounter valueCounter = new ValueCounter(allCards);
             ColorCounter colorCounter = new ColorCounter(allCards);
             int straightLenght;
@@ -128,12 +128,25 @@ namespace tddd49_holdem
                     case 2:
                         cardsInDraw.AddRange(valueCounter.GetHighestPair());
 
+                        // TwoPair
                         if (valueCounter.NumberOfCardsOfSize(2) == 2)
                         {
                             drawtype = DrawType.TwoPairs;
                             cardsInDraw.AddRange(valueCounter.GetSecondHighestPair());
                             cardsInDraw.AddRange(valueCounter.GetHighestSingleCards(1));
                         }
+                        // Three pair
+                        else if (valueCounter.NumberOfCardsOfSize(2) == 3)
+                        {
+                            drawtype = DrawType.TwoPairs;
+                            cardsInDraw.AddRange(valueCounter.GetSecondHighestPair());
+                            
+                            // comparing third pair to highest single card
+                            Card c1 = valueCounter.GetThirdHighestPair().First();
+                            Card c2 = valueCounter.GetHighestSingleCards(1).First();
+                            cardsInDraw.Add(c1.Value > c2.Value ? c1 : c2);
+                        }
+                        // One pair
                         else
                         {
                             drawtype = DrawType.OnePair;
