@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using tddd49_holdem;
+using tddd49_holdem.Players;
 
 namespace tddd49_holdem_gui
 {
@@ -10,9 +11,9 @@ namespace tddd49_holdem_gui
     {
         public object Convert(object value, Type targetType, object parameter,
             CultureInfo culture) {
-            Player player = value as Player;
+            HumanPlayer player = value as HumanPlayer;
         
-            // TODO: Change player name to player
+            // TODO: Change player name to Player
             if (player != null && player.Name.Equals(player.Table.ActivePlayer.Name)) {
                 return true;
             }

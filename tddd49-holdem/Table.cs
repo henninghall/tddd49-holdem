@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using tddd49_holdem.actions;
+using tddd49_holdem.Players;
 
 namespace tddd49_holdem
 {
@@ -20,31 +20,6 @@ namespace tddd49_holdem
         {
             get { return _pot; }
             set { SetField(ref _pot, value, "Pot"); }
-        }
-
-        private bool _canCheck;
-        public bool CanCheck
-        {
-            get { return _canCheck; }
-            set { SetField(ref _canCheck, value, "CanCheck"); }
-        }
-        private bool _canFold;
-        public bool CanFold
-        {
-            get { return _canFold; }
-            set { SetField(ref _canFold, value, "CanFold"); }
-        }
-        private bool _canCall;
-        public bool CanCall
-        {
-            get { return _canCall; }
-            set { SetField(ref _canCall, value, "CanCall"); }
-        }
-        private bool _canRaise;
-        public bool CanRaise
-        {
-            get { return _canRaise; }
-            set { SetField(ref _canRaise, value, "CanRaise"); }
         }
         private Player _activePlayer;
         public Player ActivePlayer
@@ -73,26 +48,26 @@ namespace tddd49_holdem
             LogBox.Log("Round started!");
         }
 
-        public void MakeMove(PlayerAction action)
+        public void ReactOnActionExecution()
         {
-            if (!action.IsValid()) throw new InvalidActionException();
-            action.Execute();
             if (GetNumberOfActivePlayers() == 1) EndRound();
             if (BeforeMove.Count == 0)
             {
                 MovePlayerBetsToPot();
-                if (!HasNextCard()) EndRound();
+                if (!HasNextCard()) { EndRound(); }
                 else
                 {
                     NextCard();
                     MoveAllAfterMoveToBeforeMove();
-                }   
+                }
             }
             if (HasNextPlayer()) { NextPlayer(); }
         }
 
-        private void HandOutCards() {
-            foreach (Player player in _allPlayers) {
+        private void HandOutCards()
+        {
+            foreach (Player player in _allPlayers)
+            {
                 player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
             }
         }
@@ -223,9 +198,11 @@ namespace tddd49_holdem
             StartRound();
         }
 
-        private void GivePotToPlayers(HashSet<Player> winners) {
-            foreach (Player winner in winners) {
-                int winSum = Pot/winners.Count;
+        private void GivePotToPlayers(HashSet<Player> winners)
+        {
+            foreach (Player winner in winners)
+            {
+                int winSum = Pot / winners.Count;
                 winner.ChipsOnHand += winSum;
                 Pot -= winSum;
             }
@@ -241,7 +218,8 @@ namespace tddd49_holdem
             return _numberOfCardsToPutOnTable.Any();
         }
 
-        private void ResetCardQueue() {
+        private void ResetCardQueue()
+        {
             _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
         }
 
@@ -250,18 +228,7 @@ namespace tddd49_holdem
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
             ActivePlayer.Active = true;
-            UpdatePossibleActions();
-        }
-
-        /// <summary>
-        /// Needed for the data bindings
-        /// </summary>
-        private void UpdatePossibleActions()
-        {
-            CanFold = new Fold(ActivePlayer).IsValid();
-            CanCheck = new Check(ActivePlayer).IsValid();
-            CanCall = new Call(ActivePlayer).IsValid();
-            CanRaise = new Raise(ActivePlayer).IsValid();
+            ActivePlayer.RequestActionExcecution();
         }
 
         public bool HasNextPlayer()

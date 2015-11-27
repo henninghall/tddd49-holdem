@@ -2,6 +2,7 @@
 using System.Linq;
 using tddd49_holdem.counters;
 using tddd49_holdem.Exceptions;
+using tddd49_holdem.Players;
 
 namespace tddd49_holdem
 {

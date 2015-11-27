@@ -1,4 +1,5 @@
 ﻿using System;
+using tddd49_holdem.Players;
 
 namespace tddd49_holdem.actions
 {
@@ -18,6 +19,9 @@ namespace tddd49_holdem.actions
         {
             Player.Bet(Player.Table.GetHighestBet() - Player.CurrentBet);
             Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
+
+            Player.Table.LogBox.Log(Player.Name + " called!");
+            Player.Table.ReactOnActionExecution();
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿<m:Player 
-    xmlns:m="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
+﻿<players:AiPlayer 
+    xmlns:players="clr-namespace:tddd49_holdem.Players;assembly=tddd49-holdem"
+    xmlns:tddd49Holdem="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
     Name="PlayerName" 
     CurrentBet="10"
-    ChipsOnHand="2000" >
-    <m:Player.Cards>
-        <m:Card SuitSymbol="♠" ValueSymbol="D" Color="Black"/>
-        <m:Card SuitSymbol="♥" ValueSymbol="4" Color="Red"/>
-    </m:Player.Cards>
-</m:Player>
+    ChipsOnHand="2000" Active="True">
+    <players:AiPlayer.Cards>
+        <tddd49Holdem:Card SuitSymbol="♠" ValueSymbol="D" Color="Black"/>
+        <tddd49Holdem:Card SuitSymbol="♥" ValueSymbol="4" Color="Red"/>
+    </players:AiPlayer.Cards>
+</players:AiPlayer>

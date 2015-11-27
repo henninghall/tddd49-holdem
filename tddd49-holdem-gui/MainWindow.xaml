@@ -84,6 +84,16 @@
 
             </StackPanel>
             <Grid>
+                <!-- Hides the Control if no player attached to it-->
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActivePlayer.IsUsingGui}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="43" />
                     <RowDefinition Height="43" />
@@ -92,10 +102,10 @@
                     <ColumnDefinition Width="202" />
                     <ColumnDefinition Width="202" />
                 </Grid.ColumnDefinitions>
-                <Button Name="FoldButton"  FontSize="20" Click="FoldButton_Click" IsEnabled ="{Binding CanFold}" Tag="{Binding ActivePlayer}">Fold</Button>
-                <Button Grid.Row="0" Grid.Column="1" Name="CheckButton"   FontSize="20" Click="CheckButton_Click" IsEnabled ="{Binding CanCheck}" Tag="{Binding ActivePlayer}">Check</Button>
-                <Button Grid.Row="1" Grid.Column="0" Name="CallButton"   FontSize="20" Click="CallButton_Click" IsEnabled ="{Binding CanCall}" Tag="{Binding ActivePlayer}">Call</Button>
-                <Button Grid.Row="1" Grid.Column="1" Name="RaiseButton"   FontSize="20" Click="RaiseButton_Click" IsEnabled ="{Binding CanRaise}" Tag="{Binding ActivePlayer}">Raise</Button>
+                <Button Name="FoldButton"  FontSize="20" Click="FoldButton_Click" IsEnabled ="{Binding ActivePlayer.CanFold}" Tag="{Binding ActivePlayer}">Fold</Button>
+                <Button Grid.Row="0" Grid.Column="1" Name="CheckButton"   FontSize="20" Click="CheckButton_Click" IsEnabled ="{Binding ActivePlayer.CanCheck}" Tag="{Binding ActivePlayer}">Check</Button>
+                <Button Grid.Row="1" Grid.Column="0" Name="CallButton"   FontSize="20" Click="CallButton_Click" IsEnabled ="{Binding ActivePlayer.CanCall}" Tag="{Binding ActivePlayer}">Call</Button>
+                <Button Grid.Row="1" Grid.Column="1" Name="RaiseButton"   FontSize="20" Click="RaiseButton_Click" IsEnabled ="{Binding ActivePlayer.CanRaise}" Tag="{Binding ActivePlayer}">Raise</Button>
             </Grid>
         </StackPanel>
     </StackPanel>

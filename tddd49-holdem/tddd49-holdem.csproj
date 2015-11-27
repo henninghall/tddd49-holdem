@@ -47,10 +47,12 @@
     <Compile Include="Data.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Exceptions\InvalidSuitException.cs" />
-    <Compile Include="Game.cs" />
     <Compile Include="Exceptions\TieDrawException.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="LogBox.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Players\AiPlayer.cs" />
+    <Compile Include="Players\HumanPlayer.cs" />
+    <Compile Include="Players\Player.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="actions\Call.cs" />
     <Compile Include="actions\Check.cs" />
