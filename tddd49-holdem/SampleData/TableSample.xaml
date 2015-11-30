@@ -1,6 +1,6 @@
 ﻿<m:Table
-    xmlns:m="clr-namespace:tddd49_holdem;assembly=tddd49-holdem"
-    xmlns:players="clr-namespace:tddd49_holdem.Players;assembly=tddd49-holdem"
+    xmlns:m="clr-namespace:tddd49_holdem"
+    xmlns:players1="clr-namespace:tddd49_holdem.Players"
     Pot="4520" >
     <m:Table.CardsOnTable>
         <m:Card SuitSymbol="♠" ValueSymbol="D" Color="Black"/>
@@ -10,7 +10,7 @@
         <m:Card SuitSymbol="♥" ValueSymbol="7" Color="Red"/>
     </m:Table.CardsOnTable>
     <m:Table.ActivePlayer>
-        <players:Player Name="PlayerName"/>
+        <players1:HumanPlayer Name="PlayerName"/>
     </m:Table.ActivePlayer>
 </m:Table>
     

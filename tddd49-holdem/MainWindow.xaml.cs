@@ -4,7 +4,7 @@ using tddd49_holdem;
 using tddd49_holdem.actions;
 using tddd49_holdem.Players;
 
-namespace tddd49_holdem_gui
+namespace tddd49_holdem
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,6 +34,7 @@ namespace tddd49_holdem_gui
             Window.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
 
+         
             table.StartRound();
 
         }

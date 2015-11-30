@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using tddd49_holdem.Players;
 
 namespace tddd49_holdem
@@ -43,9 +45,42 @@ namespace tddd49_holdem
             CardsOnTable.Clear();
             Deck = new Deck();
             HandOutCards();
+
+            // Test data
+            Player p1 = _allPlayers[0];
+            Player p2 = _allPlayers[1];
+
+            /*
+            p1.Cards.Clear();
+            p2.Cards.Clear();
+            p1.Cards.Add(new Card(1, 14));
+            p1.Cards.Add(new Card(2, 14));
+            p2.Cards.Add(new Card(3, 14));
+            p2.Cards.Add(new Card(0, 14));
+            */
+
+            ShowGuiPlayersCards();
             ResetCardQueue();
             NextPlayer();
             LogBox.Log("Round started!");
+        }
+
+        private void ShowGuiPlayersCards() {
+            foreach (Player player in _allPlayers) {
+                if (player.IsUsingGui) {
+                    foreach (Card card in player.Cards) {
+                        card.Show = true;
+                    }
+                }
+            }
+        }
+
+        private void ShowAllCards() {
+            foreach (Player player in _allPlayers) {
+                foreach (Card card in player.Cards) {
+                    card.Show = true;
+                }
+            }
         }
 
         public void ReactOnActionExecution()
@@ -181,21 +216,29 @@ namespace tddd49_holdem
 
         public void EndRound()
         {
+            MovePlayerBetsToPot();
             HashSet<Player> winners = GetWinners();
+            string message;
             if (winners.Count == 1)
             {
                 Player winner = winners.First();
-                string logMessage = "Game over! The winner is " + winner.Name;
-                if (GetNumberOfActivePlayers() > 1) logMessage += " with " + Rules.GetDrawType(winner.GetAllCards());
-                LogBox.Log(logMessage);
+                message = "Game over! The winner is " + winner.Name;
+                if (GetNumberOfActivePlayers() > 1) message += " with " + Rules.GetDrawType(winner.GetAllCards());
             }
             else
             {
-                LogBox.Log("Game over! There was a Tie between: ");
+                message = "Game over! There was a Tie between: ";
                 foreach (Player winner in winners) LogBox.Log(winner.Name);
             }
+
             GivePotToPlayers(winners);
-            StartRound();
+            ShowAllCards();
+            LogBox.Log(message);
+            MessageBoxResult result = MessageBox.Show(message + ". Start next round?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                StartRound();
+            }
         }
 
         private void GivePotToPlayers(HashSet<Player> winners)

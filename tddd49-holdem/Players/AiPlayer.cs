@@ -35,7 +35,7 @@ namespace tddd49_holdem.Players
                 double raiseProbability = 0.2;
                 if (netDrawType > (int) DrawType.HighCards) raiseProbability += 0.4;
                 else if (netDrawType > (int) DrawType.OnePair) raiseProbability += 0.6;
-                if (new Random().NextDouble() < raiseProbability) Raise.Execute();
+                if (new Random().NextDouble() < raiseProbability && Raise.IsValid()) Raise.Execute();
                 else Check.Execute();
             }
 
@@ -44,17 +44,17 @@ namespace tddd49_holdem.Players
             else if (!Check.IsValid())
             {
                 double raiseProbability = 0.1;
-                double callProbability = 0.3;
+                double callProbability = 0.6;
                 if (netDrawType > (int) DrawType.HighCards) {
                     raiseProbability += 0.2;
-                    callProbability += 0.5;
+                    callProbability += 0.3;
                 }
                 else if (netDrawType > (int) DrawType.OnePair) {
                     raiseProbability += 0.5;
-                    callProbability += 0.7;
+                    callProbability += 0.4;
                 }
-                if (new Random().NextDouble() < raiseProbability) Raise.Execute();
-                else if (new Random().NextDouble() < callProbability) Call.Execute();
+                if (new Random().NextDouble() < raiseProbability && Raise.IsValid()) Raise.Execute();
+                else if (new Random().NextDouble() < callProbability && Call.IsValid()) Call.Execute();
                 else Fold.Execute();
             }
             

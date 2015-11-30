@@ -17,39 +17,50 @@ namespace tddd49_holdem
         public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players)
         {
             HashSet<Player> currentBestDrawPlayers = new HashSet<Player>();
-            Draw bestDrawSoFar = new Draw();
+            Draw bestDrawSoFar = null;
 
             // Get best draw types by comparing all players draws.
             foreach (Player player in players)
             {
                 Draw currentDraw = GetDraw(player.GetAllCards());
-                // continue with next player if a better draw than current draw has been found
-                if (GetBestDraw(currentDraw, bestDrawSoFar).Equals(bestDrawSoFar)) continue;
 
-                // the current draw is the best found so far.
-                currentBestDrawPlayers.Clear();
-                currentBestDrawPlayers.Add(player);
-                bestDrawSoFar = currentDraw;
+                try {
+                    // continue with next player if a better draw than current draw has been found
+                    if (GetBestDraw(currentDraw, bestDrawSoFar).Equals(bestDrawSoFar)) continue;
+                    else {
+                        // the current draw is the best found so far.
+                        currentBestDrawPlayers.Clear();
+                        currentBestDrawPlayers.Add(player);
+                        bestDrawSoFar = currentDraw;
+                    }
+
+                }
+                catch (TieDrawException) {
+                    currentBestDrawPlayers.Add(player);
+                }
             }
             return currentBestDrawPlayers;
         }
 
-        public Draw GetBestDraw(Draw currentDraw, Draw currentBestDraw)
+        public Draw GetBestDraw(Draw currentDraw, Draw bestDrawSoFar)
         {
+            // if no bestDraw has been found
+            if (bestDrawSoFar == null) return currentDraw;
+
             // if current draw type is better than so far found
-            if (currentDraw.Type > currentBestDraw.Type) return currentDraw;
-            if (currentDraw.Type < currentBestDraw.Type) return currentBestDraw;
+            if (currentDraw.Type > bestDrawSoFar.Type) return currentDraw;
+            if (currentDraw.Type < bestDrawSoFar.Type) return bestDrawSoFar;
 
             // if same draw type
-            if (currentDraw.Type == currentBestDraw.Type)
+            if (currentDraw.Type == bestDrawSoFar.Type)
             {
 
                 // Important! Assuming the lists are sorted in a way that the most "valued" cards is first. 
                 // Example: In TwoPair the highest pair first, then second highest pair, and last the highest remaining card.
                 for (int i = 0; i < currentDraw.Cards.Count; i++)
                 {
-                    if (currentDraw.Cards[i].Value > currentBestDraw.Cards[i].Value) return currentDraw;
-                    if (currentDraw.Cards[i].Value < currentBestDraw.Cards[i].Value) return currentBestDraw;
+                    if (currentDraw.Cards[i].Value > bestDrawSoFar.Cards[i].Value) return currentDraw;
+                    if (currentDraw.Cards[i].Value < bestDrawSoFar.Cards[i].Value) return bestDrawSoFar;
                 }
 
                 throw new TieDrawException();

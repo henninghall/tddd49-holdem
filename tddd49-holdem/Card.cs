@@ -5,15 +5,20 @@ namespace tddd49_holdem
 {
     //public enum CardColor { Black, Red }
 
-    public class Card
+    public class Card : Data
     {
 		public int Suit { get; set; }
 		public int Value {get; set; }
         public string SuitSymbol { get; set; }
         public string ValueSymbol { get; set; }
         public string Color { get; set; }
+        private bool _show;
+        public bool Show
+        {
+            get { return _show; }
+            set { SetField(ref _show, value, "Show"); }
+        }
 
-    
         // Needed for sample data in gui    
         public Card() { }
 

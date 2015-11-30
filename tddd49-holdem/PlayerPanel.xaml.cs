@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace tddd49_holdem_gui
+namespace tddd49_holdem
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml

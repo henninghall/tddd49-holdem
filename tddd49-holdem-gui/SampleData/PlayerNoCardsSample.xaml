@@ -1,6 +1,0 @@
-﻿<players:HumanPlayer
-    xmlns:players="clr-namespace:tddd49_holdem.Players;assembly=tddd49-holdem"
-    Name="PlayerName" 
-    CurrentBet="10"
-    ChipsOnHand="2000" >
-</players:HumanPlayer>

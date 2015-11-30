@@ -42,11 +42,12 @@ namespace tddd49_holdem.Players
         /// </summary>
         private bool _active;
 
-        public bool Active {
+        public bool Active
+        {
             get { return _active; }
             set { SetField(ref _active, value, "Active"); }
         }
-
+       
         private int _currentBet;
 
         public int CurrentBet {
