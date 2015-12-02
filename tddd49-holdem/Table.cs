@@ -8,7 +8,7 @@ namespace tddd49_holdem
 {
     public class Table : Data
     {
-        private readonly List<Player> _allPlayers = new List<Player>();
+        public virtual List<Player> AllPlayers { get; set; }
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
         public RulesEngine Rules { get; }
@@ -35,6 +35,7 @@ namespace tddd49_holdem
             CardsOnTable = new Cards();
             LogBox = new LogBox();
             Rules = new RulesEngine();
+            AllPlayers = new List<Player>();
             Pot = 0;
         }
 
@@ -47,8 +48,8 @@ namespace tddd49_holdem
             HandOutCards();
 
             // Test data
-            Player p1 = _allPlayers[0];
-            Player p2 = _allPlayers[1];
+            Player p1 = AllPlayers[0];
+            Player p2 = AllPlayers[1];
 
             /*
             p1.Cards.Clear();
@@ -66,7 +67,7 @@ namespace tddd49_holdem
         }
 
         private void ShowGuiPlayersCards() {
-            foreach (Player player in _allPlayers) {
+            foreach (Player player in AllPlayers) {
                 if (player.IsUsingGui) {
                     foreach (Card card in player.Cards) {
                         card.Show = true;
@@ -76,7 +77,7 @@ namespace tddd49_holdem
         }
 
         private void ShowAllCards() {
-            foreach (Player player in _allPlayers) {
+            foreach (Player player in AllPlayers) {
                 foreach (Card card in player.Cards) {
                     card.Show = true;
                 }
@@ -101,7 +102,7 @@ namespace tddd49_holdem
 
         private void HandOutCards()
         {
-            foreach (Player player in _allPlayers)
+            foreach (Player player in AllPlayers)
             {
                 player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
             }
@@ -111,7 +112,7 @@ namespace tddd49_holdem
         {
             player.Table = this;
             player.ChipsOnHand = RulesEngine.StartingChips;
-            _allPlayers.Add(player);
+            AllPlayers.Add(player);
             LogBox.Log(player.Name + " joined the table.");
         }
 
@@ -125,7 +126,7 @@ namespace tddd49_holdem
 
         public void MovePlayerBetsToPot()
         {
-            foreach (Player player in _allPlayers)
+            foreach (Player player in AllPlayers)
             {
                 Pot += player.CurrentBet;
                 player.CurrentBet = 0;
@@ -136,7 +137,7 @@ namespace tddd49_holdem
         {
             int currentHighestBet = 0;
             HashSet<Player> currentHighestBetPlayers = new HashSet<Player>();
-            foreach (Player player in _allPlayers)
+            foreach (Player player in AllPlayers)
             {
                 if (player.CurrentBet > currentHighestBet)
                 {
@@ -155,7 +156,7 @@ namespace tddd49_holdem
         public int GetHighestBet()
         {
             int currentHighestBet = 0;
-            foreach (Player player in _allPlayers)
+            foreach (Player player in AllPlayers)
             {
                 if (player.CurrentBet > currentHighestBet)
                 {
@@ -176,7 +177,7 @@ namespace tddd49_holdem
 
         public void MakeAllPlayersActive()
         {
-            BeforeMove = new Queue<Player>(_allPlayers);
+            BeforeMove = new Queue<Player>(AllPlayers);
         }
 
         public void MoveAllAfterMoveToBeforeMove()

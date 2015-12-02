@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using tddd49_holdem;
-using tddd49_holdem.actions;
 using tddd49_holdem.Players;
+using System.Linq;
 
 namespace tddd49_holdem
 {
@@ -12,6 +11,7 @@ namespace tddd49_holdem
     public partial class MainWindow
     {
 
+
         /// <summary>
         /// Interaction logic for MainWindow.xaml
         /// </summary>
@@ -19,23 +19,54 @@ namespace tddd49_holdem
         {
             InitializeComponent();
 
-            Player p1 = new HumanPlayer("Bamse");
-            Player p2 = new AiPlayer("Skalman");
-            Player p3 = new AiPlayer("Lille Skutt");
-            PlayerSlot1.DataContext = p1;
-            PlayerSlot2.DataContext = p2;
-            PlayerSlot3.DataContext = p3;
+            //  SQLiteConnection sqlConnection = new SQLiteConnection("Data Source=HoldemDatabase.sqlite;Version=3;New=True;Compress=True");
+            //sqlConnection.Open();
+            //SQLiteCommand sqlCommand = sqlConnection.CreateCommand();
+            // sqlCommand.CommandText = "CREATE TABLE test (id integer primary key, text varchar(100));";
+            // sqlCommand.ExecuteNonQuery();
 
-            Table table = new Table();
-            table.AttachPlayer(p1);
-            table.AttachPlayer(p2);
-            table.AttachPlayer(p3);
+            using (HoldemContext db = new HoldemContext())
+            {
+                Player p1 = new HumanPlayer("Bamse 2");
+                Player p2 = new AiPlayer("Skalman 2");
+                Player p3 = new AiPlayer("Lille Skutt 2");
+                PlayerSlot1.DataContext = p1;
+                PlayerSlot2.DataContext = p2;
+                PlayerSlot3.DataContext = p3;
 
-            Window.DataContext = table;
-            LogBoxControl.DataContext = table.LogBox;
+                Table table = new Table();
+                table.AttachPlayer(p1);
+                table.AttachPlayer(p2);
+                table.AttachPlayer(p3);
 
-         
-            table.StartRound();
+                Window.DataContext = table;
+                LogBoxControl.DataContext = table.LogBox;
+
+
+
+
+                db.Players.Add(p1);
+                db.Players.Add(p2);
+                db.Players.Add(p3);
+                db.SaveChanges();
+
+                // Display all Blogs from the database 
+                var query = from p in db.Players
+                            orderby p.Name
+                            select p;
+
+                foreach (var item in query)
+                {
+                    table.LogBox.Log("Player DATABASE: " + item.Name);
+                }
+
+
+
+                table.StartRound();
+
+            }
+
+
 
         }
 

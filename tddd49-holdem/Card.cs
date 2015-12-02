@@ -7,6 +7,7 @@ namespace tddd49_holdem
 
     public class Card : Data
     {
+		public int CardId { get; set; }
 		public int Suit { get; set; }
 		public int Value {get; set; }
         public string SuitSymbol { get; set; }
