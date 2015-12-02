@@ -5,21 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:tddd49_holdem"
         mc:Ignorable="d"
-        Title="TDDD49 Hold'em" Height="700"  Width="900"
-        x:Name="Window">
-    <StackPanel  d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
+        Title="TDDD49 Hold'em" Height="720"  Width="900">
+    <StackPanel x:Name="MainPanel"  d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>
         <WrapPanel x:Name="PlayerPanel1" HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 1 -->
-            <local:PlayerPanel x:Name="PlayerSlot1" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
-            <local:PlayerPanel x:Name="PlayerSlot2" d:DataContext="{d:DesignData Source=/SampleData/PlayerNoCardsSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot01" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot02" d:DataContext="{d:DesignData Source=/SampleData/PlayerNoCardsSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot03" d:DataContext="{d:DesignData Source=/SampleData/PlayerNoCardsSample.xaml}"/>
         </WrapPanel>
         <StackPanel Orientation="Horizontal" Height="300" HorizontalAlignment="Center">
             <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 2 -->
-                <local:PlayerPanel x:Name="PlayerSlot6" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot10" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot09" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
             <!-- the actual table -->
             <StackPanel Width="600">
@@ -61,13 +62,15 @@
             </StackPanel>
             <WrapPanel Width="130" VerticalAlignment="Center">
                 <!-- Player 3 -->
-                <local:PlayerPanel x:Name="PlayerSlot3" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot04" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+                <local:PlayerPanel x:Name="PlayerSlot05" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
             </WrapPanel>
         </StackPanel>
         <WrapPanel HorizontalAlignment="Center" MinHeight="135">
             <!-- Player 4 -->
-            <local:PlayerPanel x:Name="PlayerSlot5" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
-            <local:PlayerPanel x:Name="PlayerSlot4" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot08" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot07" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
+            <local:PlayerPanel x:Name="PlayerSlot06" d:DataContext="{d:DesignData Source=/SampleData/PlayerSample.xaml}"/>
         </WrapPanel>
 
         <!-- Action bar -->
@@ -95,8 +98,8 @@
                     </Style>
                 </Grid.Style>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="43" />
-                    <RowDefinition Height="43" />
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="48" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="202" />

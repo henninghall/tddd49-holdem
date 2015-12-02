@@ -5,12 +5,15 @@ namespace tddd49_holdem.Players
 {
     public abstract class Player : Data
     {
-        public Fold Fold;
-        public Check Check;
-        public Call Call;
-        public Raise Raise;
-
         public abstract bool IsUsingGui { get; }
+
+        private string _name;
+        [Key]
+        public string Name
+        {
+            get { return _name; }
+            set { SetField(ref _name, value, "Name"); }
+        }
 
         private Cards _cards;
         public Cards Cards
@@ -61,13 +64,7 @@ namespace tddd49_holdem.Players
             set { SetField(ref _currentBet, value, "CurrentBet"); }
         }
 
-        private string _name;
-        [Key]
-        public string Name
-        {
-            get { return _name; }
-            set { SetField(ref _name, value, "Name"); }
-        }
+     
 
         private bool _canCheck;
 
@@ -101,15 +98,11 @@ namespace tddd49_holdem.Players
         }
 
 
-        protected Player() { }
+        protected Player() {}
 
         protected Player(string name)
         {
             Name = name;
-            Fold = new Fold(this);
-            Check = new Check(this);
-            Call = new Call(this);
-            Raise = new Raise(this);
         }
 
         public void Bet(int amount)

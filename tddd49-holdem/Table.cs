@@ -16,6 +16,8 @@ namespace tddd49_holdem
         private Queue<int> _numberOfCardsToPutOnTable;
         public LogBox LogBox { get; set; }
         public Cards CardsOnTable { get; set; }
+        public bool HasActiveGame; 
+        public static HoldemContext Db = new HoldemContext();
 
         private int _pot;
         public int Pot
@@ -36,30 +38,23 @@ namespace tddd49_holdem
             LogBox = new LogBox();
             Rules = new RulesEngine();
             AllPlayers = new List<Player>();
+            Db = new HoldemContext();
+
             Pot = 0;
         }
 
-        public void StartRound()
+        public Table(HoldemContext db)
         {
+            Db = db;
+        }
+
+        public void StartRound() {
+            HasActiveGame = true;
             MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
             HandOutCards();
-
-            // Test data
-            Player p1 = AllPlayers[0];
-            Player p2 = AllPlayers[1];
-
-            /*
-            p1.Cards.Clear();
-            p2.Cards.Clear();
-            p1.Cards.Add(new Card(1, 14));
-            p1.Cards.Add(new Card(2, 14));
-            p2.Cards.Add(new Card(3, 14));
-            p2.Cards.Add(new Card(0, 14));
-            */
-
             ShowGuiPlayersCards();
             ResetCardQueue();
             NextPlayer();
@@ -111,7 +106,7 @@ namespace tddd49_holdem
         public void AttachPlayer(Player player)
         {
             player.Table = this;
-            player.ChipsOnHand = RulesEngine.StartingChips;
+            //player.ChipsOnHand = RulesEngine.StartingChips;
             AllPlayers.Add(player);
             LogBox.Log(player.Name + " joined the table.");
         }
@@ -223,8 +218,8 @@ namespace tddd49_holdem
             if (winners.Count == 1)
             {
                 Player winner = winners.First();
-                message = "Game over! The winner is " + winner.Name;
-                if (GetNumberOfActivePlayers() > 1) message += " with " + Rules.GetDrawType(winner.GetAllCards());
+                message = "Game over!" ;
+                if (GetNumberOfActivePlayers() > 1) message += winner.Name + " won with " + Rules.GetDrawType(winner.GetAllCards());
             }
             else
             {
@@ -236,10 +231,8 @@ namespace tddd49_holdem
             ShowAllCards();
             LogBox.Log(message);
             MessageBoxResult result = MessageBox.Show(message + ". Start next round?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
-            {
-                StartRound();
-            }
+            if (result == MessageBoxResult.Yes) StartRound();
+            else HasActiveGame = false;
         }
 
         private void GivePotToPlayers(HashSet<Player> winners)
