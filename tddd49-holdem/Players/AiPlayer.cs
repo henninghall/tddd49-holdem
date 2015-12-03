@@ -8,9 +8,10 @@ namespace tddd49_holdem.Players
     public class AiPlayer : Player
     {
         public AiPlayer(string name) : base(name) {}
-        public AiPlayer() {}
         public override bool IsUsingGui { get; } = false;
-        
+
+        public AiPlayer() { }
+
         public override void RequestActionExcecution() {
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += worker_DoWork;

@@ -22,17 +22,14 @@ namespace tddd49_holdem.Players
             set { SetField(ref _cards, value, "Cards"); }
         }
 
-        public Table Table;
+        private Table _table;
 
-        public Table get_Table()
+        public Table Table
         {
-            return Table;
+            get { return _table; }
+            set { SetField(ref _table, value, "_table");}
         }
-
-        public void set_Table(Table t)
-        {
-            SetField(ref Table, t, "Table");
-        }
+        
 
         private int _chipsOnHand;
 
@@ -115,7 +112,7 @@ namespace tddd49_holdem.Players
         {
             Cards allCards = new Cards();
             allCards.AddRange(Cards);
-            allCards.AddRange(Table.CardsOnTable);
+            allCards.AddRange(_table.CardsOnTable);
             return allCards;
         }
 

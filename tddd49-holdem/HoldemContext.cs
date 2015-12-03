@@ -6,5 +6,7 @@ namespace tddd49_holdem
     public class HoldemContext : DbContext
     {
         public DbSet<Player> Players { get; set; }
+        public DbSet<Table> Tables { get; set; }
+
     }
 }

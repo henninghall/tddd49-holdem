@@ -6,6 +6,7 @@ namespace tddd49_holdem.Players
     {
         public override bool IsUsingGui { get; } = true;
         public HumanPlayer(string name) : base(name){ }
+
         public HumanPlayer() { }
         
         private void UpdatePossibleActions()

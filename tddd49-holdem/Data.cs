@@ -18,7 +18,6 @@ namespace tddd49_holdem
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
             OnPropertyChanged(propertyName);
-            Table.Db.SaveChanges();
             return true;
         }
 

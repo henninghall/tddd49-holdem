@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -16,8 +17,8 @@ namespace tddd49_holdem
         private Queue<int> _numberOfCardsToPutOnTable;
         public LogBox LogBox { get; set; }
         public Cards CardsOnTable { get; set; }
-        public bool HasActiveGame; 
-        public static HoldemContext Db = new HoldemContext();
+        public bool HasActiveGame { get; set; }
+        public int TableId { get; set; }
 
         private int _pot;
         public int Pot
@@ -38,17 +39,13 @@ namespace tddd49_holdem
             LogBox = new LogBox();
             Rules = new RulesEngine();
             AllPlayers = new List<Player>();
-            Db = new HoldemContext();
-
             Pot = 0;
         }
 
-        public Table(HoldemContext db)
-        {
-            Db = db;
-        }
 
-        public void StartRound() {
+        public void StartRound()
+        {
+
             HasActiveGame = true;
             MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
@@ -61,19 +58,26 @@ namespace tddd49_holdem
             LogBox.Log("Round started!");
         }
 
-        private void ShowGuiPlayersCards() {
-            foreach (Player player in AllPlayers) {
-                if (player.IsUsingGui) {
-                    foreach (Card card in player.Cards) {
+        private void ShowGuiPlayersCards()
+        {
+            foreach (Player player in AllPlayers)
+            {
+                if (player.IsUsingGui)
+                {
+                    foreach (Card card in player.Cards)
+                    {
                         card.Show = true;
                     }
                 }
             }
         }
 
-        private void ShowAllCards() {
-            foreach (Player player in AllPlayers) {
-                foreach (Card card in player.Cards) {
+        private void ShowAllCards()
+        {
+            foreach (Player player in AllPlayers)
+            {
+                foreach (Card card in player.Cards)
+                {
                     card.Show = true;
                 }
             }
@@ -218,7 +222,7 @@ namespace tddd49_holdem
             if (winners.Count == 1)
             {
                 Player winner = winners.First();
-                message = "Game over!" ;
+                message = "Game over!";
                 if (GetNumberOfActivePlayers() > 1) message += winner.Name + " won with " + Rules.GetDrawType(winner.GetAllCards());
             }
             else
@@ -262,15 +266,35 @@ namespace tddd49_holdem
 
         public void NextPlayer()
         {
-            if (ActivePlayer != null) ActivePlayer.Active = false;
-            ActivePlayer = BeforeMove.Peek();
-            ActivePlayer.Active = true;
-            ActivePlayer.RequestActionExcecution();
+            
+                if (ActivePlayer != null) ActivePlayer.Active = false;
+                ActivePlayer = BeforeMove.Peek();
+                ActivePlayer.Active = true;
+                ActivePlayer.RequestActionExcecution();
+
+                UpdateTable(this);
         }
 
         public bool HasNextPlayer()
         {
             return BeforeMove.Any();
         }
+
+        public void UpdateTable(Table table)
+        {
+            using (HoldemContext db = new HoldemContext()) {
+                var entity = db.Tables.Where(c => c.TableId == table.TableId).AsQueryable().FirstOrDefault();
+                if (entity == null) {
+                    db.Tables.Add(table);
+                }
+                else {
+                    db.Entry(entity).CurrentValues.SetValues(table);
+                }
+
+                db.SaveChanges();
+            }
+        }
+
+
     }
 }
