@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
+using System.Linq;
 using tddd49_holdem.actions;
 
 namespace tddd49_holdem.Players
@@ -16,7 +18,7 @@ namespace tddd49_holdem.Players
         }
 
         private Cards _cards;
-        public Cards Cards
+        public virtual Cards Cards
         {
             get { return _cards; }
             set { SetField(ref _cards, value, "Cards"); }
@@ -27,9 +29,9 @@ namespace tddd49_holdem.Players
         public Table Table
         {
             get { return _table; }
-            set { SetField(ref _table, value, "_table");}
+            set { SetField(ref _table, value, "_table"); }
         }
-        
+
 
         private int _chipsOnHand;
 
@@ -61,7 +63,7 @@ namespace tddd49_holdem.Players
             set { SetField(ref _currentBet, value, "CurrentBet"); }
         }
 
-     
+
 
         private bool _canCheck;
 
@@ -95,7 +97,7 @@ namespace tddd49_holdem.Players
         }
 
 
-        protected Player() {}
+        protected Player() { }
 
         protected Player(string name)
         {
@@ -104,16 +106,24 @@ namespace tddd49_holdem.Players
 
         public void Bet(int amount)
         {
-            ChipsOnHand -= amount;
-            CurrentBet += amount;
+            using (HoldemContext db = new HoldemContext())
+            {
+                Player player = db.Players.First(p => p.Name == Name);
+                player.ChipsOnHand -= amount;
+                player.CurrentBet += amount;
+                db.SaveChanges();
+            }
         }
 
         public Cards GetAllCards()
         {
-            Cards allCards = new Cards();
-            allCards.AddRange(Cards);
-            allCards.AddRange(_table.CardsOnTable);
-            return allCards;
+            using (HoldemContext db = new HoldemContext())
+            {
+                var player = db.Players.Where(p => p.Name == Name).Include(p => p.Table).First();
+                Cards pCards = player.Cards;
+                Cards tCards = player.Table.CardsOnTable;
+                return pCards.Concat(tCards);
+            }
         }
 
         /// <summary>

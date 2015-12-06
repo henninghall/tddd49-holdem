@@ -7,6 +7,7 @@ namespace tddd49_holdem
     {
         public DbSet<Player> Players { get; set; }
         public DbSet<Table> Tables { get; set; }
-
+        public DbSet<Card> Cards { get; set; }
+        
     }
 }

@@ -45,12 +45,12 @@ namespace tddd49_holdem
 
         public void StartRound()
         {
-
             HasActiveGame = true;
             MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
+            HandInCards();
             HandOutCards();
             ShowGuiPlayersCards();
             ResetCardQueue();
@@ -58,19 +58,18 @@ namespace tddd49_holdem
             LogBox.Log("Round started!");
         }
 
-        private void ShowGuiPlayersCards()
-        {
-            foreach (Player player in AllPlayers)
-            {
-                if (player.IsUsingGui)
-                {
-                    foreach (Card card in player.Cards)
-                    {
-                        card.Show = true;
-                    }
+        private void ShowGuiPlayersCards() {
+
+          
+            using (HoldemContext db = new HoldemContext()) {
+                var players = db.Tables.First(t => t.TableId == TableId).AllPlayers;
+
+                foreach (Card card in players.Where(player => player.IsUsingGui).SelectMany(player => player.Cards)) {
+                    card.Show = true;
                 }
-            }
+                db.SaveChanges();
         }
+    }
 
         private void ShowAllCards()
         {
@@ -103,7 +102,29 @@ namespace tddd49_holdem
         {
             foreach (Player player in AllPlayers)
             {
-                player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
+                Cards cards = Deck.Pop(RulesEngine.CardsOnHand);
+
+                using (HoldemContext db = new HoldemContext())
+                {
+                    Player curPlayer = db.Players.First(p => p.Name == player.Name);
+                    curPlayer.Cards = new Cards();
+                    curPlayer.Cards.AddRange(cards);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        private void HandInCards()
+        {
+            foreach (Player player in AllPlayers)
+            {
+
+                using (HoldemContext db = new HoldemContext())
+                {
+                    Player curPlayer = db.Players.First(p => p.Name == player.Name);
+                    db.Cards.RemoveRange(curPlayer.Cards);
+                    db.SaveChanges();
+                }
             }
         }
 
@@ -266,13 +287,13 @@ namespace tddd49_holdem
 
         public void NextPlayer()
         {
-            
-                if (ActivePlayer != null) ActivePlayer.Active = false;
-                ActivePlayer = BeforeMove.Peek();
-                ActivePlayer.Active = true;
-                ActivePlayer.RequestActionExcecution();
 
-                UpdateTable(this);
+            if (ActivePlayer != null) ActivePlayer.Active = false;
+            ActivePlayer = BeforeMove.Peek();
+            ActivePlayer.Active = true;
+            ActivePlayer.RequestActionExcecution();
+
+            UpdateTable(this);
         }
 
         public bool HasNextPlayer()
@@ -282,12 +303,15 @@ namespace tddd49_holdem
 
         public void UpdateTable(Table table)
         {
-            using (HoldemContext db = new HoldemContext()) {
+            using (HoldemContext db = new HoldemContext())
+            {
                 var entity = db.Tables.Where(c => c.TableId == table.TableId).AsQueryable().FirstOrDefault();
-                if (entity == null) {
+                if (entity == null)
+                {
                     db.Tables.Add(table);
                 }
-                else {
+                else
+                {
                     db.Entry(entity).CurrentValues.SetValues(table);
                 }
 

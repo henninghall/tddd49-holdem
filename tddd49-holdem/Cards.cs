@@ -16,6 +16,13 @@ namespace tddd49_holdem
 	            Add(card);
 	        }
 	    }
+
+	    public Cards Concat(Cards cards) {
+            Cards allCards = new Cards();
+            allCards.AddRange(cards);
+            allCards.AddRange(this);
+	        return allCards;
+	    }
 	}
 }
 

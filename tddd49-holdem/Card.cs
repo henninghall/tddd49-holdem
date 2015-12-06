@@ -17,7 +17,9 @@ namespace tddd49_holdem
         public bool Show
         {
             get { return _show; }
-            set { SetField(ref _show, value, "Show"); }
+            set {
+                SetField(ref _show, value, "Show");
+            }
         }
 
         // Needed for sample data in gui    

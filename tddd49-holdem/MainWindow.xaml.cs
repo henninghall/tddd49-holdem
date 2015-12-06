@@ -20,6 +20,7 @@ namespace tddd49_holdem
     /// </summary>
     public partial class MainWindow
     {
+        private HoldemContext _context = new HoldemContext();
         /// <summary>
         /// Interaction logic for MainWindow.xaml
         /// </summary>
@@ -77,15 +78,19 @@ namespace tddd49_holdem
             db.SaveChanges();
             */
             Table table;
-            using (HoldemContext db = new HoldemContext()) {
+            List<Player> allPlayers;
+
+            using (HoldemContext db = new HoldemContext())
+            {
                 table = db.Tables.First(a => a.HasActiveGame);
-                SetPlayersDataContext(table.AllPlayers);
-                db.SaveChanges();
+                allPlayers = table.AllPlayers;
             }
-        
-                MainPanel.DataContext = table;
-                LogBoxControl.DataContext = table.LogBox;
-                table.StartRound();
+
+            /*SetPlayersDataContext(allPlayers);
+            MainPanel.DataContext = table;
+            LogBoxControl.DataContext = table.LogBox;
+            */
+            table.StartRound();
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)
@@ -144,6 +149,24 @@ namespace tddd49_holdem
                     GetLogicalChildCollection(depChild, logicalCollection);
                 }
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Data.CollectionViewSource categoryViewSource =
+                ((System.Windows.Data.CollectionViewSource)(this.FindResource("PlayerViewSource")));
+
+            // Load is an extension method on IQueryable,  
+            // defined in the System.Data.Entity namespace. 
+            // This method enumerates the results of the query,  
+            // similar to ToList but without creating a list. 
+            // When used with Linq to Entities this method  
+            // creates entity objects and adds them to the context. 
+            _context.Players.Load();
+
+            // After the data is loaded call the DbSet<T>.Local property  
+            // to use the DbSet<T> as a binding source. 
+            categoryViewSource.Source = _context.Players.Local;
         }
     }
 }

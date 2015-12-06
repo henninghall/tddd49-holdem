@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HoldemContext.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Players\AiPlayer.cs" />
     <Compile Include="Actions\Call.cs" />
     <Compile Include="Card.cs" />
@@ -145,6 +146,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Table.datasource" />
+    <None Include="Properties\DataSources\tddd49_holdem.Players.AiPlayer.datasource" />
+    <None Include="Properties\DataSources\tddd49_holdem.Players.HumanPlayer.datasource" />
+    <None Include="Properties\DataSources\tddd49_holdem.Players.Player.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

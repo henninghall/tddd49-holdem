@@ -1,4 +1,5 @@
-﻿using tddd49_holdem.Players;
+﻿using System.Linq;
+using tddd49_holdem.Players;
 
 namespace tddd49_holdem.actions
 {
@@ -15,7 +16,14 @@ namespace tddd49_holdem.actions
         public override void Execute()
         {
             Player.Table.BeforeMove.Dequeue();
-            Player.Cards.Clear();
+
+            using (HoldemContext db = new HoldemContext()) {
+                db.Cards.RemoveRange(db.Players.First(p => p.Name == Player.Name).Cards);
+                db.SaveChanges();
+            }
+
+            //Player.Cards.Clear();
+
 
             Player.Table.LogBox.Log(Player.Name + " folded!");
             Player.Table.ReactOnActionExecution();
