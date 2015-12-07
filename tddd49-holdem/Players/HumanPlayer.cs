@@ -1,4 +1,5 @@
-﻿using tddd49_holdem.actions;
+﻿using System.Linq;
+using tddd49_holdem.actions;
 
 namespace tddd49_holdem.Players
 {
@@ -8,13 +9,19 @@ namespace tddd49_holdem.Players
         public HumanPlayer(string name) : base(name){ }
 
         public HumanPlayer() { }
-        
-        private void UpdatePossibleActions()
-        {
-            CanFold = new Fold(this).IsValid();
-            CanCheck = new Check(this).IsValid();
-            CanCall = new Call(this).IsValid();
-            CanRaise = new Raise(this).IsValid();
+
+        private void UpdatePossibleActions() {
+
+            using (HoldemContext db = new HoldemContext()) {
+                Player player = db.Players.First(p => p.Name == Name);
+
+                player.CanFold = new Fold(this).IsValid();
+                player.CanCheck = new Check(this).IsValid();
+                player.CanCall = new Call(this).IsValid();
+                player.CanRaise = new Raise(this).IsValid();
+                db.SaveChanges();
+                MainWindow.RefreshContext();
+            }
         }
 
 

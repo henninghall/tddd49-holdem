@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using tddd49_holdem.Players;
@@ -20,77 +24,37 @@ namespace tddd49_holdem
     /// </summary>
     public partial class MainWindow
     {
-        private HoldemContext _context = new HoldemContext();
+        private static HoldemContext db = new HoldemContext();
+
         /// <summary>
         /// Interaction logic for MainWindow.xaml
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-
-            /*
-            Player p1 = new HumanPlayer("Bamse");
-            Player p2 = new AiPlayer("Skalman");
-            Player p3 = new AiPlayer("Lille Skutt");
-            /*   Player p4 = new AiPlayer("Farmor");
-            Player p5 = new AiPlayer("Draken");
-            Player p6 = new AiPlayer("Skorpan");
-            Player p7 = new AiPlayer("Katla");
-            Player p8 = new AiPlayer("Snusmumriken");
-            Player p9 = new AiPlayer("Herr Nilsson");
-            Player p10 = new AiPlayer("Pikachu");
-          */
-
-
-
-
-            /*
-
-                        // activeTable.StartRound();
-                        /*if (activeTable == 0) table = new Table();
-                            else table = db.Tables.First();
-
-                        /* table.AttachPlayer(p1);
-                         table.AttachPlayer(p2);
-                         table.AttachPlayer(p3);
-
-
-
-
-              var players = from p in db.Players
-                          orderby p.Name
-                          select p;
-
-
-              table.AttachPlayers(players);
-
-           
-            Table table1 = new Table();
-            HumanPlayer p3 = new HumanPlayer("Björne1");
-            HumanPlayer p4 = new HumanPlayer("Snigeln2");
-
-            p3.ChipsOnHand = p4.ChipsOnHand = 1000;
-            table1.AttachPlayer(p3);
-            table1.AttachPlayer(p4);
-             
-
-            db.Tables.Add(table1);
-            db.SaveChanges();
-            */
             Table table;
-            List<Player> allPlayers;
 
-            using (HoldemContext db = new HoldemContext())
-            {
-                table = db.Tables.First(a => a.HasActiveGame);
-                allPlayers = table.AllPlayers;
-            }
+            /* using (HoldemContext db = new HoldemContext())
+             {*/
 
-            /*SetPlayersDataContext(allPlayers);
+
+            table = db.Tables.First();
+            List<Player> allPlayers = table.AllPlayers;
+
+
+
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
-            */
+            SetPlayersDataContext(allPlayers);
+
             table.StartRound();
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)
@@ -151,22 +115,26 @@ namespace tddd49_holdem
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Refreshing context to detect database changes outside the program
+        /// From: http://stackoverflow.com/questions/18169970/how-do-i-refresh-dbcontext
+        /// </summary>
+        public static void RefreshContext()
         {
-            System.Windows.Data.CollectionViewSource categoryViewSource =
-                ((System.Windows.Data.CollectionViewSource)(this.FindResource("PlayerViewSource")));
+            var context = ((IObjectContextAdapter)db).ObjectContext;
+            var refreshableObjects = (from entry in context.ObjectStateManager.GetObjectStateEntries(
+                                                        EntityState.Added
+                                                       | EntityState.Deleted
+                                                       | EntityState.Modified
+                                                       | EntityState.Unchanged)
+                                      where entry.EntityKey != null
+                                      select entry.Entity).ToList();
 
-            // Load is an extension method on IQueryable,  
-            // defined in the System.Data.Entity namespace. 
-            // This method enumerates the results of the query,  
-            // similar to ToList but without creating a list. 
-            // When used with Linq to Entities this method  
-            // creates entity objects and adds them to the context. 
-            _context.Players.Load();
+            List<object> refreshableObjects2 = refreshableObjects.Where(refreshableObject => refreshableObject != null).ToList();
 
-            // After the data is loaded call the DbSet<T>.Local property  
-            // to use the DbSet<T> as a binding source. 
-            categoryViewSource.Source = _context.Players.Local;
+            context.Refresh(RefreshMode.StoreWins, refreshableObjects2);
         }
+
+
     }
 }

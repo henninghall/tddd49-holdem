@@ -7,35 +7,12 @@
         xmlns:Players="clr-namespace:tddd49_holdem.Players" x:Class="tddd49_holdem.MainWindow"
         mc:Ignorable="d"
         Title="TDDD49 Hold'em" Height="720"  Width="900" Loaded="Window_Loaded">
-    <Window.Resources>
-         <CollectionViewSource x:Key="PlayerViewSource" d:DesignSource="{d:DesignInstance {x:Type Players:Player}, CreateList=True}"/>
-    </Window.Resources>
 
     <StackPanel x:Name="MainPanel"  d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
-
-
 
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>
-
-
-        <Grid DataContext="{StaticResource PlayerViewSource}">
-            
-            <DataGrid x:Name="playerDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="141,72,351,-23" ItemsSource="{Binding Source={StaticResource PlayerViewSource}}" EnableRowVirtualization="True" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridCheckBoxColumn x:Name="activeColumn" Width="SizeToHeader" Header="Active" Binding="{Binding Active}"/>
-                    <DataGridCheckBoxColumn x:Name="canCallColumn" Width="SizeToHeader" Header="Can Call" Binding="{Binding CanCall}"/>
-                    <DataGridCheckBoxColumn x:Name="canCheckColumn" Width="SizeToHeader" Header="Can Check" Binding="{Binding CanCheck}"/>
-                    <DataGridCheckBoxColumn x:Name="canFoldColumn" Width="SizeToHeader" Header="Can Fold" Binding="{Binding CanFold}"/>
-                    <DataGridCheckBoxColumn x:Name="canRaiseColumn" Width="SizeToHeader" Header="Can Raise" Binding="{Binding CanRaise}"/>
-                    <DataGridTextColumn x:Name="chipsOnHandColumn" Width="SizeToHeader" Header="Chips On Hand" Binding="{Binding ChipsOnHand}"/>
-                    <DataGridTextColumn x:Name="currentBetColumn" Width="SizeToHeader" Header="Current Bet" Binding="{Binding CurrentBet}"/>
-                    <DataGridCheckBoxColumn x:Name="isUsingGuiColumn" Width="SizeToHeader" IsReadOnly="True" Header="Is Using Gui" Binding="{Binding IsUsingGui}"/>
-                    <DataGridTextColumn x:Name="nameColumn1" Width="SizeToHeader" Header="Name" Binding="{Binding Name}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
 
 
         <WrapPanel x:Name="PlayerPanel1" HorizontalAlignment="Center" MinHeight="135">

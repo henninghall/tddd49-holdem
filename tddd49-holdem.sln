@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tddd49-holdem", "tddd49-hol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingNewFeatures", "TestingNewFeatures\TestingNewFeatures.csproj", "{061AD54A-9D9C-4F55-B28E-E38A6855CA5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "..\TestApp\TestApp.csproj", "{B947DA3D-3007-4D40-8691-9AFC1FDA8512}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{061AD54A-9D9C-4F55-B28E-E38A6855CA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{061AD54A-9D9C-4F55-B28E-E38A6855CA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{061AD54A-9D9C-4F55-B28E-E38A6855CA5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B947DA3D-3007-4D40-8691-9AFC1FDA8512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B947DA3D-3007-4D40-8691-9AFC1FDA8512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B947DA3D-3007-4D40-8691-9AFC1FDA8512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B947DA3D-3007-4D40-8691-9AFC1FDA8512}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
