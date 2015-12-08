@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using tddd49_holdem.Players;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Documents;
 using tddd49_holdem.actions;
 
 namespace tddd49_holdem
@@ -22,6 +24,7 @@ namespace tddd49_holdem
         {
             InitializeComponent();
             _context = new HoldemContext();
+
 
             Table table = _context.Tables.First();
             List<Player> allPlayers = table.AllPlayers;
@@ -105,19 +108,23 @@ namespace tddd49_holdem
             }
         }
 
-        private void UpdateUI()
-        {
+        private async void UpdateUI() {
             _context.SaveChanges();
-            _context.Dispose();
 
+            RefreshContext();
+            /*
+            await _context.SaveChangesAsync();
+            /*_context.Dispose();
             _context = new HoldemContext();
-            Table table = _context.Tables.First();
-            List<Player> allPlayers = table.AllPlayers;
 
+            Table table = _context.Tables.First();
+            
+            List<Player> allPlayers = table.AllPlayers;
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
             SetPlayersDataContext(allPlayers);
-    
+            // 
+    */
         }
 
 
@@ -145,6 +152,19 @@ namespace tddd49_holdem
         {
             base.OnClosing(e);
             _context.Dispose();
+        }
+
+        private void Seed()
+        {
+
+            Table table1 = new Table();
+            Player p1 = new HumanPlayer("Bamse");
+            Player p2 = new HumanPlayer("Skalman");
+            table1.AttachPlayer(p1);
+            table1.AttachPlayer(p2);
+            _context.Tables.Add(table1);
+            _context.SaveChanges();
+
         }
     }
 }

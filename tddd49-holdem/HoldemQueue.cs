@@ -32,8 +32,20 @@ namespace tddd49_holdem
             return t;
         }
 
-        private int GetFirstElementIndex() {
-            for (int i = 0; i < this.Count; i++) {
+        public Cards Dequeue(int cardsOnHand)
+        {
+            Cards cards = new Cards();
+            for (int i = 0; i < cardsOnHand; i++)
+            {
+                cards.Add(Dequeue() as Card);
+            }
+            return cards;
+        }
+
+        private int GetFirstElementIndex()
+        {
+            for (int i = 0; i < this.Count; i++)
+            {
                 if (this[i] != null) return i;
             }
             throw new IndexOutOfRangeException();

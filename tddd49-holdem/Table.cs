@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using tddd49_holdem.Players;
 
@@ -14,8 +12,8 @@ namespace tddd49_holdem
         public virtual HoldemQueue<Player> BeforeMove { get; set; }  // active players waiting to move
         public virtual HoldemQueue<Player> AfterMove { get; set; }// active players already moved
         public RulesEngine Rules { get; }
-        public Deck Deck;
-        public virtual HoldemQueue<int> NumberOfCardsToPutOnTable { get; set; }
+        public virtual HoldemQueue<Card> Deck { get; set; }
+        public NumberOfCardsList NumberOfCardsToPutOnTable { get; set; }
         public LogBox LogBox { get; set; }
         public virtual Cards CardsOnTable { get; set; }
         public bool HasActiveGame { get; set; }
@@ -51,10 +49,10 @@ namespace tddd49_holdem
 
         public void StartNewRound()
         {
+            Deck = new Deck();
             HasActiveGame = true;
             MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
-            Deck = new Deck();
             CardsOnTable.Clear();
             HandInCards();
             HandOutCards();
@@ -123,20 +121,17 @@ namespace tddd49_holdem
         {
             foreach (Player player in AllPlayers)
             {
-                Cards cards = Deck.Pop(RulesEngine.CardsOnHand);
+                Cards cards = Deck.Dequeue(RulesEngine.CardsOnHand);
                 player.Cards.AddRange(cards);
 
             }
 
         }
 
-        private void HandInCards()
-        {
-            foreach (Player player in AllPlayers)
-            {
+        private void HandInCards() {
+            foreach (Player player in AllPlayers.Where(player => player.Cards != null)) {
                 player.Cards.Clear();
             }
-
         }
 
         public void AttachPlayer(Player player)
@@ -282,19 +277,19 @@ namespace tddd49_holdem
             }
         }
 
-        public void NextCard()
+        private void NextCard()
         {
-            PutCards(Deck.Pop(NumberOfCardsToPutOnTable.Dequeue()));
+            PutCards(Deck.Dequeue(NumberOfCardsToPutOnTable.Dequeue()));
         }
 
-        public bool HasNextCard()
+        private bool HasNextCard()
         {
             return NumberOfCardsToPutOnTable.Any();
         }
 
         private void ResetCardQueue()
         {
-            NumberOfCardsToPutOnTable = new HoldemQueue<int>(RulesEngine.CardsBeforeRound);
+            NumberOfCardsToPutOnTable = new NumberOfCardsList(RulesEngine.CardsBeforeRound);
         }
 
 

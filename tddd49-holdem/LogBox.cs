@@ -6,7 +6,7 @@ namespace tddd49_holdem
     public class LogBox
     {
         public int LogBoxId { get; set; }
-        public ObservableCollection<Row> TextRows { get; set; }
+        public virtual ObservableCollection<Row> TextRows { get; set; }
 
         public LogBox() {
             TextRows = new ObservableCollection<Row>();

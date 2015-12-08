@@ -4,21 +4,16 @@
 
 namespace tddd49_holdem
     {
-    public class Deck : Stack<Card>
+    public class Deck : HoldemQueue<Card>
     {
         public Deck()
         {
-            Push(CreateAllCards());
+            AddRange(CreateAllCards());
             Shuffle();
         }
+        
+        
 
-        private void Push(IEnumerable<Card> cardList)
-        {
-            foreach (Card card in cardList)
-            {
-                Push(card);
-            }
-        }
 
         private IEnumerable<Card> CreateAllCards()
         {   
@@ -43,7 +38,7 @@ namespace tddd49_holdem
 		    Cards cards = new Cards();
             for (int i = 0; i < numberOfCards; i++)
             {
-                cards.Add(Pop());   
+                cards.Add(Dequeue());   
             }
             return cards;
         }
@@ -63,7 +58,7 @@ namespace tddd49_holdem
                 deck[n] = deck[k];
                 deck[k] = temp;
             }
-            Push(new List<Card>(deck));
+            AddRange(new List<Card>(deck));
         }
 
         
