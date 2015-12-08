@@ -72,15 +72,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HoldemContext.cs" />
-    <Compile Include="Migrations\201512081936409_InitialCreate.cs" />
-    <Compile Include="Migrations\201512081936409_InitialCreate.Designer.cs">
-      <DependentUpon>201512081936409_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201512081945410_sd.cs" />
-    <Compile Include="Migrations\201512081945410_sd.Designer.cs">
-      <DependentUpon>201512081945410_sd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="HoldemQueue.cs" />
+    <Compile Include="IntegerObject.cs" />
     <Compile Include="Players\AiPlayer.cs" />
     <Compile Include="Actions\Call.cs" />
     <Compile Include="Card.cs" />
@@ -149,12 +142,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201512081936409_InitialCreate.resx">
-      <DependentUpon>201512081936409_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512081945410_sd.resx">
-      <DependentUpon>201512081945410_sd.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

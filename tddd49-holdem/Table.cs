@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -10,13 +11,13 @@ namespace tddd49_holdem
     {
         public int TableId { set; get; }
         public virtual List<Player> AllPlayers { get; set; }
-        public Queue<Player> BeforeMove; // active players waiting to move
-        public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
-        public RulesEngine Rules { get; }
-        public Deck Deck;
-        private Queue<int> _numberOfCardsToPutOnTable;
-        public LogBox LogBox { get; set; }
-        public Cards CardsOnTable { get; set; }
+        public virtual HoldemQueue<Player> BeforeMove { get; set; } // active players waiting to move
+        public virtual HoldemQueue<Player> AfterMove { get; set; } // active players already moved
+        public virtual RulesEngine Rules { get; }
+        public virtual Deck Deck { get; set; }
+        public virtual HoldemQueue<IntegerObject> NumberOfCardsToPutOnTable { get; set; }
+        public virtual LogBox LogBox { get; set; }
+        public virtual Cards CardsOnTable { get; set; }
 
         private int _pot;
         public int Pot
@@ -40,20 +41,25 @@ namespace tddd49_holdem
             Pot = 0;
         }
 
-        public void StartRound()
+        public void ContinueRound() {
+            NextPlayer();
+        }
+
+        public void StartNewRound()
         {
             MoveAllAfterMoveToBeforeMove();
             MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
+            HandInCards();
             HandOutCards();
-
             ShowGuiPlayersCards();
             ResetCardQueue();
             NextPlayer();
             LogBox.Log("Round started!");
         }
 
+     
         private void ShowGuiPlayersCards() {
             foreach (Player player in AllPlayers) {
                 if (player.IsUsingGui) {
@@ -92,9 +98,17 @@ namespace tddd49_holdem
         {
             foreach (Player player in AllPlayers)
             {
-                player.Cards = Deck.Pop(RulesEngine.CardsOnHand);
+                player.Cards = Deck.Dequeue(RulesEngine.CardsOnHand);
             }
         }
+
+        private void HandInCards()
+        {
+            foreach (Player player in AllPlayers) {
+                player.Cards?.Clear();
+            }
+        }
+
 
         public void AttachPlayer(Player player)
         {
@@ -165,7 +179,7 @@ namespace tddd49_holdem
 
         public void MakeAllPlayersActive()
         {
-            BeforeMove = new Queue<Player>(AllPlayers);
+            BeforeMove = new HoldemQueue<Player>(AllPlayers);
         }
 
         public void MoveAllAfterMoveToBeforeMove()
@@ -226,7 +240,7 @@ namespace tddd49_holdem
             MessageBoxResult result = MessageBox.Show(message + ". Start next round?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                StartRound();
+                StartNewRound();
             }
         }
 
@@ -242,25 +256,33 @@ namespace tddd49_holdem
 
         public void NextCard()
         {
-            PutCards(Deck.Pop(_numberOfCardsToPutOnTable.Dequeue()));
+            PutCards(Deck.Dequeue(NumberOfCardsToPutOnTable.Dequeue().TheInt));
         }
 
         public bool HasNextCard()
         {
-            return _numberOfCardsToPutOnTable.Any();
+            return NumberOfCardsToPutOnTable.Any();
         }
 
-        private void ResetCardQueue()
-        {
-            _numberOfCardsToPutOnTable = new Queue<int>(new Queue<int>(RulesEngine.CardsBeforeRound));
+        private void ResetCardQueue() {
+            if (NumberOfCardsToPutOnTable == null)
+                NumberOfCardsToPutOnTable = new HoldemQueue<IntegerObject>();
+
+            NumberOfCardsToPutOnTable.Clear();
+            foreach (int variable in RulesEngine.CardsBeforeRound) {
+                IntegerObject inteObj = new IntegerObject(variable);
+                NumberOfCardsToPutOnTable.Add(inteObj);
+            }
         }
 
-        public void NextPlayer()
-        {
+        public void NextPlayer() {
+
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
+
+            MainWindow.db.SaveChanges();
         }
 
         public bool HasNextPlayer()

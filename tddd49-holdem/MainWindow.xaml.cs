@@ -21,7 +21,7 @@ namespace tddd49_holdem
         public MainWindow()
         {
             InitializeComponent();
-
+            
             //  SQLiteConnection sqlConnection = new SQLiteConnection("Data Source=HoldemDatabase.sqlite;Version=3;New=True;Compress=True");
             //sqlConnection.Open();
             //SQLiteCommand sqlCommand = sqlConnection.CreateCommand();
@@ -35,12 +35,36 @@ namespace tddd49_holdem
             LogBoxControl.DataContext = table.LogBox;
 
 
-            table.StartRound();
+            table.ContinueRound();
 
 
 
 
 
+        }
+
+        private void FoldButton_Click(object sender, RoutedEventArgs e)
+        {
+            Player activePlayer = (Player)((Button)sender).Tag;
+            new Fold(activePlayer).Execute();
+        }
+
+        private void CheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            Player activePlayer = (Player)((Button)sender).Tag;
+            new Check(activePlayer).Execute();
+        }
+
+        private void CallButton_Click(object sender, RoutedEventArgs e)
+        {
+            Player activePlayer = (Player)((Button)sender).Tag;
+            new Call(activePlayer).Execute();
+        }
+
+        private void RaiseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Player activePlayer = (Player)((Button)sender).Tag;
+            new Raise(activePlayer).Execute();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -49,36 +73,17 @@ namespace tddd49_holdem
             db.Dispose();
         }
 
-        private void FoldButton_Click(object sender, RoutedEventArgs e)
+        private void Seed()
         {
+
+            Table table1 = new Table();
+            Player p1 = new HumanPlayer("Bamse");
+            Player p2 = new HumanPlayer("Skalman");
+            table1.AttachPlayer(p1);
+            table1.AttachPlayer(p2);
+            db.Tables.Add(table1);
             db.SaveChanges();
 
-            Player activePlayer = (Player)((Button)sender).Tag;
-            new Fold(activePlayer).Execute();
-        }
-
-        private void CheckButton_Click(object sender, RoutedEventArgs e)
-        {
-            db.SaveChanges();
-
-            Player activePlayer = (Player)((Button)sender).Tag;
-            new Check(activePlayer).Execute();
-        }
-
-        private void CallButton_Click(object sender, RoutedEventArgs e)
-        {
-            db.SaveChanges();
-
-            Player activePlayer = (Player)((Button)sender).Tag;
-            new Call(activePlayer).Execute();
-        }
-
-        private void RaiseButton_Click(object sender, RoutedEventArgs e)
-        {
-            db.SaveChanges();
-
-            Player activePlayer = (Player)((Button)sender).Tag;
-            new Raise(activePlayer).Execute();
         }
     }
 }

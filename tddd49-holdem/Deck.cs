@@ -1,27 +1,24 @@
-﻿    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace tddd49_holdem
-    {
-    public class Deck : Stack<Card>
+{
+    public class Deck : HoldemQueue<Card>
     {
         public Deck()
         {
-            Push(CreateAllCards());
+            AddRange(CreateAllCards());
             Shuffle();
         }
 
         private void Push(IEnumerable<Card> cardList)
         {
-            foreach (Card card in cardList)
-            {
-                Push(card);
-            }
+            AddRange(cardList);
         }
 
         private IEnumerable<Card> CreateAllCards()
-        {   
+        {
             List<Card> allCards = new List<Card>();
             for (byte i = 2; i < 15; i++)
             {
@@ -36,16 +33,6 @@ namespace tddd49_holdem
         public override string ToString()
         {
             return this.ToArray().Aggregate("", (current, card) => current + (card + "\n"));
-        }
-
-	    public Cards Pop(int numberOfCards)
-        {
-		    Cards cards = new Cards();
-            for (int i = 0; i < numberOfCards; i++)
-            {
-                cards.Add(Pop());   
-            }
-            return cards;
         }
 
         public void Shuffle()
@@ -66,6 +53,15 @@ namespace tddd49_holdem
             Push(new List<Card>(deck));
         }
 
-        
+
+        public Cards Dequeue(int cardsOnHand)
+        {
+            Cards cards = new Cards();
+            for (int i = 0; i < cardsOnHand; i++)
+            {
+                cards.Add(Dequeue());
+            }
+            return cards;
+        }
     }
-    }   
+}
