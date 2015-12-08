@@ -48,17 +48,15 @@ namespace tddd49_holdem
             NextPlayer();
         }
 
-     
-        private void ShowGuiPlayersCards() {
-            foreach (Card card in AllPlayers.Where(player => player.IsUsingGui).SelectMany(player => player.Cards)) {
-                card.Show = true;
-            }
-        }
 
-        private void ShowAllCards() {
-            foreach (Card card in AllPlayers.SelectMany(player => player.Cards)) {
-                card.Show = true;
-            }
+        public void NextPlayer() {
+
+            if (ActivePlayer != null) ActivePlayer.Active = false;
+            ActivePlayer = BeforeMove.Peek();
+            ActivePlayer.Active = true;
+            ActivePlayer.RequestActionExcecution();
+
+            MainWindow.SyncState();
         }
 
         public void ReactOnActionExecution()
@@ -75,6 +73,18 @@ namespace tddd49_holdem
                 }
             }
             if (HasNextPlayer()) { NextPlayer(); }
+        }
+
+        private void ShowGuiPlayersCards() {
+            foreach (Card card in AllPlayers.Where(player => player.IsUsingGui).SelectMany(player => player.Cards)) {
+                card.Show = true;
+            }
+        }
+
+        private void ShowAllCards() {
+            foreach (Card card in AllPlayers.SelectMany(player => player.Cards)) {
+                card.Show = true;
+            }
         }
 
         private void HandOutCards()
@@ -170,6 +180,7 @@ namespace tddd49_holdem
         }
 
         // Winner is often one player but it could also be a tie between several players. 
+
         public HashSet<Player> GetWinners()
         {
             HashSet<Player> activePlayers = new HashSet<Player>(GetActivePlayers());
@@ -246,16 +257,6 @@ namespace tddd49_holdem
             foreach (IntegerObject inteObj in RulesEngine.CardsBeforeRound.Select(variable => new IntegerObject(variable))) {
                 NumberOfCardsToPutOnTable.Add(inteObj);
             }
-        }
-
-        public void NextPlayer() {
-
-            if (ActivePlayer != null) ActivePlayer.Active = false;
-            ActivePlayer = BeforeMove.Peek();
-            ActivePlayer.Active = true;
-            ActivePlayer.RequestActionExcecution();
-
-            MainWindow.Db.SaveChanges();
         }
 
         public bool HasNextPlayer()

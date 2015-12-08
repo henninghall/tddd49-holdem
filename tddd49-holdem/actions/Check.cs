@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using tddd49_holdem.Players;
+﻿using tddd49_holdem.Players;
 
 namespace tddd49_holdem.actions
 { 

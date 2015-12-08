@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Windows;
 using System.Windows.Controls;
 using tddd49_holdem.Players;
@@ -24,6 +27,15 @@ namespace tddd49_holdem
             Table table = Db.Tables.First();
             DataBindTableToWindow(table);
             table.ContinueRound();
+        }
+
+        public static void SyncState() {
+            Db.SaveChanges();
+
+            ObjectContext context = ((IObjectContextAdapter)Db).ObjectContext;
+            List<object> refreshableObjects = Db.ChangeTracker.Entries().Select(c => c.Entity).ToList();
+            context.Refresh(RefreshMode.StoreWins, refreshableObjects);
+
         }
 
         private void DataBindTableToWindow(Table table) {
