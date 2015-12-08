@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="TDDD49 Hold'em" Height="700"  Width="900"
         >
-    <StackPanel x:Name="Window" d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
+    <StackPanel x:Name="MainPanel" d:DataContext="{d:DesignData Source=/SampleData/TableSample.xaml}">
         <StackPanel.Background>
             <ImageBrush ImageSource="/images/floor.jpg"/>
         </StackPanel.Background>

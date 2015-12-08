@@ -12,11 +12,6 @@ namespace tddd49_holdem
             Shuffle();
         }
 
-        private void Push(IEnumerable<Card> cardList)
-        {
-            AddRange(cardList);
-        }
-
         private IEnumerable<Card> CreateAllCards()
         {
             List<Card> allCards = new List<Card>();
@@ -32,7 +27,7 @@ namespace tddd49_holdem
 
         public override string ToString()
         {
-            return this.ToArray().Aggregate("", (current, card) => current + (card + "\n"));
+            return ToArray().Aggregate("", (current, card) => current + (card + "\n"));
         }
 
         public void Shuffle()
@@ -50,7 +45,7 @@ namespace tddd49_holdem
                 deck[n] = deck[k];
                 deck[k] = temp;
             }
-            Push(new List<Card>(deck));
+            AddRange(new List<Card>(deck));
         }
 
 

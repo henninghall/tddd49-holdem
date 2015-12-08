@@ -10,14 +10,14 @@ namespace tddd49_holdem
     public class Table : Data
     {
         public int TableId { set; get; }
-        public virtual List<Player> AllPlayers { get; set; }
+        public virtual List<Player> AllPlayers { get; set; } = new List<Player>();
         public virtual HoldemQueue<Player> BeforeMove { get; set; } // active players waiting to move
         public virtual HoldemQueue<Player> AfterMove { get; set; } // active players already moved
-        public virtual RulesEngine Rules { get; }
-        public virtual Deck Deck { get; set; }
+        public virtual RulesEngine Rules { get; } = new RulesEngine();
+        public virtual Deck Deck { get; set; } = new Deck();
         public virtual HoldemQueue<IntegerObject> NumberOfCardsToPutOnTable { get; set; }
-        public virtual LogBox LogBox { get; set; }
-        public virtual Cards CardsOnTable { get; set; }
+        public virtual LogBox LogBox { get; set; } = new LogBox();
+        public virtual Cards CardsOnTable { get; set; } = new Cards();
 
         private int _pot;
         public int Pot
@@ -32,14 +32,7 @@ namespace tddd49_holdem
             set { SetField(ref _activePlayer, value, "ActivePlayer"); }
         }
 
-        public Table()
-        {
-            CardsOnTable = new Cards();
-            LogBox = new LogBox();
-            Rules = new RulesEngine();
-            AllPlayers = new List<Player>();
-            Pot = 0;
-        }
+        public Table() { }
 
         public void ContinueRound() {
             NextPlayer();
@@ -51,7 +44,7 @@ namespace tddd49_holdem
             MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
-            HandInCards();
+            ClearPlayerCards();
             HandOutCards();
             ShowGuiPlayersCards();
             ResetCardQueue();
@@ -61,20 +54,14 @@ namespace tddd49_holdem
 
      
         private void ShowGuiPlayersCards() {
-            foreach (Player player in AllPlayers) {
-                if (player.IsUsingGui) {
-                    foreach (Card card in player.Cards) {
-                        card.Show = true;
-                    }
-                }
+            foreach (Card card in AllPlayers.Where(player => player.IsUsingGui).SelectMany(player => player.Cards)) {
+                card.Show = true;
             }
         }
 
         private void ShowAllCards() {
-            foreach (Player player in AllPlayers) {
-                foreach (Card card in player.Cards) {
-                    card.Show = true;
-                }
+            foreach (Card card in AllPlayers.SelectMany(player => player.Cards)) {
+                card.Show = true;
             }
         }
 
@@ -102,7 +89,7 @@ namespace tddd49_holdem
             }
         }
 
-        private void HandInCards()
+        private void ClearPlayerCards()
         {
             foreach (Player player in AllPlayers) {
                 player.Cards?.Clear();
@@ -269,8 +256,7 @@ namespace tddd49_holdem
                 NumberOfCardsToPutOnTable = new HoldemQueue<IntegerObject>();
 
             NumberOfCardsToPutOnTable.Clear();
-            foreach (int variable in RulesEngine.CardsBeforeRound) {
-                IntegerObject inteObj = new IntegerObject(variable);
+            foreach (IntegerObject inteObj in RulesEngine.CardsBeforeRound.Select(variable => new IntegerObject(variable))) {
                 NumberOfCardsToPutOnTable.Add(inteObj);
             }
         }
@@ -282,7 +268,7 @@ namespace tddd49_holdem
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
 
-            MainWindow.db.SaveChanges();
+            MainWindow.Db.SaveChanges();
         }
 
         public bool HasNextPlayer()
