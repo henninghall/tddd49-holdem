@@ -1,4 +1,6 @@
-﻿namespace tddd49_holdem.Players
+﻿using tddd49_holdem.actions;
+
+namespace tddd49_holdem.Players
 {
     public class HumanPlayer : Player
     {
@@ -8,10 +10,10 @@
         
         private void UpdatePossibleActions()
         {
-            CanFold = Fold.IsValid();
-            CanCheck = Check.IsValid();
-            CanCall = Call.IsValid();
-            CanRaise = Raise.IsValid();
+            CanFold = new Fold(this).IsValid();
+            CanCheck = new Check(this).IsValid();
+            CanCall = new Call(this).IsValid();
+            CanRaise = new Raise(this).IsValid();
         }
 
 

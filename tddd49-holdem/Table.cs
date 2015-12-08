@@ -8,6 +8,7 @@ namespace tddd49_holdem
 {
     public class Table : Data
     {
+        public int TableId { set; get; }
         public virtual List<Player> AllPlayers { get; set; }
         public Queue<Player> BeforeMove; // active players waiting to move
         public Queue<Player> AfterMove = new Queue<Player>(); // active players already moved
@@ -46,19 +47,6 @@ namespace tddd49_holdem
             CardsOnTable.Clear();
             Deck = new Deck();
             HandOutCards();
-
-            // Test data
-            Player p1 = AllPlayers[0];
-            Player p2 = AllPlayers[1];
-
-            /*
-            p1.Cards.Clear();
-            p2.Cards.Clear();
-            p1.Cards.Add(new Card(1, 14));
-            p1.Cards.Add(new Card(2, 14));
-            p2.Cards.Add(new Card(3, 14));
-            p2.Cards.Add(new Card(0, 14));
-            */
 
             ShowGuiPlayersCards();
             ResetCardQueue();

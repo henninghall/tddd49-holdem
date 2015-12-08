@@ -5,32 +5,22 @@ namespace tddd49_holdem.Players
 {
     public abstract class Player : Data
     {
-        public Fold Fold;
-        public Check Check;
-        public Call Call;
-        public Raise Raise;
-
-        public abstract bool IsUsingGui { get; }
+      public abstract bool IsUsingGui { get; }
 
         private Cards _cards;
-        public Cards Cards
+        public virtual Cards Cards
         {
             get { return _cards; }
             set { SetField(ref _cards, value, "Cards"); }
         }
 
-        public Table Table;
-
-        public Table get_Table()
-        {
-            return Table;
+        private Table _table;
+        public virtual Table Table
+         {
+            get { return _table; }
+            set { SetField(ref _table, value, "Table"); }
         }
-
-        public void set_Table(Table t)
-        {
-            SetField(ref Table, t, "Table");
-        }
-
+           
         private int _chipsOnHand;
 
         public int ChipsOnHand
@@ -106,10 +96,6 @@ namespace tddd49_holdem.Players
         protected Player(string name)
         {
             Name = name;
-            Fold = new Fold(this);
-            Check = new Check(this);
-            Call = new Call(this);
-            Raise = new Raise(this);
         }
 
         public void Bet(int amount)

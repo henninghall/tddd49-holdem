@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
+using tddd49_holdem.actions;
 
 namespace tddd49_holdem.Players
 {
@@ -31,17 +32,17 @@ namespace tddd49_holdem.Players
 
             // In cases where a check is possible lays the decision between checking or raising.
             // Probaility of doing a raise increases along with better draw types. 
-            if (Check.IsValid()) {
+            if (new Check(this).IsValid()) {
                 double raiseProbability = 0.2;
                 if (netDrawType > (int) DrawType.HighCards) raiseProbability += 0.4;
                 else if (netDrawType > (int) DrawType.OnePair) raiseProbability += 0.6;
-                if (new Random().NextDouble() < raiseProbability && Raise.IsValid()) Raise.Execute();
-                else Check.Execute();
+                if (new Random().NextDouble() < raiseProbability && new Raise(this).IsValid()) new Raise(this).Execute();
+                else new Check(this).Execute();
             }
 
             // In cases where a check is NOT possible lays the decision between folding, calling or raising.
             // Probaility of doing a raise and call increases along with better draw types. 
-            else if (!Check.IsValid())
+            else if (!new Check(this).IsValid())
             {
                 double raiseProbability = 0.1;
                 double callProbability = 0.6;
@@ -53,9 +54,9 @@ namespace tddd49_holdem.Players
                     raiseProbability += 0.5;
                     callProbability += 0.4;
                 }
-                if (new Random().NextDouble() < raiseProbability && Raise.IsValid()) Raise.Execute();
-                else if (new Random().NextDouble() < callProbability && Call.IsValid()) Call.Execute();
-                else Fold.Execute();
+                if (new Random().NextDouble() < raiseProbability && new Raise(this).IsValid()) new Raise(this).Execute();
+                else if (new Random().NextDouble() < callProbability && new Call(this).IsValid()) new Call(this).Execute();
+                else new Fold(this).Execute();
             }
             
             else throw new InvalidActionException("AI-Player couldn't find any action to excecute.");
