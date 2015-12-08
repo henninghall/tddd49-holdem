@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using tddd49_holdem.Players;
 
@@ -32,8 +30,6 @@ namespace tddd49_holdem
             set { SetField(ref _activePlayer, value, "ActivePlayer"); }
         }
 
-        public Table() { }
-
         public void ContinueRound() {
             NextPlayer();
         }
@@ -48,8 +44,8 @@ namespace tddd49_holdem
             HandOutCards();
             ShowGuiPlayersCards();
             ResetCardQueue();
-            NextPlayer();
             LogBox.Log("Round started!");
+            NextPlayer();
         }
 
      
@@ -142,17 +138,8 @@ namespace tddd49_holdem
             return currentHighestBetPlayers;
         }
 
-        public int GetHighestBet()
-        {
-            int currentHighestBet = 0;
-            foreach (Player player in AllPlayers)
-            {
-                if (player.CurrentBet > currentHighestBet)
-                {
-                    currentHighestBet = player.CurrentBet;
-                }
-            }
-            return currentHighestBet;
+        public int GetHighestBet() {
+            return AllPlayers.Select(player => player.CurrentBet).Concat(new[] {0}).Max();
         }
 
         public void PutCards(IEnumerable<Card> cards)

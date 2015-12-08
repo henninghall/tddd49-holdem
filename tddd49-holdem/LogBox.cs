@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Net.Mime;
+﻿using System.Collections.ObjectModel;
 
 namespace tddd49_holdem
 {
     public class LogBox
     {
         public int LogBoxId { set; get; }
-
-        public virtual ObservableCollection<Row> TextRows { get; set; }
-
-
-
-        public LogBox() {
-            TextRows = new ObservableCollection<Row>();
-        }
-
+        public virtual ObservableCollection<Row> TextRows { get; set; } = new ObservableCollection<Row>();
+        
         public void Log(string text) {
            TextRows.Insert(0,new Row(text));
         }

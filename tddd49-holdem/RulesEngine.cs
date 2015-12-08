@@ -23,12 +23,9 @@ namespace tddd49_holdem
             foreach (Player player in players)
             {
                 Draw currentDraw = GetDraw(player.GetAllCards());
-
                 try {
-                    // continue with next player if a better draw than current draw has been found
-                    if (GetBestDraw(currentDraw, bestDrawSoFar).Equals(bestDrawSoFar)) continue;
-                    else {
-                        // the current draw is the best found so far.
+                    // save the current draw if it is better than the previuosly best found draw
+                    if (!GetBestDraw(currentDraw, bestDrawSoFar).Equals(bestDrawSoFar)){
                         currentBestDrawPlayers.Clear();
                         currentBestDrawPlayers.Add(player);
                         bestDrawSoFar = currentDraw;
@@ -54,7 +51,6 @@ namespace tddd49_holdem
             // if same draw type
             if (currentDraw.Type == bestDrawSoFar.Type)
             {
-
                 // Important! Assuming the lists are sorted in a way that the most "valued" cards is first. 
                 // Example: In TwoPair the highest pair first, then second highest pair, and last the highest remaining card.
                 for (int i = 0; i < currentDraw.Cards.Count; i++)
@@ -62,11 +58,9 @@ namespace tddd49_holdem
                     if (currentDraw.Cards[i].Value > bestDrawSoFar.Cards[i].Value) return currentDraw;
                     if (currentDraw.Cards[i].Value < bestDrawSoFar.Cards[i].Value) return bestDrawSoFar;
                 }
-
                 throw new TieDrawException();
             }
             return null;
-
         }
 
         public DrawType GetDrawType(Cards allCards)
@@ -75,7 +69,6 @@ namespace tddd49_holdem
         }
 
         public Draw GetDraw(Cards allCards) {
-            int numberOfCards = allCards.Count;
             ValueCounter valueCounter = new ValueCounter(allCards);
             ColorCounter colorCounter = new ColorCounter(allCards);
             int straightLenght;
@@ -83,7 +76,6 @@ namespace tddd49_holdem
             GetLongestStraight(valueCounter, out straightLenght, out straightStartsAt);
             DrawType drawtype;
             Cards cardsInDraw = new Cards();
-
 
             // Flush or Straight Flush
             if (colorCounter.Max() >= 5)
@@ -173,7 +165,7 @@ namespace tddd49_holdem
             return new Draw(cardsInDraw, drawtype);
         }
 
-        private void GetLongestStraight(CardCounter valueCounter, out int straightLenght, out int straightStartsAt)
+        private static void GetLongestStraight(CardCounter valueCounter, out int straightLenght, out int straightStartsAt)
         {
             int longestStraight = 0;
             int longestStraightStartsAt = 0;

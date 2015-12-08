@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Windows;
 using System.Windows.Controls;
 using tddd49_holdem.Players;
 using System.Linq;
-using System.Net;
 using tddd49_holdem.actions;
 
 namespace tddd49_holdem
@@ -24,11 +22,14 @@ namespace tddd49_holdem
             InitializeComponent();
 
             Table table = Db.Tables.First();
+            DataBindTableToWindow(table);
+            table.ContinueRound();
+        }
+
+        private void DataBindTableToWindow(Table table) {
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
             SetPlayersDataContext(table.AllPlayers);
-
-            table.ContinueRound();
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)
