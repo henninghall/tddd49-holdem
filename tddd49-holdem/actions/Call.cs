@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using tddd49_holdem.Players;
 
 namespace tddd49_holdem.actions
@@ -22,6 +22,7 @@ namespace tddd49_holdem.actions
 
             Player.Table.LogBox.Log(Player.Name + " called!");
             Player.Table.ReactOnActionExecution();
+
         }
     }
 }

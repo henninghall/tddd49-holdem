@@ -1,53 +1,36 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using tddd49_holdem.Players;
 using System.Linq;
-using System.Windows.Documents;
-using System.Windows.Media;
 using tddd49_holdem.actions;
 
 namespace tddd49_holdem
 {
-
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
-        private static HoldemContext db = new HoldemContext();
+        private HoldemContext _context;
 
-        /// <summary>
-        /// Interaction logic for MainWindow.xaml
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            Table table;
+            _context = new HoldemContext();
 
-            /* using (HoldemContext db = new HoldemContext())
-             {*/
-
-
-            table = db.Tables.First();
+            Table table = _context.Tables.First();
             List<Player> allPlayers = table.AllPlayers;
-
-
 
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
             SetPlayersDataContext(allPlayers);
 
-            table.StartRound();
+            table.StartNewRound();
 
         }
 
@@ -61,24 +44,31 @@ namespace tddd49_holdem
         {
             Player activePlayer = (Player)((Button)sender).Tag;
             new Fold(activePlayer).Execute();
+            UpdateUI();
         }
 
         private void CheckButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
             new Check(activePlayer).Execute();
+            UpdateUI();
+
         }
 
         private void CallButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
             new Call(activePlayer).Execute();
+            UpdateUI();
+
         }
 
         private void RaiseButton_Click(object sender, RoutedEventArgs e)
         {
             Player activePlayer = (Player)((Button)sender).Tag;
             new Raise(activePlayer).Execute();
+            UpdateUI();
+
         }
 
         private void SetPlayersDataContext(IReadOnlyList<Player> players)
@@ -115,13 +105,29 @@ namespace tddd49_holdem
             }
         }
 
+        private void UpdateUI()
+        {
+            _context.SaveChanges();
+            _context.Dispose();
+
+            _context = new HoldemContext();
+            Table table = _context.Tables.First();
+            List<Player> allPlayers = table.AllPlayers;
+
+            MainPanel.DataContext = table;
+            LogBoxControl.DataContext = table.LogBox;
+            SetPlayersDataContext(allPlayers);
+    
+        }
+
+
         /// <summary>
         /// Refreshing context to detect database changes outside the program
         /// From: http://stackoverflow.com/questions/18169970/how-do-i-refresh-dbcontext
         /// </summary>
-        public static void RefreshContext()
+        private void RefreshContext()
         {
-            var context = ((IObjectContextAdapter)db).ObjectContext;
+            var context = ((IObjectContextAdapter)_context).ObjectContext;
             var refreshableObjects = (from entry in context.ObjectStateManager.GetObjectStateEntries(
                                                         EntityState.Added
                                                        | EntityState.Deleted
@@ -135,6 +141,10 @@ namespace tddd49_holdem
             context.Refresh(RefreshMode.StoreWins, refreshableObjects2);
         }
 
-
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            _context.Dispose();
+        }
     }
 }

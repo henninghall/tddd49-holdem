@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="HoldemContext.cs" />
+    <Compile Include="HoldemQueue.cs" />
     <Compile Include="Players\AiPlayer.cs" />
     <Compile Include="Actions\Call.cs" />
     <Compile Include="Card.cs" />

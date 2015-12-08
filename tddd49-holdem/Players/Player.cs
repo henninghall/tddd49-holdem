@@ -25,7 +25,7 @@ namespace tddd49_holdem.Players
         }
 
         private Table _table;
-        public Table Table
+        public virtual Table Table
         {
             get { return _table; }
             set { SetField(ref _table, value, "Table"); }
@@ -110,7 +110,6 @@ namespace tddd49_holdem.Players
                 player.ChipsOnHand -= amount;
                 player.CurrentBet += amount;
                 db.SaveChanges();
-                MainWindow.RefreshContext();
             }
         }
 

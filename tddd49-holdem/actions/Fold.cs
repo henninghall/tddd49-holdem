@@ -13,17 +13,9 @@ namespace tddd49_holdem.actions
             return true;
         }
 
-        public override void Execute()
-        {
+        public override void Execute() {
             Player.Table.BeforeMove.Dequeue();
-
-            using (HoldemContext db = new HoldemContext())
-            {
-                db.Cards.RemoveRange(db.Players.First(p => p.Name == Player.Name).Cards);
-                db.SaveChanges();
-                MainWindow.RefreshContext();
-            }
-            
+            Player.Cards.Clear();
             Player.Table.LogBox.Log(Player.Name + " folded!");
             Player.Table.ReactOnActionExecution();
         }
