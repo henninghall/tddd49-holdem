@@ -14,6 +14,11 @@ namespace tddd49_holdem
         public const int StartingChips = 100;
         public const int CardsOnHand = 2;
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="players"></param>
+        /// <returns>A set of players with best draw</returns>
         public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players)
         {
             HashSet<Player> currentBestDrawPlayers = new HashSet<Player>();
@@ -30,7 +35,6 @@ namespace tddd49_holdem
                         currentBestDrawPlayers.Add(player);
                         bestDrawSoFar = currentDraw;
                     }
-
                 }
                 catch (TieDrawException) {
                     currentBestDrawPlayers.Add(player);
@@ -68,6 +72,25 @@ namespace tddd49_holdem
             return GetDraw(allCards).Type;
         }
 
+        /// <summary>
+        /// Returns a set with the winner at the current table state. 
+        /// Will return all players in case of a Tie. 
+        /// </summary>
+        public HashSet<Player> GetWinners(Table table)
+        {
+            HashSet<Player> activePlayers = new HashSet<Player>(table.GetActivePlayers());
+
+            // if all players except one folded
+            if (activePlayers.Count == 1) return activePlayers;
+
+            // else winner(s) is determined due to rules
+            return GetBestDrawPlayers(activePlayers);
+        }
+
+        /// <summary>
+        /// Calculates and returns the draw (Pair, Straight etc) from the submitted cards. 
+        /// The number of sumbitted cards are arbitrary .
+        /// </summary>
         public Draw GetDraw(Cards allCards) {
             ValueCounter valueCounter = new ValueCounter(allCards);
             ColorCounter colorCounter = new ColorCounter(allCards);
@@ -165,6 +188,10 @@ namespace tddd49_holdem
             return new Draw(cardsInDraw, drawtype);
         }
 
+        /// <summary>
+        /// Using a Cardcounter to find the longest straight.
+        /// Both the longest straight and straight starting point will be returned in form of out variabels. 
+        /// </summary>
         private static void GetLongestStraight(CardCounter valueCounter, out int straightLenght, out int straightStartsAt)
         {
             int longestStraight = 0;

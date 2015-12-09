@@ -26,7 +26,7 @@ namespace tddd49_holdem
 
             Table table = Db.Tables.First();
             DataBindTableToWindow(table);
-            table.ContinueRound();
+            table.StartNewRound();
         }
 
         public static void SyncState() {

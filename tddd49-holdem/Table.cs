@@ -50,12 +50,10 @@ namespace tddd49_holdem
 
 
         public void NextPlayer() {
-
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = BeforeMove.Peek();
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
-
             MainWindow.SyncState();
         }
 
@@ -87,6 +85,9 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Gives all players at the table the number of cards defined in RulesEngine
+        /// </summary>
         private void HandOutCards()
         {
             foreach (Player player in AllPlayers)
@@ -95,6 +96,9 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Removes all cards from all players at the table
+        /// </summary>
         private void ClearPlayerCards()
         {
             foreach (Player player in AllPlayers) {
@@ -102,7 +106,11 @@ namespace tddd49_holdem
             }
         }
 
-
+        /// <summary>
+        /// Attaches a player to the table and gives the player 
+        /// the amount of starting chips defined in Rulesengine.
+        /// </summary>
+        /// <param name="player"></param>
         public void AttachPlayer(Player player)
         {
             player.Table = this;
@@ -111,6 +119,11 @@ namespace tddd49_holdem
             LogBox.Log(player.Name + " joined the table.");
         }
 
+        /// <summary>
+        /// Attaches several players to the table and gives the player 
+        /// the amount of starting chips defined in Rulesengine.
+        /// </summary>
+        /// <param name="allPlayers"></param>
         public void AttachPlayers(IEnumerable<Player> allPlayers)
         {
             foreach (Player player in allPlayers)
@@ -119,6 +132,9 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Moves all players current bets to the table pot.
+        /// </summary>
         public void MovePlayerBetsToPot()
         {
             foreach (Player player in AllPlayers)
@@ -128,6 +144,12 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Returns the player or players at the table who currently 
+        /// has the highest bet.
+        /// </summary>
+        /// <returns>Returns a set with the player or players
+        /// who currently has the highest bet.</returns>
         public HashSet<Player> GetHighestBetPlayers()
         {
             int currentHighestBet = 0;
@@ -148,10 +170,17 @@ namespace tddd49_holdem
             return currentHighestBetPlayers;
         }
 
+        /// <summary>
+        /// Returns the value of the current highest bet at the table.
+        /// </summary>
         public int GetHighestBet() {
             return AllPlayers.Select(player => player.CurrentBet).Concat(new[] {0}).Max();
         }
 
+        /// <summary>
+        /// Puts cards on the table.
+        /// </summary>
+        /// <param name="cards"></param>
         public void PutCards(IEnumerable<Card> cards)
         {
             foreach (Card card in cards)
@@ -161,6 +190,9 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Makes all players active by adding all players at the table to the BeforeMove queue. 
+        /// </summary>
         public void MakeAllPlayersActive()
         {
             BeforeMove = new HoldemQueue<Player>(AllPlayers);
@@ -168,7 +200,7 @@ namespace tddd49_holdem
 
         public void MoveAllAfterMoveToBeforeMove()
         {
-            while (AfterMove.Count > 0)
+            while (AfterMove != null && AfterMove.Count > 0)
             {
                 BeforeMove.Enqueue(AfterMove.Dequeue());
             }
@@ -179,20 +211,8 @@ namespace tddd49_holdem
             return GetActivePlayers().Count;
         }
 
-        // Winner is often one player but it could also be a tie between several players. 
 
-        public HashSet<Player> GetWinners()
-        {
-            HashSet<Player> activePlayers = new HashSet<Player>(GetActivePlayers());
-
-            // if all players except one folded
-            if (activePlayers.Count == 1) return activePlayers;
-
-            // else winner(s) is determined due to rules
-            return Rules.GetBestDrawPlayers(activePlayers);
-        }
-
-        private List<Player> GetActivePlayers()
+        public List<Player> GetActivePlayers()
         {
             return AfterMove.Concat(BeforeMove).ToList();
         }
@@ -205,7 +225,7 @@ namespace tddd49_holdem
         public void EndRound()
         {
             MovePlayerBetsToPot();
-            HashSet<Player> winners = GetWinners();
+            HashSet<Player> winners = Rules.GetWinners(this);
             string message;
             if (winners.Count == 1)
             {
