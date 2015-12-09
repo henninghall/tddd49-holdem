@@ -25,6 +25,7 @@ namespace tddd49_holdem
             InitializeComponent();
 
             Table table = Db.Tables.First();
+
             DataBindTableToWindow(table);
             table.ContinueRound();
         }
@@ -32,6 +33,8 @@ namespace tddd49_holdem
         public static void SyncState() {
             Db.SaveChanges();
 
+            // From stackoverflow:
+            // Refreshes the context with data modified outside the program. 
             ObjectContext context = ((IObjectContextAdapter)Db).ObjectContext;
             List<object> refreshableObjects = Db.ChangeTracker.Entries().Select(c => c.Entity).ToList();
             context.Refresh(RefreshMode.StoreWins, refreshableObjects);

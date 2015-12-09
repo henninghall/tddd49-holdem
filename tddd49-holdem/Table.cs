@@ -37,6 +37,7 @@ namespace tddd49_holdem
         public void StartNewRound()
         {
             MoveAllAfterMoveToBeforeMove();
+            MovePlayerBetsToChips();
             MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
@@ -46,6 +47,14 @@ namespace tddd49_holdem
             ResetCardQueue();
             LogBox.Log("Round started!");
             NextPlayer();
+        }
+
+        private void MovePlayerBetsToChips() {
+            foreach (Player player in AllPlayers)
+            {
+                player.ChipsOnHand += player.CurrentBet;
+                player.CurrentBet = 0;
+            }
         }
 
 
