@@ -13,12 +13,11 @@ namespace tddd49_holdem
         public static List<int> CardsBeforeRound = new List<int>(new[] { 3, 1, 1 });
         public const int StartingChips = 100;
         public const int CardsOnHand = 2;
-        
+
         /// <summary>
-        /// 
+        /// Returns a set of players with best draw including player 
+        /// cards and cards on table
         /// </summary>
-        /// <param name="players"></param>
-        /// <returns>A set of players with best draw</returns>
         public PlayerList GetBestDrawPlayers(PlayerList players)
         {
             PlayerList currentBestDrawPlayers = new PlayerList();
@@ -44,6 +43,10 @@ namespace tddd49_holdem
             return currentBestDrawPlayers;
         }
 
+        /// <summary>
+        /// Returns the best draw of the two draws submitted.
+        /// If both draws are has equal a TieDrawException will be thrown.
+        /// </summary>
         public Draw GetBestDraw(Draw currentDraw, Draw bestDrawSoFar)
         {
             // if no bestDraw has been found
@@ -67,12 +70,7 @@ namespace tddd49_holdem
             }
             return null;
         }
-
-        public DrawType GetDrawType(Cards allCards)
-        {
-            return GetDraw(allCards).Type;
-        }
-
+        
         /// <summary>
         /// Returns a set with the winner at the current table state. 
         /// Will return all players in case of a Tie. 

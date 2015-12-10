@@ -102,6 +102,15 @@ namespace tddd49_holdem.Players
             CurrentBet += amount;
         }
 
+        public bool HasCards()
+        {
+            return Cards != null && Cards.Count > 0;
+        }
+
+        /// <summary>
+        /// Returns player cards and cards on the players table merged together.
+        /// </summary>
+        /// <returns></returns>
         public Cards GetAllCards()
         {
             Cards allCards = new Cards();
@@ -109,12 +118,7 @@ namespace tddd49_holdem.Players
             allCards.AddRange(Table.CardsOnTable);
             return allCards;
         }
-
-        public bool HasCards()
-        {
-            return Cards != null && Cards.Count > 0;
-        }
-
+        
         /// <summary>
         /// This method is called by the table when it requests an action from the player. 
         /// </summary>

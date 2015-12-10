@@ -49,7 +49,7 @@ namespace tddd49_holdem
         }
 
 
-        public void NextPlayer()
+        private void NextPlayer()
         {
             if (ActivePlayer != null) ActivePlayer.Active = false;
             ActivePlayer = Players.NextPlayerWithCards();
@@ -90,7 +90,6 @@ namespace tddd49_holdem
         /// Attaches a player to the table and gives the player 
         /// the amount of starting chips defined in Rulesengine.
         /// </summary>
-        /// <param name="player"></param>
         public void AttachPlayer(Player player)
         {
             player.Table = this;
@@ -115,20 +114,16 @@ namespace tddd49_holdem
         /// <summary>
         /// Moves all players current bets to the table pot.
         /// </summary>
-        public void MovePlayerBetsToPot()
-        {
-            foreach (Player player in Players)
-            {
-                Pot += player.CurrentBet;
-                player.CurrentBet = 0;
-            }
+        private void MovePlayerBetsToPot() {
+            Pot += Players.GetBetsValue();
+            Players.ClearBets();
         }
 
         /// <summary>
         /// Puts cards on the table.
         /// </summary>
         /// <param name="cards"></param>
-        public void PutCards(IEnumerable<Card> cards)
+        private void PutCards(IEnumerable<Card> cards)
         {
             foreach (Card card in cards)
             {
@@ -142,7 +137,7 @@ namespace tddd49_holdem
         /// Shares the pot among winners. 
         /// Asks the client if a new game should be started. 
         /// </summary>
-        public void EndRound()
+        private void EndRound()
         {
             MovePlayerBetsToPot();
             PlayerList winners = Rules.GetWinners(this);
@@ -153,7 +148,7 @@ namespace tddd49_holdem
             {
                 Player winner = winners.First();
                 message = "Game over! The winner is " + winner.Name;
-                if (Players.Count > 1) message += " with " + Rules.GetDrawType(winner.GetAllCards());
+                if (Players.Count > 1) message += " with " + Rules.GetDraw(winner.GetAllCards()).Type;
             }
             else
             {
@@ -177,7 +172,7 @@ namespace tddd49_holdem
         /// <summary>
         /// Puts the next card or cards on the table.
         /// </summary>
-        public void NextCard()
+        private void NextCard()
         {
             PutCards(Deck.Dequeue(NumberOfCardsToPutOnTable.Dequeue().TheInt));
         }
@@ -186,7 +181,7 @@ namespace tddd49_holdem
         /// Returns true if there are any cards left to be put on the table this round. 
         /// </summary>
         /// <returns></returns>
-        public bool HasNextCard()
+        private bool HasNextCard()
         {
             return NumberOfCardsToPutOnTable.Any();
         }

@@ -178,5 +178,17 @@ namespace tddd49_holdem
             }
 
         }
+  
+        public int GetBetsValue() {
+            return this.Sum(player => player.CurrentBet);
+        }
+
+        public void ClearBets()
+        {
+            foreach (Player player in this)
+            {
+                player.CurrentBet = 0;
+            }
+        }
     }
 }

@@ -31,8 +31,8 @@ namespace tddd49_holdem.Players
             Call call = new Call(this);
 
             // The net draw type is calculated to make draws only from table cards insignificant. 
-            int handDrawTypeValue = (int) Table.Rules.GetDrawType(GetAllCards());
-            int tableDrawTypeValue = (int) Table.Rules.GetDrawType(Table.CardsOnTable);
+            int handDrawTypeValue = (int) Table.Rules.GetDraw(GetAllCards()).Type;
+            int tableDrawTypeValue = (int) Table.Rules.GetDraw(Table.CardsOnTable).Type;
             int netDrawType = handDrawTypeValue - tableDrawTypeValue;
 
             // In cases where a check is possible lays the decision between checking or raising.
