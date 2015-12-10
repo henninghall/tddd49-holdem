@@ -9,27 +9,32 @@ using tddd49_holdem.Players;
 using System.Linq;
 using tddd49_holdem.actions;
 
-namespace tddd49_holdem
+namespace tddd49_holdem.GUI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public static HoldemContext Db = new HoldemContext();
-        /// <summary>
-        /// Interaction logic for MainWindow.xaml
-        /// </summary>
+
         public MainWindow()
         {
             InitializeComponent();
 
+            // Gets the first table from database
+            // This could be inproved to support multiple tables 
             Table table = Db.Tables.First();
             DataBindTableToWindow(table);
-            table.ContinueRound();
+
+            table.StartNewRound();
+            //table.ContinueRound();
         }
 
-        public static void SyncState() {
+        /// <summary>
+        /// 1. Saves the current object modifications to the database.
+        /// 2. Updates the current state with data from the database if 
+        /// it has been changed from outside the application.
+        /// </summary>
+        public static void SyncState()
+        {
             Db.SaveChanges();
 
             ObjectContext context = ((IObjectContextAdapter)Db).ObjectContext;
@@ -38,7 +43,12 @@ namespace tddd49_holdem
 
         }
 
-        private void DataBindTableToWindow(Table table) {
+        /// <summary>
+        /// Databinds the table and all its components to the window.
+        /// </summary>
+        /// <param name="table"></param>
+        private void DataBindTableToWindow(Table table)
+        {
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
             SetPlayersDataContext(table.Players);
@@ -91,7 +101,7 @@ namespace tddd49_holdem
             return logicalCollection;
         }
 
-        private static void GetLogicalChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
+        private static void GetLogicalChildCollection<T>(DependencyObject parent, ICollection<T> logicalCollection) where T : DependencyObject
         {
             IEnumerable children = LogicalTreeHelper.GetChildren(parent);
             foreach (object child in children)
@@ -112,7 +122,7 @@ namespace tddd49_holdem
         {
             Table table1 = new Table();
             Player p1 = new HumanPlayer("Bamse");
-            Player p2 = new HumanPlayer("Skalman");
+            Player p2 = new AiPlayer("Skalman");
             table1.AttachPlayer(p1);
             table1.AttachPlayer(p2);
             Db.Tables.Add(table1);

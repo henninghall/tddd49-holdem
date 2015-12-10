@@ -4,6 +4,9 @@ using tddd49_holdem.Players;
 
 namespace tddd49_holdem
 {
+    /// <summary>
+    /// A circular list of players.
+    /// </summary>
     public class PlayerList : List<Player>
     {
         private int _current;
@@ -23,19 +26,16 @@ namespace tddd49_holdem
         /// Returns next player in list.
         /// Increases the index to this player.
         /// </summary>
-        /// <returns></returns>
         private Player Next()
         {
             IncreaseIndex();
             return this[_current];
         }
-        
+
         /// <summary>
         /// Returns next player with cards (active in the current game) in list.
         /// Increases the index to this player.
         /// </summary>
-        /// <returns></returns>
-        ///  
         public Player NextPlayerWithCards()
         {
             Player player;
@@ -56,15 +56,18 @@ namespace tddd49_holdem
             return this[_lastBet];
         }
 
-        public bool HasPlayerWithCards() {
+        public bool HasPlayerWithCards()
+        {
             return this.Any(player => player.HasCards());
         }
 
-        public int NumberOfPlayersWithCards() {
+        public int NumberOfPlayersWithCards()
+        {
             return this.Count(player => player.HasCards());
         }
 
-        public PlayerList GetPlayerWithCards(){
+        public PlayerList GetPlayerWithCards()
+        {
             PlayerList players = new PlayerList();
             players.AddRange(this.Where(player => player.HasCards()));
             return players;
@@ -73,7 +76,6 @@ namespace tddd49_holdem
         /// <summary>
         /// Returns true if the next player was the last to bet or first to start the round.
         /// </summary>
-        /// <returns></returns>
         public bool NextPlayerWasLastToBet()
         {
             return PeekNext().Equals(LastBet());
@@ -140,6 +142,9 @@ namespace tddd49_holdem
             return this.Select(player => player.CurrentBet).Concat(new[] { 0 }).Max();
         }
 
+        /// <summary>
+        /// Shows all the cards of all players
+        /// </summary>
         public void ShowAllCards()
         {
             foreach (Card card in this.SelectMany(player => player.Cards))
@@ -148,6 +153,10 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Shows the cards attached to gui players. 
+        /// The Ai-players cards will still be hidden. 
+        /// </summary>
         public void ShowGuiPlayersCards()
         {
             foreach (Card card in this.Where(player => player.IsUsingGui).SelectMany(player => player.Cards))
@@ -156,5 +165,18 @@ namespace tddd49_holdem
             }
         }
 
+        /// <summary>
+        /// Shares the pot equally between the players
+        /// </summary>
+        public void GivePot(int pot)
+        {
+            int potShare = pot / Count;
+
+            foreach (Player player in this)
+            {
+                player.ChipsOnHand += potShare;
+            }
+
+        }
     }
 }

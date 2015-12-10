@@ -3,18 +3,21 @@ using System.Collections.Generic;
 
 namespace tddd49_holdem
 {
+    /// <summary>
+    /// The HoldemQueue class is used as a regular queue.
+    /// The regular queue is not supported in EntityFramwork 6
+    /// but this class does since it derives from a List. 
+    /// </summary>
     public class HoldemQueue<T> : List<T>
     {
 
-        public HoldemQueue() {
-            
-        } 
+        public HoldemQueue(){}
 
-        public HoldemQueue(IEnumerable<T> players)
+        public HoldemQueue(IEnumerable<T> items)
         {
-            AddRange(players);
+            AddRange(items);
         }
-        
+
         public T Peek()
         {
             return this[GetFirstElementIndex()];

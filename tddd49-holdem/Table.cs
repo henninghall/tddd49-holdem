@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using tddd49_holdem.Players;
+using tddd49_holdem.GUI;
 
 namespace tddd49_holdem
 {
@@ -55,9 +56,15 @@ namespace tddd49_holdem
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
 
-            MainWindow.SyncState();
+            GUI.MainWindow.SyncState();
         }
 
+        /// <summary>
+        /// This method should be called when an action has been 
+        /// executed and a response from the table is needed.
+        /// The response could be to end the round, put out next 
+        /// card or choose next player to move. 
+        /// </summary>
         public void ReactOnActionExecution()
         {
             // time to end round
@@ -77,22 +84,6 @@ namespace tddd49_holdem
             }
             // time for next player
             else NextPlayer();
-
-            // Doesnt wait for any more player actions 
-            /*  if (GetNumberOfActivePlayers() == 1) EndRound();
-            if (BeforeMove.Count == 0)
-            {
-                MovePlayerBetsToPot();
-                if (!HasNextCard()) { EndRound(); }
-                else
-                {
-                    NextCard();
-                    MoveAllAfterMoveToBeforeMove();
-                }
-            }
-            if (HasNextPlayer()) { NextPlayer(); }
-
-              */
         }
 
         /// <summary>
@@ -145,12 +136,18 @@ namespace tddd49_holdem
                 LogBox.Log("Put card '" + card + "' on table.");
             }
         }
-
-
+        
+        /// <summary>
+        /// Ends the game round.
+        /// Shares the pot among winners. 
+        /// Asks the client if a new game should be started. 
+        /// </summary>
         public void EndRound()
         {
             MovePlayerBetsToPot();
             PlayerList winners = Rules.GetWinners(this);
+            Players.ShowAllCards();
+
             string message;
             if (winners.Count == 1)
             {
@@ -163,37 +160,40 @@ namespace tddd49_holdem
                 message = "Game over! There was a Tie between: ";
                 foreach (Player winner in winners) LogBox.Log(winner.Name);
             }
-
-            GivePotToPlayers(winners);
-            Players.ShowAllCards();
             LogBox.Log(message);
+
+            // Shares pot between players
+            winners.GivePot(Pot);
+            Pot = 0;
+           
+            // Displays a textbox which asks if the client wants to player another round
             MessageBoxResult result = MessageBox.Show(message + ". Start next round?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 StartNewRound();
             }
         }
-
-        private void GivePotToPlayers(PlayerList winners)
-        {
-            foreach (Player winner in winners)
-            {
-                int winSum = Pot / winners.Count;
-                winner.ChipsOnHand += winSum;
-                Pot -= winSum;
-            }
-        }
-
+        
+        /// <summary>
+        /// Puts the next card or cards on the table.
+        /// </summary>
         public void NextCard()
         {
             PutCards(Deck.Dequeue(NumberOfCardsToPutOnTable.Dequeue().TheInt));
         }
 
+        /// <summary>
+        /// Returns true if there are any cards left to be put on the table this round. 
+        /// </summary>
+        /// <returns></returns>
         public bool HasNextCard()
         {
             return NumberOfCardsToPutOnTable.Any();
         }
 
+        /// <summary>
+        /// Resets the cards to be put on the table according to the rules. 
+        /// </summary>
         private void ResetCardQueue()
         {
             if (NumberOfCardsToPutOnTable == null)

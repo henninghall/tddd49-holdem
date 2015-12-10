@@ -11,8 +11,6 @@ namespace tddd49_holdem
         public DbSet<Row> Rows { get; set; }
         public DbSet<IntegerObject> NumberOfCardsToPutOnTable { get; set; }
 
-        public HoldemContext()
-        {
-        }
+        public HoldemContext(){}
     }
 }

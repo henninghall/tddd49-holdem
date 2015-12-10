@@ -3,10 +3,13 @@ using System.ComponentModel;
 
 namespace tddd49_holdem
 {
+    /// <summary>
+    /// Notifies the client that a binding property has changed.
+    /// This updates the GUI when a property is changed. 
+    /// </summary>
     // From: http://stackoverflow.com/questions/1315621/implementing-inotifypropertychanged-does-a-better-way-exist
     public class Data : INotifyPropertyChanged
     {
-        // boiler-plate
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {

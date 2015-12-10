@@ -1,9 +1,9 @@
-﻿<Window x:Class="tddd49_holdem.MainWindow"
+﻿<Window x:Class="tddd49_holdem.GUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:tddd49_holdem"
+        xmlns:local="clr-namespace:tddd49_holdem.GUI"
         mc:Ignorable="d"
         Title="TDDD49 Hold'em" Height="700"  Width="900"
         >
