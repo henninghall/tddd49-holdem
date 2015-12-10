@@ -40,12 +40,12 @@ namespace tddd49_holdem
             Deck = new Deck();
             ResetCardQueue();
 
-            Players.SetNoBet();
             Players.ClearCards();
             Players.HandOutCards(Deck);
             Players.ShowGuiPlayersCards();
             LogBox.Log("Round started!");
             NextPlayer();
+            Players.SetNoBet();
         }
 
 
@@ -56,7 +56,7 @@ namespace tddd49_holdem
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
 
-            GUI.MainWindow.SyncState();
+            MainWindow.SyncState();
         }
 
         /// <summary>

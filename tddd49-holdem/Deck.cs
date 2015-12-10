@@ -6,13 +6,13 @@ namespace tddd49_holdem
 {
     public class Deck : HoldemQueue<Card>
     {
-        public Deck()
-        {
+        public Deck() {
+            Clear();
             AddRange(CreateAllCards());
             Shuffle();
         }
 
-        private IEnumerable<Card> CreateAllCards()
+        private static IEnumerable<Card> CreateAllCards()
         {
             List<Card> allCards = new List<Card>();
             for (byte i = 2; i < 15; i++)
@@ -30,13 +30,12 @@ namespace tddd49_holdem
             return ToArray().Aggregate("", (current, card) => current + (card + "\n"));
         }
 
+        ///	Based on Java code from wikipedia:
+        ///	http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
         public void Shuffle()
         {
             Card[] deck = ToArray();
             Clear();
-
-            //	Based on Java code from wikipedia:
-            //	http://en.wikipedia.org/wiki/Fisher-Yates_shuffle
             Random r = new Random();
             for (int n = deck.Length - 1; n > 0; --n)
             {

@@ -4,7 +4,7 @@ namespace tddd49_holdem.Players
 {
     public abstract class Player : Data
     {
-      public abstract bool IsUsingGui { get; }
+        public abstract bool IsUsingGui { get; }
 
         private Cards _cards;
         public virtual Cards Cards
@@ -15,11 +15,11 @@ namespace tddd49_holdem.Players
 
         private Table _table;
         public virtual Table Table
-         {
+        {
             get { return _table; }
             set { SetField(ref _table, value, "Table"); }
         }
-           
+
         private int _chipsOnHand;
 
         public int ChipsOnHand
@@ -110,13 +110,15 @@ namespace tddd49_holdem.Players
             return allCards;
         }
 
+        public bool HasCards()
+        {
+            return Cards != null && Cards.Count > 0;
+        }
+
         /// <summary>
         /// This method is called by the table when it requests an action from the player. 
         /// </summary>
         public abstract void RequestActionExcecution();
 
-        public bool HasCards() {
-            return Cards != null && Cards.Count > 0;
-        }
     }
 }

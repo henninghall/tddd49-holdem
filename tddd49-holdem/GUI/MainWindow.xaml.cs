@@ -117,16 +117,5 @@ namespace tddd49_holdem.GUI
                 }
             }
         }
-
-        private void Seed()
-        {
-            Table table1 = new Table();
-            Player p1 = new HumanPlayer("Bamse");
-            Player p2 = new AiPlayer("Skalman");
-            table1.AttachPlayer(p1);
-            table1.AttachPlayer(p2);
-            Db.Tables.Add(table1);
-            Db.SaveChanges();
-        }
     }
 }

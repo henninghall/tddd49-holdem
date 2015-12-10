@@ -17,14 +17,10 @@ namespace tddd49_holdem.actions
             int bet = 10;
             // bet = raise + diff to max bet. 
             bet += (Player.Table.Players.GetHighestBet() - Player.CurrentBet);
-
             Player.Bet(bet);
 
             // forces every active player to move again...
             Player.Table.Players.SetNoBet();
-            // ... except player who made the bet
-            //Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
-
             Player.Table.LogBox.Log(Player.Name + " raised!");
             Player.Table.ReactOnActionExecution();
         }
