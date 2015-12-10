@@ -14,9 +14,8 @@ namespace tddd49_holdem.actions
 
         public override void Execute()
         {
-            Player.Table.BeforeMove.Dequeue();
+            //Player.Table.BeforeMove.Dequeue();
             Player.Cards.Clear();
-
             Player.Table.LogBox.Log(Player.Name + " folded!");
             Player.Table.ReactOnActionExecution();
         }

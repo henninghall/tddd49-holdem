@@ -9,22 +9,21 @@ namespace tddd49_holdem.actions
         public override bool IsValid()
         {
             // must have enough chips
-            return (Player.CurrentBet + Player.ChipsOnHand) > Player.Table.GetHighestBet();
+            return (Player.CurrentBet + Player.ChipsOnHand) > Player.Table.Players.GetHighestBet();
         }
 
-        // TODO: Remove fixed bet.
         public override void Execute()
         {
             int bet = 10;
             // bet = raise + diff to max bet. 
-            bet += (Player.Table.GetHighestBet() - Player.CurrentBet);
+            bet += (Player.Table.Players.GetHighestBet() - Player.CurrentBet);
 
             Player.Bet(bet);
 
-            // force every active player to move again...
-            Player.Table.MoveAllAfterMoveToBeforeMove();
+            // forces every active player to move again...
+            Player.Table.Players.SetNoBet();
             // ... except player who made the bet
-            Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
+            //Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
 
             Player.Table.LogBox.Log(Player.Name + " raised!");
             Player.Table.ReactOnActionExecution();

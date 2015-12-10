@@ -26,7 +26,7 @@ namespace tddd49_holdem
 
             Table table = Db.Tables.First();
             DataBindTableToWindow(table);
-            table.StartNewRound();
+            table.ContinueRound();
         }
 
         public static void SyncState() {
@@ -41,7 +41,7 @@ namespace tddd49_holdem
         private void DataBindTableToWindow(Table table) {
             MainPanel.DataContext = table;
             LogBoxControl.DataContext = table.LogBox;
-            SetPlayersDataContext(table.AllPlayers);
+            SetPlayersDataContext(table.Players);
         }
 
         private void FoldButton_Click(object sender, RoutedEventArgs e)

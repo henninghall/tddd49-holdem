@@ -19,14 +19,15 @@ namespace tddd49_holdem
         /// </summary>
         /// <param name="players"></param>
         /// <returns>A set of players with best draw</returns>
-        public HashSet<Player> GetBestDrawPlayers(HashSet<Player> players)
+        public PlayerList GetBestDrawPlayers(PlayerList players)
         {
-            HashSet<Player> currentBestDrawPlayers = new HashSet<Player>();
+            PlayerList currentBestDrawPlayers = new PlayerList();
             Draw bestDrawSoFar = null;
 
             // Get best draw types by comparing all players draws.
             foreach (Player player in players)
             {
+                if (!player.HasCards()) continue;
                 Draw currentDraw = GetDraw(player.GetAllCards());
                 try {
                     // save the current draw if it is better than the previuosly best found draw
@@ -76,15 +77,13 @@ namespace tddd49_holdem
         /// Returns a set with the winner at the current table state. 
         /// Will return all players in case of a Tie. 
         /// </summary>
-        public HashSet<Player> GetWinners(Table table)
+        public PlayerList GetWinners(Table table)
         {
-            HashSet<Player> activePlayers = new HashSet<Player>(table.GetActivePlayers());
-
             // if all players except one folded
-            if (activePlayers.Count == 1) return activePlayers;
+            if (table.Players.NumberOfPlayersWithCards() == 1) return table.Players.GetPlayerWithCards();
 
             // else winner(s) is determined due to rules
-            return GetBestDrawPlayers(activePlayers);
+            return GetBestDrawPlayers(table.Players);
         }
 
         /// <summary>

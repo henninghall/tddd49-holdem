@@ -8,9 +8,7 @@ namespace tddd49_holdem
     public class Table : Data
     {
         public int TableId { set; get; }
-        public virtual List<Player> AllPlayers { get; set; } = new List<Player>();
-        public virtual HoldemQueue<Player> BeforeMove { get; set; } // active players waiting to move
-        public virtual HoldemQueue<Player> AfterMove { get; set; } // active players already moved
+        public virtual PlayerList Players { set; get; } = new PlayerList();
         public virtual RulesEngine Rules { get; } = new RulesEngine();
         public virtual Deck Deck { get; set; } = new Deck();
         public virtual HoldemQueue<IntegerObject> NumberOfCardsToPutOnTable { get; set; }
@@ -30,36 +28,58 @@ namespace tddd49_holdem
             set { SetField(ref _activePlayer, value, "ActivePlayer"); }
         }
 
-        public void ContinueRound() {
+        public void ContinueRound()
+        {
             NextPlayer();
         }
 
         public void StartNewRound()
         {
-            MoveAllAfterMoveToBeforeMove();
-            MakeAllPlayersActive();
             CardsOnTable.Clear();
             Deck = new Deck();
-            ClearPlayerCards();
-            HandOutCards();
-            ShowGuiPlayersCards();
             ResetCardQueue();
+
+            Players.SetNoBet();
+            Players.ClearCards();
+            Players.HandOutCards(Deck);
+            Players.ShowGuiPlayersCards();
             LogBox.Log("Round started!");
             NextPlayer();
         }
 
 
-        public void NextPlayer() {
+        public void NextPlayer()
+        {
             if (ActivePlayer != null) ActivePlayer.Active = false;
-            ActivePlayer = BeforeMove.Peek();
+            ActivePlayer = Players.NextPlayerWithCards();
             ActivePlayer.Active = true;
             ActivePlayer.RequestActionExcecution();
+
             MainWindow.SyncState();
         }
 
         public void ReactOnActionExecution()
         {
-            if (GetNumberOfActivePlayers() == 1) EndRound();
+            // time to end round
+            if (Players.NumberOfPlayersWithCards() == 1) EndRound();
+
+            // time for next card or end round
+            if (Players.NextPlayerWasLastToBet())
+            {
+                MovePlayerBetsToPot();
+                if (HasNextCard())
+                {
+                    NextCard();
+                    NextPlayer();
+                    Players.SetNoBet();
+                }
+                else EndRound();
+            }
+            // time for next player
+            else NextPlayer();
+
+            // Doesnt wait for any more player actions 
+            /*  if (GetNumberOfActivePlayers() == 1) EndRound();
             if (BeforeMove.Count == 0)
             {
                 MovePlayerBetsToPot();
@@ -71,39 +91,8 @@ namespace tddd49_holdem
                 }
             }
             if (HasNextPlayer()) { NextPlayer(); }
-        }
 
-        private void ShowGuiPlayersCards() {
-            foreach (Card card in AllPlayers.Where(player => player.IsUsingGui).SelectMany(player => player.Cards)) {
-                card.Show = true;
-            }
-        }
-
-        private void ShowAllCards() {
-            foreach (Card card in AllPlayers.SelectMany(player => player.Cards)) {
-                card.Show = true;
-            }
-        }
-
-        /// <summary>
-        /// Gives all players at the table the number of cards defined in RulesEngine
-        /// </summary>
-        private void HandOutCards()
-        {
-            foreach (Player player in AllPlayers)
-            {
-                player.Cards = Deck.Dequeue(RulesEngine.CardsOnHand);
-            }
-        }
-
-        /// <summary>
-        /// Removes all cards from all players at the table
-        /// </summary>
-        private void ClearPlayerCards()
-        {
-            foreach (Player player in AllPlayers) {
-                player.Cards?.Clear();
-            }
+              */
         }
 
         /// <summary>
@@ -115,7 +104,7 @@ namespace tddd49_holdem
         {
             player.Table = this;
             player.ChipsOnHand = RulesEngine.StartingChips;
-            AllPlayers.Add(player);
+            Players.Add(player);
             LogBox.Log(player.Name + " joined the table.");
         }
 
@@ -137,44 +126,11 @@ namespace tddd49_holdem
         /// </summary>
         public void MovePlayerBetsToPot()
         {
-            foreach (Player player in AllPlayers)
+            foreach (Player player in Players)
             {
                 Pot += player.CurrentBet;
                 player.CurrentBet = 0;
             }
-        }
-
-        /// <summary>
-        /// Returns the player or players at the table who currently 
-        /// has the highest bet.
-        /// </summary>
-        /// <returns>Returns a set with the player or players
-        /// who currently has the highest bet.</returns>
-        public HashSet<Player> GetHighestBetPlayers()
-        {
-            int currentHighestBet = 0;
-            HashSet<Player> currentHighestBetPlayers = new HashSet<Player>();
-            foreach (Player player in AllPlayers)
-            {
-                if (player.CurrentBet > currentHighestBet)
-                {
-                    currentHighestBetPlayers.Clear();
-                    currentHighestBetPlayers.Add(player);
-                    currentHighestBet = player.CurrentBet;
-                }
-                else if (player.CurrentBet == currentHighestBet)
-                {
-                    currentHighestBetPlayers.Add(player);
-                }
-            }
-            return currentHighestBetPlayers;
-        }
-
-        /// <summary>
-        /// Returns the value of the current highest bet at the table.
-        /// </summary>
-        public int GetHighestBet() {
-            return AllPlayers.Select(player => player.CurrentBet).Concat(new[] {0}).Max();
         }
 
         /// <summary>
@@ -190,48 +146,17 @@ namespace tddd49_holdem
             }
         }
 
-        /// <summary>
-        /// Makes all players active by adding all players at the table to the BeforeMove queue. 
-        /// </summary>
-        public void MakeAllPlayersActive()
-        {
-            BeforeMove = new HoldemQueue<Player>(AllPlayers);
-        }
-
-        public void MoveAllAfterMoveToBeforeMove()
-        {
-            while (AfterMove != null && AfterMove.Count > 0)
-            {
-                BeforeMove.Enqueue(AfterMove.Dequeue());
-            }
-        }
-
-        public int GetNumberOfActivePlayers()
-        {
-            return GetActivePlayers().Count;
-        }
-
-
-        public List<Player> GetActivePlayers()
-        {
-            return AfterMove.Concat(BeforeMove).ToList();
-        }
-
-        public bool IsPlayerActive(Player player)
-        {
-            return GetActivePlayers().Contains(player);
-        }
 
         public void EndRound()
         {
             MovePlayerBetsToPot();
-            HashSet<Player> winners = Rules.GetWinners(this);
+            PlayerList winners = Rules.GetWinners(this);
             string message;
             if (winners.Count == 1)
             {
                 Player winner = winners.First();
                 message = "Game over! The winner is " + winner.Name;
-                if (GetNumberOfActivePlayers() > 1) message += " with " + Rules.GetDrawType(winner.GetAllCards());
+                if (Players.Count > 1) message += " with " + Rules.GetDrawType(winner.GetAllCards());
             }
             else
             {
@@ -240,7 +165,7 @@ namespace tddd49_holdem
             }
 
             GivePotToPlayers(winners);
-            ShowAllCards();
+            Players.ShowAllCards();
             LogBox.Log(message);
             MessageBoxResult result = MessageBox.Show(message + ". Start next round?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
@@ -249,7 +174,7 @@ namespace tddd49_holdem
             }
         }
 
-        private void GivePotToPlayers(HashSet<Player> winners)
+        private void GivePotToPlayers(PlayerList winners)
         {
             foreach (Player winner in winners)
             {
@@ -269,19 +194,16 @@ namespace tddd49_holdem
             return NumberOfCardsToPutOnTable.Any();
         }
 
-        private void ResetCardQueue() {
+        private void ResetCardQueue()
+        {
             if (NumberOfCardsToPutOnTable == null)
                 NumberOfCardsToPutOnTable = new HoldemQueue<IntegerObject>();
 
             NumberOfCardsToPutOnTable.Clear();
-            foreach (IntegerObject inteObj in RulesEngine.CardsBeforeRound.Select(variable => new IntegerObject(variable))) {
+            foreach (IntegerObject inteObj in RulesEngine.CardsBeforeRound.Select(variable => new IntegerObject(variable)))
+            {
                 NumberOfCardsToPutOnTable.Add(inteObj);
             }
-        }
-
-        public bool HasNextPlayer()
-        {
-            return BeforeMove.Any();
         }
     }
 }

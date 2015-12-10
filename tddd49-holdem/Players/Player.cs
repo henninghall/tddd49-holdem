@@ -89,7 +89,6 @@ namespace tddd49_holdem.Players
             set { SetField(ref _canRaise, value, "CanRaise"); }
         }
 
-
         protected Player() { }
 
         protected Player(string name)
@@ -116,5 +115,8 @@ namespace tddd49_holdem.Players
         /// </summary>
         public abstract void RequestActionExcecution();
 
+        public bool HasCards() {
+            return Cards != null && Cards.Count > 0;
+        }
     }
 }

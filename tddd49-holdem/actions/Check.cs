@@ -10,12 +10,12 @@ namespace tddd49_holdem.actions
 
         public override bool IsValid()
         {
-            return (Player.Table.GetHighestBetPlayers().Contains(Player));
+            return (Player.Table.Players.GetHighestBetters().Contains(Player));
         }
 
         public override void Execute()
         {
-            Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
+            //Player.Table.AfterMove.Enqueue(Player.Table.BeforeMove.Dequeue());
 
             Player.Table.LogBox.Log(Player.Name + " checked!");
             Player.Table.ReactOnActionExecution();
